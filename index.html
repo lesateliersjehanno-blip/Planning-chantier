@@ -166,7 +166,7 @@ tr.row-moving .team-cell{background:rgba(55,138,221,.1);}
 .wknd-swap{position:absolute;top:1px;right:2px;font-size:8px;opacity:.5;cursor:pointer;padding:2px;line-height:1;}
 .wknd-swap:active{opacity:1;}
 .wknd-row{display:flex;align-items:center;justify-content:center;gap:2px;width:100%;}
-.wknd-rm{font-size:7px;opacity:.45;cursor:pointer;line-height:1;padding:1px;}
+.wknd-rm{font-size:10px;opacity:.65;cursor:pointer;line-height:1;padding:3px;}
 .wknd-rm:active{opacity:1;color:#f44336;}
 .wknd-add{font-size:9px;opacity:.55;cursor:pointer;padding:1px 4px;margin-top:1px;border-radius:3px;}
 .wknd-add:active{opacity:1;background:rgba(255,255,255,.4);}
@@ -1064,7 +1064,8 @@ window.openWkndNamePicker=function(e,ti,d,aci,poleId){
   const targetSpan=e.target;
   const assignedId=getWeekendAssign(team,d);
   const assignedTeam=teams.find(t=>t.id===assignedId)||team;
-  const current=getWeekendNames(team,d,assignedTeam)[aci];
+  const currentList=getWeekendNames(team,d,assignedTeam);
+  const current=currentList[aci];
   const pole=poleById(poleId);
   const list=compagnonsInPole(poleId);
   const pop=document.getElementById('apop');pop.innerHTML='';
@@ -1086,6 +1087,13 @@ window.openWkndNamePicker=function(e,ti,d,aci,poleId){
     };
   };
   pop.appendChild(autreOpt);
+
+  if(currentList.length>1){
+    const rmOpt=document.createElement('div');rmOpt.className='ao';
+    rmOpt.innerHTML=`<div class="adot" style="background:${pole.bg};opacity:.35"></div><span style="font-style:italic;color:#f44336">Retirer cette personne</span>`;
+    rmOpt.onclick=()=>{removeWeekendSlot(ti,d,aci);closeAll();};
+    pop.appendChild(rmOpt);
+  }
 
   list.forEach(entry=>{
     const o=document.createElement('div');o.className='ao';
