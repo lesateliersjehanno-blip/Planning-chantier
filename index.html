@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=0.3, maximum-scale=5.0, user-scalable=yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <title>Planning Chantier — Jehanno</title>
 <meta name="mobile-web-app-capable" content="yes">
@@ -517,6 +517,13 @@ td.pmb-st.last{background:#F0F0F0!important;}
   .pmb-in{min-height:0!important;padding:2px 3px!important;}
   td.pmb-a,th.pmb-a,.pmb-menu{display:none!important;}
   td.pmb-st,th.pmb-sth{width:34px!important;min-width:34px!important;max-width:34px!important;}
+}
+/* ══ ZOOM À DEUX DOIGTS (téléphone / tablette) ══════════════ */
+/* pincer pour zoomer est autorisé ; le double-tap ne zoome pas (il sert aux croix de Prod Mex Bois) */
+html,body{touch-action:manipulation;}
+/* iPhone : champs en 16 px pour éviter le zoom automatique quand on tape dedans */
+@media (hover:none) and (pointer:coarse){
+  input[type=text],input[type=search],input[type=number],input[type=date],textarea,select{font-size:16px!important;}
 }
 </style>
 </head>
