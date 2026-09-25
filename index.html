@@ -525,6 +525,7 @@ html,body{touch-action:manipulation;}
 @media (hover:none) and (pointer:coarse){
   input[type=text],input[type=search],input[type=number],input[type=date],textarea,select{font-size:16px!important;}
 }
+@media (hover:none) and (pointer:coarse){.dc{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;}}
 </style>
 </head>
 <body>
@@ -1297,10 +1298,21 @@ function render(){
   document.querySelectorAll('.dc').forEach(td=>{
     if(td.classList.contains('wknd-cell'))return;
     const ti=parseInt(td.dataset.ti),d=parseInt(td.dataset.d);
-    td.addEventListener('contextmenu',e=>openCtx(e,ti,d));
-    td.addEventListener('touchstart',e=>{lpt=setTimeout(()=>{openCtx({preventDefault:()=>{},clientX:e.touches[0].clientX,clientY:e.touches[0].clientY},ti,d);},600);},{passive:true});
-    td.addEventListener('touchend',()=>clearTimeout(lpt));
-    td.addEventListener('touchmove',()=>clearTimeout(lpt));
+    // clic droit (souris) = menu ; au doigt : plus d'appui long, on ignore le « clic droit » tactile
+    td.addEventListener('contextmenu',e=>{if(Date.now()-lastTouchT<1500){e.preventDefault();return;}openCtx(e,ti,d);});
+    td.addEventListener('touchstart',()=>{lastTouchT=Date.now();},{passive:true});
+    td.addEventListener('touchend',e=>{
+      clearTimeout(lpt);
+      // double-tap au doigt = ouvrir la case (comme le double-clic à la souris)
+      const now=Date.now(),t=e.changedTouches&&e.changedTouches[0],k=ti+'_'+d;
+      if(t&&lastTap.k===k&&now-lastTap.t<400&&Math.abs(t.clientX-lastTap.x)<30&&Math.abs(t.clientY-lastTap.y)<30){
+        lastTap={k:'',t:0,x:0,y:0};tapOpened=now;
+        if(e.cancelable)e.preventDefault();
+        if(justDragged){justDragged=false;return;}
+        openCPDirect(ti,d);
+      }else if(t)lastTap={k,t:now,x:t.clientX,y:t.clientY};
+    });
+    td.addEventListener('touchmove',()=>{clearTimeout(lpt);lastTap={k:'',t:0,x:0,y:0};});
   });
   document.querySelectorAll('.team-handle').forEach(hd=>{
     const ti=parseInt(hd.dataset.ti);
@@ -1415,7 +1427,8 @@ function openCPDirect(ti,d){
   setTimeout(()=>document.getElementById('ich').focus(),80);
 }
 let justDragged=false;
-window.openCP=(e,ti,d)=>{e.stopPropagation();if(justDragged){justDragged=false;return;}openCPDirect(ti,d);};
+let lastTap={k:'',t:0,x:0,y:0},tapOpened=0,lastTouchT=0;
+window.openCP=(e,ti,d)=>{e.stopPropagation();if(Date.now()-tapOpened<700)return;if(justDragged){justDragged=false;return;}openCPDirect(ti,d);};
 window.popOk=()=>{
   if(!popCell)return;
   const ch=document.getElementById('ich').value.trim(),ta=document.getElementById('ita').value.trim(),k=K(popCell.ti,popCell.d);
