@@ -472,9 +472,9 @@ td.w-com:hover .pmb-cbtn,.pmb-cbtn:focus{opacity:1;background:var(--bg2);color:v
 #pmb-table tr.is-st td:not(.on):not(.pct){background:#EFE3D3!important;}
 #pmb-table tr.is-st td.w-com .pmb-in{color:#6D4C41;font-weight:600;}
 @media print{.pmb-cbtn{display:none!important;}#pmb-table tr.is-st td{-webkit-print-color-adjust:exact;print-color-adjust:exact;}}
-td.w-uw{width:46px;min-width:46px;max-width:46px;text-align:center;vertical-align:middle!important;background:#F7F7F7!important;}
-.pmb-uw{width:40px;height:24px;border:none;background:transparent;font:inherit;font-weight:700;text-align:center;text-align-last:center;cursor:pointer;color:var(--text);-webkit-appearance:none;appearance:none;padding:0;}
-.pmb-uw.u{color:#1565C0;}.pmb-uw.w{color:#AD1457;}
+td.w-uw{width:62px;min-width:62px;max-width:62px;text-align:center;vertical-align:middle!important;background:#F7F7F7!important;}
+.pmb-uw{width:56px;height:24px;border:none;background:transparent;font:inherit;font-weight:700;text-align:center;text-align-last:center;cursor:pointer;color:var(--text);-webkit-appearance:none;appearance:none;padding:0;}
+.pmb-uw.u{color:#1565C0;}.pmb-uw.w{color:#AD1457;}.pmb-uw.uw{color:#6A1B9A;}
 .pmb-uw:focus{outline:1.5px solid var(--blue);border-radius:4px;}
 td.w-dt{position:relative;cursor:pointer;}
 td.w-dt .pmb-dt{min-height:28px;padding:6px 6px;line-height:1.3;white-space:pre-wrap;word-break:break-word;}
@@ -2207,10 +2207,10 @@ function pmbNorm(r,id){
   o.arc=o.arch&&(r.arc!==undefined?!!r.arc:/pos[ée]|réalis/i.test(o.pose+' '+o.com));
   return o;
 }
-function pmbSavePref(){try{localStorage.setItem('jehanno_prodbois_prefs',JSON.stringify({att:pmbShowAtt,arc:pmbShowArc,sort:pmbSort,conds:pmbConds}));}catch(e){}}
+function pmbSavePref(){try{localStorage.setItem('jehanno_prodbois_prefs',JSON.stringify({att:pmbShowAtt,arc:pmbShowArc,sort:pmbSort,conds:pmbConds,uw:pmbUW}));}catch(e){}}
 // Nom affiché : « olivier » → « Olivier », « pierre-yves » → « Pierre-Yves »
 function pmbCondLbl(c){c=String(c||'').trim();const f=PMB_CONDS.find(x=>x.toLowerCase()===c.toLowerCase());return f||c.replace(/(^|[\s-])(\S)/g,(m,a,b)=>a+b.toUpperCase());}
-(function(){try{const p=JSON.parse(localStorage.getItem('jehanno_prodbois_prefs')||'null');if(p){pmbConds=Array.isArray(p.conds)?p.conds.filter(c=>typeof c==='string'):(p.cond?[p.cond]:[]);pmbShowAtt=p.att!==false;pmbShowArc=!!p.arc;pmbSort=['az','za','d1','d2'].includes(p.sort)?p.sort:'';}}catch(e){}})();
+(function(){try{const p=JSON.parse(localStorage.getItem('jehanno_prodbois_prefs')||'null');if(p){pmbUW=['U','W','U+W'].includes(p.uw)?p.uw:'';pmbConds=Array.isArray(p.conds)?p.conds.filter(c=>typeof c==='string'):(p.cond?[p.cond]:[]);pmbShowAtt=p.att!==false;pmbShowArc=!!p.arc;pmbSort=['az','za','d1','d2'].includes(p.sort)?p.sort:'';}}catch(e){}})();
 function pmbAll(){return Object.keys(pmbRows).map(k=>pmbNorm(pmbRows[k],k)).sort((a,b)=>a.o-b.o);}
 
 // ── Cache + sync ──
@@ -2249,6 +2249,8 @@ function pmbPct(v){const n=parseFloat(String(v||'').replace(',','.').replace(/[^
 // Ligne sous-traitée : commentaire « Sous-traitante » (ou sous-traitance, sous traitant…) → ligne en marron très clair
 const PMB_ST_TXT='Sous-traitante';
 function pmbIsST(r){return /^\s*sous[\s-]*trait/i.test(r.com||'');}
+// Machine : '', 'U', 'W' ou 'U+W' (accepte aussi « uw », « u + w »…)
+function pmbUWn(v){v=String(v||'').toUpperCase().replace(/[\s+]/g,'');return v==='UW'||v==='WU'?'U+W':v==='U'||v==='W'?v:'';}
 function pmbRowHtml(r){
   const last=r.st.lastIndexOf(1),dp=pmbDate(r.pose),t0=new Date();t0.setHours(0,0,0,0);
   // rouge si date de pose dépassée : en production (pas encore prêt à poser) et terminés en attente de pose
@@ -2257,9 +2259,9 @@ function pmbRowHtml(r){
   const go=!r.arch&&r.st[PMB_LAST]?`<button class="pmb-go" onclick="pmbMove('${r.id}','att')" title="Prêt à poser → Terminés, en attente de pose">➜</button>`:'';
   const sel=r.arc?`<input type="checkbox" class="pmb-sel" ${pmbSel.has(r.id)?'checked':''} onclick="pmbSelToggle(event,'${r.id}')" title="Sélectionner (Maj+clic = plage)">`:'';
   let h=`<tr data-id="${r.id}" class="${pmbIsST(r)?'is-st ':''}${r.arch?'is-arch':''}${r.arc?' is-arc':''}${pmbSel.has(r.id)?' is-sel':''}"><td class="pmb-a">${sel}<button onclick="pmbMenu(event,'${r.id}')" title="Actions">⋮</button>${go}</td>`;
-  const uw=String(r.uw||'').toUpperCase();
+  const uw=pmbUWn(r.uw);
   h+=pmbCell(r,'com','w-com').replace('</td>',`<button class="pmb-cbtn" onclick="pmbComMenu(event,'${r.id}')" title="Choisir : Sous-traitante">▼</button></td>`)+pmbCell({...r,cond:pmbCondLbl(r.cond)},'cond','w-cond').replace('</td>',`<button class="pmb-cbtn" onclick="pmbCondMenu(event,'${r.id}')" title="Choisir le conducteur">▼</button></td>`)
-    +`<td class="w-uw"><select class="pmb-uw ${uw==='U'?'u':uw==='W'?'w':''}" onchange="pmbSetUW('${r.id}',this.value)" title="U ou W"><option value=""${uw?'':' selected'}>–</option><option value="U"${uw==='U'?' selected':''}>U</option><option value="W"${uw==='W'?' selected':''}>W</option></select></td>`
+    +`<td class="w-uw"><select class="pmb-uw ${uw==='U'?'u':uw==='W'?'w':uw==='U+W'?'uw':''}" onchange="pmbSetUW('${r.id}',this.value)" title="Machine : U, W ou U+W"><option value=""${uw?'':' selected'}>–</option><option value="U"${uw==='U'?' selected':''}>U</option><option value="W"${uw==='W'?' selected':''}>W</option><option value="U+W"${uw==='U+W'?' selected':''}>U+W</option></select></td>`
     +pmbDateCell(r,'pose','w-pose'+(late?' late':''),'jj/mm/aaaa')+pmbCell(r,'ch','pmb-ch','Chantier…');
   r.st.forEach((on,i)=>{
     if(i===PMB_LAST)h+=`<td class="w-pct"><div class="pmb-in" contenteditable="true" spellcheck="false" inputmode="numeric" data-f="pct" data-ph="">${pc==null?'':pc+' %'}</div></td>`;
@@ -2291,10 +2293,10 @@ function pmbRender(){
   pmbPending=false;
   const tb=document.getElementById('pmb-table');if(!tb)return;
   const all=pmbAll(),q=pmbQ.trim().toLowerCase();
-  const match=r=>(!pmbConds.length||pmbConds.includes(r.cond.trim().toLowerCase()))&&(!pmbUW||String(r.uw||'').toUpperCase()===pmbUW)&&(!q||[r.ch,r.com,r.cond,r.uw,r.ral,r.pose,r.qte].join(' ').toLowerCase().includes(q));
+  const match=r=>(!pmbConds.length||pmbConds.includes(r.cond.trim().toLowerCase()))&&(!pmbUW||pmbUWn(r.uw)===pmbUW)&&(!q||[r.ch,r.com,r.cond,r.uw,r.ral,r.pose,r.qte].join(' ').toLowerCase().includes(q));
   const prod=all.filter(r=>!r.arch&&match(r)),att=all.filter(r=>r.arch&&!r.arc&&match(r)),arc=all.filter(r=>r.arc&&match(r));
   const NC=7+PMB_N+6,arrow=pmbSort==='az'?' ▲':pmbSort==='za'?' ▼':'',darrow=pmbSort==='d1'?' ▲':pmbSort==='d2'?' ▼':'';
-  let h=`<thead><tr><th class="pmb-a"></th><th>Commentaires</th><th>Conduc</th><th title="U ou W">U/W</th><th class="pmb-sortable${darrow?' on':''}" onclick="pmbDateSortCycle()" title="Trier par date de pose">Date POSE${darrow}</th><th class="pmb-chh pmb-sortable" onclick="pmbSortCycle()" title="Trier par nom de chantier">Chantiers${arrow}</th>`+
+  let h=`<thead><tr><th class="pmb-a"></th><th>Commentaires</th><th>Conduc</th><th title="Machine : U, W ou U+W">Machine</th><th class="pmb-sortable${darrow?' on':''}" onclick="pmbDateSortCycle()" title="Trier par date de pose">Date POSE${darrow}</th><th class="pmb-chh pmb-sortable" onclick="pmbSortCycle()" title="Trier par nom de chantier">Chantiers${arrow}</th>`+
     PMB_ST.map((s,i)=>(i===PMB_LAST?`<th class="pmb-pcth y">% avan&shy;cement</th>`:'')+`<th class="pmb-sth y"><span style="border-bottom-color:${PMB_COL[i]}">${s}</span></th>`).join('')+
     `<th class="y">Quantité</th><th class="y">Prod terminé</th><th class="y">Tps travail CN</th><th class="y">Tps travail Fab</th><th class="y">Finition</th></tr></thead><tbody>`;
   h+=`<tr class="pmb-sec"><td colspan="${NC}"><span class="pmb-secin"><i class="ti ti-tools"></i> En production · ${prod.length} chantier${prod.length>1?'s':''}</span></td></tr>`;
@@ -2319,8 +2321,7 @@ function pmbChips(all){
   const n=pmbConds.length,lbl=!n?'Tous':n<=2?pmbConds.map(pmbCondLbl).join(', '):n+' conducteurs';
   document.getElementById('pmb-chips').innerHTML=`<button class="btn${n?' on':''}" onclick="pmbCondDlg(event)" title="Choisir les conducteurs à afficher"><i class="ti ti-user"></i> Conduc : ${esc(lbl)} ▾</button>`;
   // Filtre U / W
-  document.getElementById('pmb-uwchips').innerHTML=[['','U+W'],['U','U'],['W','W']]
-    .map(([v,l])=>`<button class="btn${pmbUW===v?' on':''}" onclick="pmbSetUW2('${v}')" title="${v?'Afficher seulement les '+v:'Afficher U et W'}">${l}</button>`).join('');
+  document.getElementById('pmb-uwchips').innerHTML=`<button class="btn${pmbUW?' on':''}" onclick="pmbUWDlg(event)" title="Filtrer par machine">Machine : ${pmbUW||'Tout'} ▾</button>`;
 }
 
 // ── Saisie ──
@@ -2407,7 +2408,15 @@ window.pmbComMenu=(ev,id)=>{
 };
 window.pmbSetCom=(id,v)=>{pmbMenuClose();const r=pmbNorm(pmbRows[id],id);if(r.com===v)return;r.com=v;pmbRows[id]=r;pmbSvRows([id]);keepScroll(pmbRender);};
 window.pmbComEdit=id=>{pmbMenuClose();const el=document.querySelector(`#pmb-table tr[data-id="${id}"] [data-f="com"]`);if(!el)return;el.focus();const s=window.getSelection(),g=document.createRange();g.selectNodeContents(el);g.collapse(false);s.removeAllRanges();s.addRange(g);};
-window.pmbSetUW2=v=>{pmbUW=v;pmbRender();};
+window.pmbSetUW2=v=>{pmbMenuClose();pmbUW=v;pmbSavePref();pmbRender();};
+// Boîte de choix U / W / U+W
+window.pmbUWDlg=ev=>{
+  ev.stopPropagation();pmbMenuId=null;const m=document.getElementById('pmb-menu');
+  m.innerHTML=`<div class="pmb-dlgt">Machine à afficher</div>`+[['U','U seulement'],['W','W seulement'],['U+W','U+W'],['','Tout']]
+    .map(([v,l])=>`<label class="pmb-chk"><input type="radio" name="pmbuw" ${pmbUW===v?'checked':''} onchange="pmbSetUW2('${v}')"> ${l}</label>`).join('');
+  m.classList.add('open','dlg');
+  const b=ev.currentTarget.getBoundingClientRect();m.style.left=Math.min(b.left,window.innerWidth-240)+'px';m.style.top=(b.bottom+4)+'px';
+};
 window.pmbToggleArch=()=>{pmbShowArc=!pmbShowArc;pmbSavePref();pmbRender();};
 window.pmbToggleSec=w=>{if(w==='att')pmbShowAtt=!pmbShowAtt;else pmbShowArc=!pmbShowArc;pmbSavePref();pmbRender();};
 // Tri par nom de chantier : A→Z, Z→A, puis ordre manuel
@@ -2494,7 +2503,7 @@ window.pmbAct=a=>{
 
 // ── Impression ──
 window.pmbPrint=()=>{
-  document.getElementById('pmb-print-hdr').innerHTML=`🪵 Suivi prod Mex bois <span>MAJ le : ${esc(pmbMaj)} · Imprimé le ${new Date().toLocaleDateString('fr-FR')}${pmbConds.length?' · '+esc(pmbConds.map(pmbCondLbl).join(', ')):''}${pmbUW?' · '+pmbUW:''}</span>`;
+  document.getElementById('pmb-print-hdr').innerHTML=`🪵 Suivi prod Mex bois <span>MAJ le : ${esc(pmbMaj)} · Imprimé le ${new Date().toLocaleDateString('fr-FR')}${pmbConds.length?' · '+esc(pmbConds.map(pmbCondLbl).join(', ')):''}${pmbUW?' · Machine '+pmbUW:''}</span>`;
   setTimeout(()=>window.print(),150);
 };
 pmbLoadCache();
