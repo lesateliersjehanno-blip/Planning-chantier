@@ -455,7 +455,9 @@ body:not(.mode-prod) #pmb-toolbar,body:not(.mode-prod) #pmb-view{display:none!im
 .pmb-in:focus{background:#EAF3FD;box-shadow:inset 0 0 0 1.5px var(--blue);}
 .pmb-in:empty::before{content:attr(data-ph);color:var(--text3);font-weight:400;}
 td.w-com{width:130px;min-width:130px;max-width:130px;background:#F7F7F7!important;}
-td.w-cond{width:74px;min-width:74px;max-width:74px;background:#F7F7F7!important;text-transform:capitalize;}
+td.w-cond{width:92px;min-width:92px;max-width:92px;background:#F7F7F7!important;position:relative;}
+td.w-cond .pmb-in{padding-right:20px;}
+td.w-cond:hover .pmb-cbtn{opacity:1;background:var(--bg2);color:var(--text);}
 td.w-pose{width:88px;min-width:88px;max-width:88px;}
 td.w-pose.late .pmb-in{color:#d32f2f;font-weight:700;}
 td.pmb-ch{width:190px;min-width:190px;max-width:190px;}
@@ -463,6 +465,29 @@ td.w-qte{width:62px;min-width:62px;max-width:62px;text-align:center;}
 td.w-fin{width:90px;min-width:90px;max-width:90px;background:#EDEDED!important;}
 td.w-t{width:66px;min-width:66px;max-width:66px;text-align:center;}
 td.w-ral{width:170px;min-width:170px;max-width:170px;}
+td.w-com{position:relative;}
+td.w-com .pmb-in{padding-right:20px;}
+.pmb-cbtn{position:absolute;top:4px;right:2px;width:17px;height:20px;border:none;border-radius:4px;background:transparent;color:var(--text3);cursor:pointer;font-size:10px;line-height:1;padding:0;opacity:.55;}
+td.w-com:hover .pmb-cbtn,.pmb-cbtn:focus{opacity:1;background:var(--bg2);color:var(--text);}
+#pmb-table tr.is-st td:not(.on):not(.pct){background:#EFE3D3!important;}
+#pmb-table tr.is-st td.w-com .pmb-in{color:#6D4C41;font-weight:600;}
+@media print{.pmb-cbtn{display:none!important;}#pmb-table tr.is-st td{-webkit-print-color-adjust:exact;print-color-adjust:exact;}}
+td.w-uw{width:46px;min-width:46px;max-width:46px;text-align:center;vertical-align:middle!important;background:#F7F7F7!important;}
+.pmb-uw{width:40px;height:24px;border:none;background:transparent;font:inherit;font-weight:700;text-align:center;text-align-last:center;cursor:pointer;color:var(--text);-webkit-appearance:none;appearance:none;padding:0;}
+.pmb-uw.u{color:#1565C0;}.pmb-uw.w{color:#AD1457;}
+.pmb-uw:focus{outline:1.5px solid var(--blue);border-radius:4px;}
+td.w-dt{position:relative;cursor:pointer;}
+td.w-dt .pmb-dt{min-height:28px;padding:6px 6px;line-height:1.3;white-space:pre-wrap;word-break:break-word;}
+td.w-dt .pmb-dt:empty::before{content:attr(data-ph);color:var(--text3);font-weight:400;}
+td.w-dt:hover .pmb-dt{background:#EAF3FD;}
+td.w-dt input.pmb-dtin{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;border:none;padding:0;margin:0;font-size:16px;}
+td.w-dt input.pmb-dtin::-webkit-calendar-picker-indicator{position:absolute;inset:0;width:auto;height:auto;opacity:0;cursor:pointer;}
+td.w-fin.late .pmb-dt{color:#d32f2f;font-weight:700;}
+td.w-pose.late .pmb-dt{color:#d32f2f;font-weight:700;}
+td.w-pct{width:58px;min-width:58px;max-width:58px;text-align:center;vertical-align:middle!important;}
+td.w-pct .pmb-in{font-weight:700;}
+#pmb-table thead th.pmb-pcth{width:58px;min-width:58px;max-width:58px;text-align:center;font-size:10px;padding:5px 1px;white-space:normal;}
+td.pmb-st.pct{color:#1a1a1a;font-size:10px;font-weight:600;}
 td.pmb-st{width:62px;min-width:62px;max-width:62px;text-align:center;vertical-align:middle!important;cursor:pointer;font-weight:700;font-size:12px;color:#fff;user-select:none;}
 td.pmb-st:hover{box-shadow:inset 0 0 0 2px var(--blue);}
 td.pmb-st.on{opacity:.45;}
@@ -483,6 +508,16 @@ td.pmb-st.last{background:#F0F0F0!important;}
 .pmb-menu div.red{color:#f44336;}
 .pmb-menu div.dis{color:var(--text3);cursor:default;}.pmb-menu div.dis:hover{background:none;}
 .pmb-menu small{font-size:10px;}
+.pmb-menu.dlg{min-width:220px;padding:6px;}
+.pmb-menu .pmb-dlgt{font-size:11px;font-weight:700;color:var(--text2);padding:4px 8px 6px;cursor:default;}
+.pmb-menu .pmb-dlgt:hover{background:none;}
+.pmb-menu label.pmb-chk{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:5px;font-size:13px;cursor:pointer;}
+.pmb-menu label.pmb-chk:hover{background:var(--bg2);}
+.pmb-menu label.pmb-chk input{width:16px;height:16px;accent-color:var(--blue);cursor:pointer;}
+.pmb-menu label.pmb-chk small{margin-left:auto;color:var(--text3);}
+.pmb-menu .pmb-dlgb{justify-content:flex-end;padding:6px 4px 2px;cursor:default;}
+.pmb-menu .pmb-dlgb:hover{background:none;}
+.pmb-menu .pmb-dlgb button{font:inherit;font-size:12px;padding:6px 14px;border-radius:6px;border:none;background:var(--blue);color:#fff;cursor:pointer;}
 #pmb-table td.pmb-a{width:48px;min-width:48px;white-space:nowrap;}
 .pmb-a button.pmb-go{color:#fff;background:#2E7D32;width:18px;height:20px;font-size:11px;margin-left:1px;border-radius:4px;}
 .pmb-a button.pmb-go:hover{background:#1B5E20;color:#fff;}
@@ -501,6 +536,7 @@ td.pmb-st.last{background:#F0F0F0!important;}
 @media print{.pmb-selbar,.pmb-sel,.pmb-yrsel{display:none!important;}}
 #pmb-table th.pmb-sortable{cursor:pointer;user-select:none;}
 #pmb-table th.pmb-sortable:hover{background:#e2e2e2;}
+#pmb-table th.pmb-sortable.on{background:#D6E4F7;}
 @media(prefers-color-scheme:dark){td.w-com,td.w-cond{background:#26262a!important;}td.w-fin{background:#2e2e32!important;}#pmb-table tr.pmb-sec td,#pmb-table tr.pmb-yr td,#pmb-table thead th{color:#1a1a1a;}}
 @media(max-width:900px){
   td.pmb-ch,#pmb-table th.pmb-chh{width:130px!important;min-width:130px!important;max-width:130px!important;}
@@ -517,6 +553,10 @@ td.pmb-st.last{background:#F0F0F0!important;}
   .pmb-in{min-height:0!important;padding:2px 3px!important;}
   td.pmb-a,th.pmb-a,.pmb-menu{display:none!important;}
   td.pmb-st,th.pmb-sth{width:34px!important;min-width:34px!important;max-width:34px!important;}
+  td.w-pct,th.pmb-pcth,td.w-uw{width:30px!important;min-width:30px!important;max-width:30px!important;}
+  td.w-dt input.pmb-dtin{display:none!important;}
+  td.w-dt .pmb-dt{min-height:0!important;padding:2px 3px!important;}
+  td.pmb-st,td.w-pct{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
 }
 /* ══ ZOOM À DEUX DOIGTS (téléphone / tablette) ══════════════ */
 /* pincer pour zoomer est autorisé ; le double-tap ne zoome pas (il sert aux croix de Prod Mex Bois) */
@@ -585,8 +625,11 @@ html,body{touch-action:manipulation;}
     <div class="sep"></div>
     <div id="pmb-chips"></div>
     <div class="sep"></div>
+    <div id="pmb-uwchips" style="display:flex;gap:4px;flex-shrink:0;"></div>
+    <div class="sep"></div>
     <button class="btn" onclick="pmbAdd()"><i class="ti ti-plus"></i> Ligne</button>
     <button class="btn" id="pmb-sort-btn" onclick="pmbSortCycle()" title="Trier par nom de chantier"><i class="ti ti-sort-ascending-letters"></i> A → Z</button>
+    <button class="btn" id="pmb-dsort-btn" onclick="pmbDateSortCycle()" title="Trier par date de pose"><i class="ti ti-calendar"></i> Date pose</button>
     <button class="btn" id="pmb-arch-btn" onclick="pmbToggleArch()" title="Afficher / masquer les chantiers archivés"><i class="ti ti-archive"></i> Archivés</button>
     <button class="btn" onclick="pmbPrint()" title="Imprimer le suivi prod"><i class="ti ti-printer"></i></button>
     <div class="sep"></div>
@@ -2134,32 +2177,40 @@ atlBuildChips();
 // ── PROD MEX BOIS (onglet « Prod Mex Bois ») ─────────────────
 // Reprise de la feuille Excel « SUIVI PROD » (Avancement FAB bois).
 // Firebase : planning/v1/prodbois/
-//   rows : { id: {o,com,cond,pose,ch,st:[10×0/1],qte,fin,tcn,tfab,ral,arch,an} }
+//   rows : { id: {v,o,com,cond,uw,pose,ch,st:[11×0/1],pct,qte,fin,tcn,tfab,ral(=Finition),arch,an} }
+//   v=2 : st à 11 colonnes (« En Préparation BE » ajoutée en tête) — les lignes sans v sont migrées à la lecture
 //   meta : { seeded:true, maj:"JJ/MM/AAAA" }
-// st = colonnes d'avancement (En attente → Prêt à poser), cliquer = X.
+// st = colonnes d'avancement (En Préparation BE → Prêt à poser), double-clic = X.
+// pct = % d'avancement (0-100) → remplit la case « Prêt à poser » de gauche à droite.
 // arch = ligne terminée (section « [En attente Pose] » groupée par conducteur/année).
 // ══════════════════════════════════════════════════════════════
 const PB=B+"/prodbois";
 const PMB_CACHE='jehanno_prodbois_cache';
-const PMB_ST=['En attente','Débit','Attente usinage CN','Usinages CN','Att. Assemblage','Assemblage','Peintures','Prêt à vitrer','Nettoyage','Prêt à poser'];
-const PMB_COL=['#9E9E9E','#FB8C00','#F9A825','#EF6C00','#7CB342','#558B2F','#1E88E5','#00ACC1','#00897B','#2E7D32'];
-const PMB_FIELDS=['com','cond','pose','ch','qte','fin','tcn','tfab','ral'];
+const PMB_ST=['En Préparation BE','Attente Débit','Débit','Attente usinage CN','Usinages CN','Att. Assemblage','Assemblage','Peintures','Prêt à vitrer','Nettoyage','Prêt à poser'];
+const PMB_COL=['#8E24AA','#9E9E9E','#FB8C00','#F9A825','#EF6C00','#7CB342','#558B2F','#1E88E5','#00ACC1','#00897B','#2E7D32'];
+const PMB_FIELDS=['com','cond','uw','pose','ch','pct','qte','fin','tcn','tfab','ral'];
+const PMB_N=PMB_ST.length,PMB_LAST=PMB_N-1; // Prêt à poser
 const PMB_SEED=[{"id":"p001","o":1,"com":"","cond":"olivier","pose":"13/07/2026","ch":"Charité PE ANC OE/OI","st":[0,0,0,0,0,1,1,0,0,0],"qte":"3","fin":"","tcn":"20H","tfab":"","ral":"Impression","arch":false,"an":""},{"id":"p002","o":2,"com":"","cond":"olivier","pose":"20/07/2026","ch":"13 Tribunaux","st":[0,0,0,0,0,1,0,0,0,0],"qte":"1","fin":"","tcn":"8H","tfab":"","ral":"RAL 3009","arch":false,"an":""},{"id":"p003","o":3,"com":"","cond":"olivier","pose":"27/07/2026","ch":"20 Saint Patern - PE","st":[0,0,0,0,0,0,1,0,0,0],"qte":"2","fin":"","tcn":"4H","tfab":"","ral":"RAL 7038","arch":false,"an":""},{"id":"p004","o":4,"com":"","cond":"olivier","pose":"01/09/2026","ch":"COËTION","st":[1,0,0,0,0,0,0,0,0,0],"qte":"4","fin":"","tcn":"","tfab":"","ral":"Impression","arch":false,"an":""},{"id":"p005","o":5,"com":"ATT validation","cond":"olivier","pose":"01/09/2026","ch":"Pérenès (Chapelle)","st":[1,0,0,0,0,0,0,0,0,0],"qte":"13","fin":"","tcn":"","tfab":"","ral":"Impression","arch":false,"an":""},{"id":"p006","o":6,"com":"","cond":"olivier","pose":"05/09/2026","ch":"15 Rue Hoche","st":[0,0,0,0,0,1,0,0,0,0],"qte":"1","fin":"","tcn":"8H","tfab":"","ral":"3 couches blanches","arch":false,"an":""},{"id":"p007","o":7,"com":"","cond":"olivier","pose":"11/09/2026","ch":"Thiers / Drezen","st":[0,0,0,0,0,1,0,0,0,0],"qte":"5","fin":"","tcn":"26 H","tfab":"","ral":"Impression","arch":false,"an":""},{"id":"p008","o":8,"com":"","cond":"olivier","pose":"14/09/2026","ch":"Château Grégo","st":[0,0,1,0,0,0,0,0,0,0],"qte":"5","fin":"","tcn":"","tfab":"","ral":"Impression","arch":false,"an":""},{"id":"p009","o":9,"com":"","cond":"olivier","pose":"21/09/2026","ch":"LE ROHELLO","st":[0,1,1,1,1,0,0,0,0,0],"qte":"33","fin":"","tcn":"32H","tfab":"","ral":"RAL 9002","arch":false,"an":""},{"id":"p010","o":10,"com":"","cond":"olivier","pose":"15/10/2026","ch":"BERNARD","st":[0,0,0,0,0,0,1,0,0,0],"qte":"2","fin":"","tcn":"6H","tfab":"","ral":"RAL 5003","arch":false,"an":""},{"id":"p011","o":11,"com":"ATT validation","cond":"olivier","pose":"01/12/2026","ch":"LE CONTE","st":[1,0,0,0,0,0,0,0,0,0],"qte":"5","fin":"","tcn":"","tfab":"","ral":"??","arch":false,"an":""},{"id":"p012","o":12,"com":"","cond":"olivier","pose":"07/12/2026","ch":"LOCOYARN","st":[1,0,0,0,0,0,0,0,0,0],"qte":"43","fin":"","tcn":"","tfab":"","ral":"","arch":false,"an":""},{"id":"p013","o":13,"com":"ATT validation","cond":"olivier","pose":"04/01/2027","ch":"Château de l'Hermine","st":[1,0,0,0,0,0,0,0,0,0],"qte":"89","fin":"","tcn":"","tfab":"","ral":"","arch":false,"an":""},{"id":"p014","o":14,"com":"","cond":"laurent","pose":"14/09/2026","ch":"Boulay","st":[0,0,0,0,0,1,1,0,0,0],"qte":"5","fin":"","tcn":"8H","tfab":"","ral":"Bleu Grange CH1 0479 Ext / Blanc Isola CH1 0008 Int","arch":false,"an":""},{"id":"p015","o":15,"com":"","cond":"laurent","pose":"28/07/2026","ch":"PENHIRIN (3 PE)","st":[0,0,0,1,0,0,0,0,0,0],"qte":"3","fin":"","tcn":"3H","tfab":"","ral":"??","arch":false,"an":""},{"id":"p016","o":16,"com":"WINLINE","cond":"laurent","pose":"01/12/2026","ch":"Caillère","st":[0,0,0,0,0,1,0,0,0,0],"qte":"4+4dorm","fin":"","tcn":"16H","tfab":"","ral":"Impression","arch":false,"an":""},{"id":"p017","o":17,"com":"Att RAL","cond":"laurent","pose":"?","ch":"Paysage (SAV)","st":[0,0,0,0,0,0,1,0,0,0],"qte":"1","fin":"","tcn":"/","tfab":"/","ral":"Att RAL","arch":false,"an":""},{"id":"p018","o":18,"com":"","cond":"laurent","pose":"?","ch":"Giboire - PE","st":[0,0,0,0,1,0,0,0,0,0],"qte":"1","fin":"","tcn":"2H30","tfab":"","ral":"idem Senechal","arch":false,"an":""},{"id":"p019","o":19,"com":"","cond":"laurent","pose":"30/09/2026","ch":"Lepeltier SAV","st":[0,0,0,0,0,0,1,0,0,0],"qte":"6","fin":"","tcn":"8H","tfab":"","ral":"","arch":false,"an":""},{"id":"p020","o":20,"com":"","cond":"olivier","pose":"Posé","ch":"Pont-Scorff","st":[0,0,0,0,0,0,0,0,0,1],"qte":"1","fin":"20/07/2025","tcn":"/","tfab":"/","ral":"","arch":true,"an":2025},{"id":"p021","o":21,"com":"","cond":"olivier","pose":"Posé","ch":"(GDL) Salomon","st":[0,0,0,0,0,0,0,0,0,1],"qte":"1","fin":"30/07/2025","tcn":"/","tfab":"/","ral":"","arch":true,"an":2025},{"id":"p022","o":22,"com":"","cond":"olivier","pose":"Posé","ch":"10 RSV Porte","st":[0,0,0,0,0,0,0,0,0,1],"qte":"1","fin":"22/09/2025","tcn":"/","tfab":"/","ral":"","arch":true,"an":2025},{"id":"p023","o":23,"com":"","cond":"olivier","pose":"Posé","ch":"13 Salomon","st":[0,0,0,0,0,0,0,0,0,1],"qte":"4","fin":"16/10/2025","tcn":"18H","tfab":"35H","ral":"","arch":true,"an":2025},{"id":"p024","o":24,"com":"","cond":"olivier","pose":"Posé","ch":"Touli","st":[0,0,0,0,0,0,0,0,0,1],"qte":"2","fin":"31/10/2025","tcn":"5H","tfab":"30H","ral":"","arch":true,"an":2025},{"id":"p025","o":25,"com":"","cond":"olivier","pose":"Posé","ch":"6 Salomon","st":[0,0,0,0,0,0,0,0,0,1],"qte":"1","fin":"31/10/2025","tcn":"3H","tfab":"/","ral":"","arch":true,"an":2025},{"id":"p026","o":26,"com":"","cond":"olivier","pose":"posé","ch":"Bouhant SAV","st":[0,0,0,0,0,0,0,0,0,1],"qte":"1","fin":"03/11/2025","tcn":"2H","tfab":"8H","ral":"","arch":true,"an":2025},{"id":"p027","o":27,"com":"","cond":"olivier","pose":"Posé","ch":"7 Porte Prison","st":[0,0,0,0,0,0,0,0,0,1],"qte":"7","fin":"06/11/2025","tcn":"17h","tfab":"/","ral":"","arch":true,"an":2025},{"id":"p028","o":28,"com":"","cond":"olivier","pose":"Posé","ch":"7 PPP","st":[0,0,0,0,0,0,0,0,0,1],"qte":"1","fin":"21/11/2025","tcn":"3H","tfab":"20H","ral":"","arch":true,"an":2025},{"id":"p029","o":29,"com":"","cond":"olivier","pose":"Posé","ch":"15 Salomon","st":[0,0,0,0,0,0,0,0,0,1],"qte":"2","fin":"24/11/2025","tcn":"7H","tfab":"","ral":"","arch":true,"an":2025},{"id":"p030","o":30,"com":"","cond":"olivier","pose":"Posé","ch":"12 RSV","st":[0,0,0,0,0,0,0,0,0,1],"qte":"7","fin":"25/11/2025","tcn":"22H","tfab":"/","ral":"","arch":true,"an":2025},{"id":"p031","o":31,"com":"","cond":"olivier","pose":"Posé","ch":"26 rue des vierges","st":[0,0,0,0,0,0,0,0,0,1],"qte":"6","fin":"27/11/2025","tcn":"20H","tfab":"/","ral":"","arch":true,"an":2025},{"id":"p032","o":32,"com":"","cond":"olivier","pose":"Posé","ch":"20 Salomon (Lamour)","st":[0,0,0,0,0,0,0,0,0,1],"qte":"3","fin":"Terminé","tcn":"/","tfab":"/","ral":"","arch":true,"an":2025},{"id":"p033","o":33,"com":"","cond":"olivier","pose":"Posé","ch":"Boro SAV (OUV)","st":[0,0,0,0,0,0,0,0,0,1],"qte":"1","fin":"17/10/2025","tcn":"4H","tfab":"12H","ral":"","arch":true,"an":2026},{"id":"p034","o":34,"com":"","cond":"olivier","pose":"Posé","ch":"Marchais","st":[0,0,0,0,0,0,0,0,0,1],"qte":"23","fin":"23/10/2025","tcn":"/","tfab":"/","ral":"","arch":true,"an":2026},{"id":"p035","o":35,"com":"","cond":"olivier","pose":"Posé","ch":"Charité 2ème partie","st":[0,0,0,0,0,0,0,0,0,1],"qte":"11","fin":"17/11/2025","tcn":"30H","tfab":"/","ral":"Impression","arch":true,"an":2026},{"id":"p036","o":36,"com":"","cond":"olivier","pose":"Posé","ch":"Fourure","st":[0,0,0,0,0,0,0,0,0,1],"qte":"1","fin":"24/11/2025","tcn":"1H30","tfab":"5H","ral":"","arch":true,"an":2026},{"id":"p037","o":37,"com":"","cond":"olivier","pose":"Posé","ch":"Le Bihan","st":[0,0,0,0,0,0,0,0,0,1],"qte":"1","fin":"14/01/2026","tcn":"/","tfab":"/","ral":"","arch":true,"an":2026},{"id":"p038","o":38,"com":"","cond":"olivier","pose":"Posé","ch":"8-10 Fontaine","st":[0,0,0,0,0,0,0,0,0,1],"qte":"9","fin":"18/02/2026","tcn":"42H","tfab":"/","ral":"","arch":true,"an":2026},{"id":"p039","o":39,"com":"","cond":"olivier","pose":"Posé","ch":"Moureaux","st":[0,0,0,0,0,0,0,0,0,1],"qte":"1","fin":"06/03/2026","tcn":"/","tfab":"","ral":"3 x Blanc","arch":true,"an":2026},{"id":"p040","o":40,"com":"","cond":"olivier","pose":"Réalisé","ch":"Echantillon MGL58 V12mm","st":[0,0,0,0,0,0,0,0,0,1],"qte":"1","fin":"13/03/2026","tcn":"/","tfab":"","ral":"","arch":true,"an":2026},{"id":"p041","o":41,"com":"","cond":"olivier","pose":"Posé","ch":"Charité","st":[0,0,0,0,0,0,0,0,0,1],"qte":"2","fin":"20/03/2026","tcn":"4H30","tfab":"","ral":"Impression","arch":true,"an":2026},{"id":"p042","o":42,"com":"","cond":"olivier","pose":"Posé","ch":"Locmalo","st":[0,0,0,0,0,0,0,0,0,1],"qte":"4","fin":"24/03/2026","tcn":"/","tfab":"","ral":"Vert bronze","arch":true,"an":2026},{"id":"p043","o":43,"com":"","cond":"olivier","pose":"Posé","ch":"Morio","st":[0,0,0,0,0,0,0,0,0,1],"qte":"2","fin":"27/03/2026","tcn":"1H","tfab":"","ral":"Impression","arch":true,"an":2026},{"id":"p044","o":44,"com":"","cond":"olivier","pose":"Posé","ch":"Groupama","st":[0,0,0,0,0,0,0,0,0,1],"qte":"6","fin":"03/04/2026","tcn":"22H","tfab":"","ral":"NCSS3050Y20R","arch":true,"an":2026},{"id":"p045","o":45,"com":"","cond":"olivier","pose":"01/04/2026","ch":"Psalette","st":[0,0,0,0,0,0,0,0,0,1],"qte":"3","fin":"10/12/2025","tcn":"4H","tfab":"/","ral":"3 x Blanc","arch":true,"an":2026},{"id":"p046","o":46,"com":"","cond":"olivier","pose":"01/04/2026","ch":"Dufourcq","st":[0,0,0,0,0,0,0,0,0,1],"qte":"15","fin":"","tcn":"70H","tfab":"","ral":"Green stone 270","arch":true,"an":2026},{"id":"p047","o":47,"com":"","cond":"olivier","pose":"01/04/2026","ch":"5 Salomon","st":[0,0,0,0,0,0,0,0,0,1],"qte":"2","fin":"03/04/2026","tcn":"3H","tfab":"","ral":"Keim 9064","arch":true,"an":2026},{"id":"p048","o":48,"com":"","cond":"olivier","pose":"01/04/2026","ch":"13 Pl. Poissonnerie","st":[0,0,0,0,0,0,0,0,0,1],"qte":"4","fin":"08/04/2026","tcn":"14H","tfab":"","ral":"Impression","arch":true,"an":2026},{"id":"p049","o":49,"com":"Posé","cond":"olivier","pose":"20/04/2026","ch":"20 Saint Patern - FEN","st":[0,0,0,0,0,0,0,0,0,1],"qte":"4","fin":"27/04/2026","tcn":"13H","tfab":"","ral":"RAL 7038","arch":true,"an":2026},{"id":"p050","o":50,"com":"Posé","cond":"olivier","pose":"20/04/2026","ch":"9 Closmadeuc PH1","st":[0,0,0,0,0,0,0,0,0,1],"qte":"10","fin":"27/04/2026","tcn":"25H","tfab":"","ral":"RAL 7032","arch":true,"an":2026},{"id":"p051","o":51,"com":"Posé","cond":"olivier","pose":"01/06/2026","ch":"9 Closma. PH2 (PE)","st":[0,0,0,0,0,0,0,0,0,1],"qte":"1","fin":"01/06/2026","tcn":"3H","tfab":"","ral":"RAL 7023","arch":true,"an":2026},{"id":"p052","o":52,"com":"Posé","cond":"olivier","pose":"15/06/2026","ch":"9 Closma. PH3","st":[0,0,0,0,0,0,0,0,0,1],"qte":"1","fin":"29/06/2026","tcn":"3H","tfab":"","ral":"7032 gris silex","arch":true,"an":2026},{"id":"p053","o":53,"com":"","cond":"olivier","pose":"30/04/2026","ch":"7-9 Saint-Nicolas","st":[0,0,0,0,0,0,0,0,0,1],"qte":"5","fin":"30/04/2026","tcn":"14H","tfab":"","ral":"Impression","arch":true,"an":2026},{"id":"p054","o":54,"com":"","cond":"olivier","pose":"01/07/2026","ch":"Boutet","st":[0,0,0,0,0,0,0,0,0,1],"qte":"2","fin":"10/07/2026","tcn":"9H","tfab":"","ral":"Impression","arch":true,"an":2026},{"id":"p055","o":55,"com":"","cond":"olivier","pose":"20/07/2026","ch":"17 Salomon","st":[0,0,0,0,0,0,0,0,0,1],"qte":"1","fin":"13/07/2026","tcn":"20Min","tfab":"","ral":"3 couches blanches","arch":true,"an":2026},{"id":"p056","o":56,"com":"","cond":"olivier","pose":"20/07/2026","ch":"12 Saint Patern - FEN","st":[0,0,0,0,0,0,0,0,0,1],"qte":"3","fin":"15/07/2026","tcn":"9H","tfab":"","ral":"Ch2 1158","arch":true,"an":2026},{"id":"p057","o":57,"com":"","cond":"olivier","pose":"15/06/2026","ch":"Mané M10","st":[0,0,0,0,0,0,0,0,0,1],"qte":"1","fin":"22/07/2026","tcn":"2H","tfab":"","ral":"Shadow white 282","arch":true,"an":2026},{"id":"p058","o":58,"com":"","cond":"olivier","pose":"31/07/2026","ch":"13 PDLP BIS","st":[0,0,0,0,0,0,0,0,0,1],"qte":"5","fin":"16/09/2026","tcn":"23H","tfab":"","ral":"Impression","arch":true,"an":2026},{"id":"p059","o":59,"com":"","cond":"olivier","pose":"20/07/2026","ch":"12 Saint Patern - MIXTE","st":[0,0,0,0,0,0,0,0,0,1],"qte":"3","fin":"23/09/2026","tcn":"4H","tfab":"","ral":"CH2 1158","arch":true,"an":2026},{"id":"p060","o":60,"com":"Posé","cond":"olivier","pose":"08/06/2026","ch":"Lanvaudan FEN","st":[0,0,0,0,0,0,0,0,0,1],"qte":"4","fin":"15/07/2026","tcn":"14H","tfab":"","ral":"RAL 3009","arch":true,"an":2026},{"id":"p061","o":61,"com":"","cond":"laurent","pose":"Posé","ch":"Flinois (2ème)","st":[0,0,0,0,0,0,0,0,0,1],"qte":"6","fin":"02/12/2025","tcn":"16H30","tfab":"/","ral":"","arch":true,"an":2025},{"id":"p062","o":62,"com":"","cond":"laurent","pose":"Posé","ch":"Senechal","st":[0,0,0,0,0,0,0,0,0,1],"qte":"1","fin":"04/12/2025","tcn":"/","tfab":"","ral":"","arch":true,"an":2025},{"id":"p063","o":63,"com":"","cond":"laurent","pose":"Posé","ch":"Senechal V2","st":[0,0,0,0,0,0,0,0,0,1],"qte":"1","fin":"09/12/2025","tcn":"/","tfab":"/","ral":"","arch":true,"an":2025},{"id":"p064","o":64,"com":"","cond":"laurent","pose":"Posé","ch":"Les volets verts (Ouv)","st":[0,0,0,0,0,0,0,0,0,1],"qte":"","fin":"X","tcn":"/","tfab":"/","ral":"","arch":true,"an":2025},{"id":"p065","o":65,"com":"","cond":"laurent","pose":"1Porte 2Vtx","ch":"CHEZE - PE 2VTX","st":[0,0,0,0,0,0,0,0,0,1],"qte":"1","fin":"02/12/2025","tcn":"3H","tfab":"","ral":"","arch":true,"an":2025},{"id":"p066","o":66,"com":"","cond":"laurent","pose":"posé","ch":"Lhopitallier (1 porte)","st":[0,0,0,0,0,0,0,0,0,1],"qte":"1","fin":"20/01/2026","tcn":"/","tfab":"/","ral":"","arch":true,"an":2026},{"id":"p067","o":67,"com":"","cond":"laurent","pose":"posé","ch":"Blue Oak Dormant","st":[0,0,0,0,0,0,0,0,0,1],"qte":"1","fin":"21/01/2026","tcn":"/","tfab":"/","ral":"","arch":true,"an":2026},{"id":"p068","o":68,"com":"","cond":"laurent","pose":"posé","ch":"Blue Oak ouvrant","st":[0,0,0,0,0,0,0,0,0,1],"qte":"1","fin":"26/01/2026","tcn":"/","tfab":"/","ral":"","arch":true,"an":2026},{"id":"p069","o":69,"com":"","cond":"laurent","pose":"Posé","ch":"Krotoff DORMANT","st":[0,0,0,0,0,0,0,0,0,1],"qte":"1","fin":"X","tcn":"30 Min","tfab":"4H","ral":"","arch":true,"an":2026},{"id":"p070","o":70,"com":"","cond":"laurent","pose":"Posé","ch":"Puech NV6","st":[0,0,0,0,0,0,0,0,0,1],"qte":"8","fin":"02/03/2026","tcn":"44H","tfab":"","ral":"","arch":true,"an":2026},{"id":"p071","o":71,"com":"","cond":"laurent","pose":"Posé","ch":"Krotoff OUVRANT","st":[0,0,0,0,0,0,0,0,0,1],"qte":"1","fin":"03/03/2026","tcn":"2H30","tfab":"","ral":"","arch":true,"an":2026},{"id":"p072","o":72,"com":"","cond":"laurent","pose":"Posé","ch":"De Labbey","st":[0,0,0,0,0,0,0,0,0,1],"qte":"14","fin":"12/03/2023","tcn":"58H","tfab":"","ral":"","arch":true,"an":2026},{"id":"p073","o":73,"com":"","cond":"laurent","pose":"Posé","ch":"CHEZE (ORIEL)","st":[0,0,0,0,0,0,0,0,0,1],"qte":"3","fin":"08/04/2026","tcn":"13H","tfab":"","ral":"INT 9010/EXT 6021","arch":true,"an":2026},{"id":"p074","o":74,"com":"","cond":"laurent","pose":"Posé","ch":"LENORMAND","st":[0,0,0,0,0,0,0,0,0,1],"qte":"2","fin":"21/04/2026","tcn":"/","tfab":"","ral":"","arch":true,"an":2026},{"id":"p075","o":75,"com":"","cond":"laurent","pose":"Posé","ch":"Delabbey 2 eme","st":[0,0,0,0,0,0,0,0,0,1],"qte":"3","fin":"03/04/2026","tcn":"11H","tfab":"","ral":"Impression","arch":true,"an":2026},{"id":"p076","o":76,"com":"","cond":"laurent","pose":"Posé","ch":"BEAUGRAND (1 PE)","st":[0,0,0,0,0,0,0,0,0,1],"qte":"1","fin":"21/04/2026","tcn":"2H","tfab":"","ral":"NOIR","arch":true,"an":2026},{"id":"p077","o":77,"com":"","cond":"laurent","pose":"Posé","ch":"BARRA","st":[0,0,0,0,0,0,0,0,0,1],"qte":"1","fin":"30/04/2026","tcn":"","tfab":"","ral":"","arch":true,"an":2026},{"id":"p078","o":78,"com":"","cond":"laurent","pose":"01/08/2026","ch":"Laurent (perso)","st":[0,0,0,0,0,0,0,0,0,1],"qte":"2","fin":"17/03/2026","tcn":"8H","tfab":"/","ral":"gris","arch":true,"an":2026},{"id":"p079","o":79,"com":"","cond":"laurent","pose":"?","ch":"BEAUGRAND CLOT","st":[0,0,0,0,0,0,0,0,0,1],"qte":"1","fin":"X","tcn":"","tfab":"","ral":"Brut","arch":true,"an":2026},{"id":"p080","o":80,"com":"","cond":"laurent","pose":"24/07/2026","ch":"Delabbey BIS","st":[0,0,0,0,0,0,0,0,0,1],"qte":"1 ouv","fin":"15/07/2026","tcn":"3H","tfab":"","ral":"","arch":true,"an":2026},{"id":"p081","o":81,"com":"","cond":"laurent","pose":"24/07/2026","ch":"Delabbey PH3","st":[0,0,0,0,0,0,0,0,0,1],"qte":"2 ouv","fin":"17/07/2026","tcn":"3H","tfab":"","ral":"3 couches blanches","arch":true,"an":2026}];
-let pmbRows={},pmbMaj='24/09/2026',pmbQ='',pmbCond='',pmbShowAtt=true,pmbShowArc=false,pmbSort='',pmbMenuId=null,pmbSeeding=false,pmbPending=false;
+const PMB_CONDS=['Laurent','Olivier','Pierre-Yves','Mathieu']; // conducteurs proposés (on peut en taper un autre)
+let pmbUW='',pmbRows={},pmbMaj='24/09/2026',pmbQ='',pmbConds=[],pmbShowAtt=true,pmbShowArc=false,pmbSort='',pmbMenuId=null,pmbSeeding=false,pmbPending=false;
 PMB_SEED.forEach(r=>{pmbRows[r.id]=r;});
 
 const pmbToday=()=>{const d=new Date();return String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+d.getFullYear();};
 function pmbDate(s){const m=/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})$/.exec(String(s||'').trim());if(!m)return null;let y=+m[3];if(y<100)y+=2000;return new Date(y,m[2]-1,+m[1]);}
 function pmbNorm(r,id){
-  r=r||{};const st=atlList(r.st).map(x=>x?1:0);while(st.length<10)st.push(0);
-  const o={id:r.id||id,o:+r.o||0,st:st.slice(0,10),arch:!!r.arch,an:r.an||''};
+  r=r||{};const st=atlList(r.st).map(x=>x?1:0);
+  if(r.v!==2)st.unshift(0); // ancien format (10 colonnes) : on insère « En Préparation BE »
+  while(st.length<PMB_N)st.push(0);
+  const o={id:r.id||id,v:2,o:+r.o||0,st:st.slice(0,PMB_N),arch:!!r.arch,an:r.an||''};
   PMB_FIELDS.forEach(f=>o[f]=String(r[f]==null?'':r[f]));
   // arc = archivé (posé). Lignes reprises d'Excel : « Posé / Réalisé » dans Date POSE ou Commentaires → archivées
   o.arc=o.arch&&(r.arc!==undefined?!!r.arc:/pos[ée]|réalis/i.test(o.pose+' '+o.com));
   return o;
 }
-function pmbSavePref(){try{localStorage.setItem('jehanno_prodbois_prefs',JSON.stringify({att:pmbShowAtt,arc:pmbShowArc,sort:pmbSort}));}catch(e){}}
-(function(){try{const p=JSON.parse(localStorage.getItem('jehanno_prodbois_prefs')||'null');if(p){pmbShowAtt=p.att!==false;pmbShowArc=!!p.arc;pmbSort=['az','za'].includes(p.sort)?p.sort:'';}}catch(e){}})();
+function pmbSavePref(){try{localStorage.setItem('jehanno_prodbois_prefs',JSON.stringify({att:pmbShowAtt,arc:pmbShowArc,sort:pmbSort,conds:pmbConds}));}catch(e){}}
+// Nom affiché : « olivier » → « Olivier », « pierre-yves » → « Pierre-Yves »
+function pmbCondLbl(c){c=String(c||'').trim();const f=PMB_CONDS.find(x=>x.toLowerCase()===c.toLowerCase());return f||c.replace(/(^|[\s-])(\S)/g,(m,a,b)=>a+b.toUpperCase());}
+(function(){try{const p=JSON.parse(localStorage.getItem('jehanno_prodbois_prefs')||'null');if(p){pmbConds=Array.isArray(p.conds)?p.conds.filter(c=>typeof c==='string'):(p.cond?[p.cond]:[]);pmbShowAtt=p.att!==false;pmbShowArc=!!p.arc;pmbSort=['az','za','d1','d2'].includes(p.sort)?p.sort:'';}}catch(e){}})();
 function pmbAll(){return Object.keys(pmbRows).map(k=>pmbNorm(pmbRows[k],k)).sort((a,b)=>a.o-b.o);}
 
 // ── Cache + sync ──
@@ -2191,19 +2242,40 @@ function pmbRefresh(){
 
 // ── Rendu ──
 function pmbCell(r,f,cls,ph){return `<td class="${cls}"><div class="pmb-in" contenteditable="true" spellcheck="false" data-f="${f}" data-ph="${ph||''}">${esc(r[f])}</div></td>`;}
+// Cellule date : affichage jj/mm/aaaa + calendrier natif au clic
+function pmbISO(s){const d=pmbDate(s);return d?d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'):'';}
+function pmbDateCell(r,f,cls,ph){return `<td class="${cls} w-dt" title="Cliquer pour choisir une date"><div class="pmb-dt" data-ph="${ph||''}">${esc(r[f])}</div><input type="date" class="pmb-dtin" value="${pmbISO(r[f])}" onclick="pmbPick(this)" onchange="pmbSetDate('${r.id}','${f}',this.value)" tabindex="-1"></td>`;}
+function pmbPct(v){const n=parseFloat(String(v||'').replace(',','.').replace(/[^\d.]/g,''));return isNaN(n)?null:Math.max(0,Math.min(100,Math.round(n)));}
+// Ligne sous-traitée : commentaire « Sous-traitante » (ou sous-traitance, sous traitant…) → ligne en marron très clair
+const PMB_ST_TXT='Sous-traitante';
+function pmbIsST(r){return /^\s*sous[\s-]*trait/i.test(r.com||'');}
 function pmbRowHtml(r){
   const last=r.st.lastIndexOf(1),dp=pmbDate(r.pose),t0=new Date();t0.setHours(0,0,0,0);
-  const late=!r.arch&&dp&&dp<t0&&!r.st[9];
-  const go=!r.arch&&r.st[9]?`<button class="pmb-go" onclick="pmbMove('${r.id}','att')" title="Prêt à poser → Terminés, en attente de pose">➜</button>`:'';
+  // rouge si date de pose dépassée : en production (pas encore prêt à poser) et terminés en attente de pose
+  const late=!r.arc&&dp&&dp<t0&&(r.arch||!r.st[PMB_LAST]);
+  const pc=pmbPct(r.pct);
+  const go=!r.arch&&r.st[PMB_LAST]?`<button class="pmb-go" onclick="pmbMove('${r.id}','att')" title="Prêt à poser → Terminés, en attente de pose">➜</button>`:'';
   const sel=r.arc?`<input type="checkbox" class="pmb-sel" ${pmbSel.has(r.id)?'checked':''} onclick="pmbSelToggle(event,'${r.id}')" title="Sélectionner (Maj+clic = plage)">`:'';
-  let h=`<tr data-id="${r.id}" class="${r.arch?'is-arch':''}${r.arc?' is-arc':''}${pmbSel.has(r.id)?' is-sel':''}"><td class="pmb-a">${sel}<button onclick="pmbMenu(event,'${r.id}')" title="Actions">⋮</button>${go}</td>`;
-  h+=pmbCell(r,'com','w-com')+pmbCell(r,'cond','w-cond')+pmbCell(r,'pose','w-pose'+(late?' late':''),'jj/mm/aaaa')+pmbCell(r,'ch','pmb-ch','Chantier…');
-  r.st.forEach((on,i)=>{h+=`<td class="pmb-st${on?' on':''}${i===last?' cur':''}" style="${on?'background:'+PMB_COL[i]:''}" onclick="pmbTap('${r.id}',${i})" title="${PMB_ST[i]} — double-clic pour mettre / enlever la croix">${on?'X':''}</td>`;});
-  h+=pmbCell(r,'qte','w-qte')+pmbCell(r,'fin','w-fin')+pmbCell(r,'tcn','w-t')+pmbCell(r,'tfab','w-t')+pmbCell(r,'ral','w-ral');
+  let h=`<tr data-id="${r.id}" class="${pmbIsST(r)?'is-st ':''}${r.arch?'is-arch':''}${r.arc?' is-arc':''}${pmbSel.has(r.id)?' is-sel':''}"><td class="pmb-a">${sel}<button onclick="pmbMenu(event,'${r.id}')" title="Actions">⋮</button>${go}</td>`;
+  const uw=String(r.uw||'').toUpperCase();
+  h+=pmbCell(r,'com','w-com').replace('</td>',`<button class="pmb-cbtn" onclick="pmbComMenu(event,'${r.id}')" title="Choisir : Sous-traitante">▼</button></td>`)+pmbCell({...r,cond:pmbCondLbl(r.cond)},'cond','w-cond').replace('</td>',`<button class="pmb-cbtn" onclick="pmbCondMenu(event,'${r.id}')" title="Choisir le conducteur">▼</button></td>`)
+    +`<td class="w-uw"><select class="pmb-uw ${uw==='U'?'u':uw==='W'?'w':''}" onchange="pmbSetUW('${r.id}',this.value)" title="U ou W"><option value=""${uw?'':' selected'}>–</option><option value="U"${uw==='U'?' selected':''}>U</option><option value="W"${uw==='W'?' selected':''}>W</option></select></td>`
+    +pmbDateCell(r,'pose','w-pose'+(late?' late':''),'jj/mm/aaaa')+pmbCell(r,'ch','pmb-ch','Chantier…');
+  r.st.forEach((on,i)=>{
+    if(i===PMB_LAST)h+=`<td class="w-pct"><div class="pmb-in" contenteditable="true" spellcheck="false" inputmode="numeric" data-f="pct" data-ph="">${pc==null?'':pc+' %'}</div></td>`;
+    // « Prêt à poser » non coché : remplissage progressif selon le % d'avancement
+    const grad=!on&&i===PMB_LAST&&pc?`background:linear-gradient(to right,#A5D6A7 ${pc}%,transparent ${pc}%)`:'';
+    h+=`<td class="pmb-st${on?' on':''}${i===last?' cur':''}${grad?' pct':''}" style="${on?'background:'+PMB_COL[i]:grad}" onclick="pmbTap('${r.id}',${i})" title="${PMB_ST[i]}${i===PMB_LAST&&pc!=null?' — avancement '+pc+' %':''} — double-clic pour mettre / enlever la croix">${on?'X':''}</td>`;
+  });
+  h+=pmbCell(r,'qte','w-qte')+pmbDateCell(r,'fin','w-fin')+pmbCell(r,'tcn','w-t')+pmbCell(r,'tfab','w-t')+pmbCell(r,'ral','w-ral');
   return h+'</tr>';
 }
 function pmbSorted(l){
   if(!pmbSort)return l;
+  if(pmbSort==='d1'||pmbSort==='d2'){ // tri par date de pose (sans date → en bas)
+    const k=r=>{const d=pmbDate(r.pose);return d?d.getTime():null;};
+    return l.slice().sort((a,b)=>{const x=k(a),y=k(b);if(x===y)return a.o-b.o;if(x==null)return 1;if(y==null)return -1;return (x-y)*(pmbSort==='d2'?-1:1);});
+  }
   const k=r=>r.ch.toLocaleLowerCase('fr').trim();
   return l.slice().sort((a,b)=>(k(a).localeCompare(k(b),'fr',{numeric:true}))*(pmbSort==='za'?-1:1));
 }
@@ -2219,14 +2291,14 @@ function pmbRender(){
   pmbPending=false;
   const tb=document.getElementById('pmb-table');if(!tb)return;
   const all=pmbAll(),q=pmbQ.trim().toLowerCase();
-  const match=r=>(!pmbCond||r.cond.toLowerCase()===pmbCond)&&(!q||[r.ch,r.com,r.cond,r.ral,r.pose,r.qte].join(' ').toLowerCase().includes(q));
+  const match=r=>(!pmbConds.length||pmbConds.includes(r.cond.trim().toLowerCase()))&&(!pmbUW||String(r.uw||'').toUpperCase()===pmbUW)&&(!q||[r.ch,r.com,r.cond,r.uw,r.ral,r.pose,r.qte].join(' ').toLowerCase().includes(q));
   const prod=all.filter(r=>!r.arch&&match(r)),att=all.filter(r=>r.arch&&!r.arc&&match(r)),arc=all.filter(r=>r.arc&&match(r));
-  const NC=20,arrow=pmbSort==='az'?' ▲':pmbSort==='za'?' ▼':'';
-  let h=`<thead><tr><th class="pmb-a"></th><th>Commentaires</th><th>Conduc</th><th>Date POSE</th><th class="pmb-chh pmb-sortable" onclick="pmbSortCycle()" title="Trier par nom de chantier">Chantiers${arrow}</th>`+
-    PMB_ST.map((s,i)=>`<th class="pmb-sth y"><span style="border-bottom-color:${PMB_COL[i]}">${s}</span></th>`).join('')+
-    `<th class="y">Quantité</th><th class="y">Prod terminé</th><th class="y">Tps travail CN</th><th class="y">Tps travail Fab</th><th class="y">RAL</th></tr></thead><tbody>`;
+  const NC=7+PMB_N+6,arrow=pmbSort==='az'?' ▲':pmbSort==='za'?' ▼':'',darrow=pmbSort==='d1'?' ▲':pmbSort==='d2'?' ▼':'';
+  let h=`<thead><tr><th class="pmb-a"></th><th>Commentaires</th><th>Conduc</th><th title="U ou W">U/W</th><th class="pmb-sortable${darrow?' on':''}" onclick="pmbDateSortCycle()" title="Trier par date de pose">Date POSE${darrow}</th><th class="pmb-chh pmb-sortable" onclick="pmbSortCycle()" title="Trier par nom de chantier">Chantiers${arrow}</th>`+
+    PMB_ST.map((s,i)=>(i===PMB_LAST?`<th class="pmb-pcth y">% avan&shy;cement</th>`:'')+`<th class="pmb-sth y"><span style="border-bottom-color:${PMB_COL[i]}">${s}</span></th>`).join('')+
+    `<th class="y">Quantité</th><th class="y">Prod terminé</th><th class="y">Tps travail CN</th><th class="y">Tps travail Fab</th><th class="y">Finition</th></tr></thead><tbody>`;
   h+=`<tr class="pmb-sec"><td colspan="${NC}"><span class="pmb-secin"><i class="ti ti-tools"></i> En production · ${prod.length} chantier${prod.length>1?'s':''}</span></td></tr>`;
-  h+=prod.length?pmbSorted(prod).map(pmbRowHtml).join(''):`<tr class="pmb-emp"><td colspan="${NC}">Aucun chantier en production${q||pmbCond?' pour ce filtre':''}</td></tr>`;
+  h+=prod.length?pmbSorted(prod).map(pmbRowHtml).join(''):`<tr class="pmb-emp"><td colspan="${NC}">Aucun chantier en production${q||pmbConds.length||pmbUW?' pour ce filtre':''}</td></tr>`;
   const sA=pmbShowAtt||!!q,sR=pmbShowArc||!!q;
   h+=`<tr class="pmb-sec att" onclick="pmbToggleSec('att')"><td colspan="${NC}"><span class="pmb-secin">${sA?'▾':'▸'} Terminés — en attente de pose · ${att.length}</span></td></tr>`;
   if(sA)h+=att.length?pmbByYear(att,NC):`<tr class="pmb-emp"><td colspan="${NC}">Aucun chantier en attente de pose</td></tr>`;
@@ -2236,14 +2308,19 @@ function pmbRender(){
   pmbSelBar();
   document.getElementById('pmb-maj').innerHTML=`MAJ le : <b>${esc(pmbMaj)}</b>`;
   document.getElementById('pmb-arch-btn').classList.toggle('on',pmbShowArc);
-  document.getElementById('pmb-sort-btn').classList.toggle('on',!!pmbSort);
+  document.getElementById('pmb-sort-btn').classList.toggle('on',pmbSort==='az'||pmbSort==='za');
   document.getElementById('pmb-sort-btn').innerHTML=`<i class="ti ti-sort-ascending-letters"></i> ${pmbSort==='za'?'Z → A':'A → Z'}`;
+  document.getElementById('pmb-dsort-btn').classList.toggle('on',pmbSort==='d1'||pmbSort==='d2');
+  document.getElementById('pmb-dsort-btn').innerHTML=`<i class="ti ti-calendar"></i> Date pose${pmbSort==='d2'?' ▼':pmbSort==='d1'?' ▲':''}`;
   pmbChips(all);
 }
 function pmbChips(all){
-  const cs=[...new Set(all.map(r=>r.cond.toLowerCase()).filter(Boolean))].sort();
-  document.getElementById('pmb-chips').innerHTML=[['','Tous'],...cs.map(c=>[c,c.charAt(0).toUpperCase()+c.slice(1)])]
-    .map(([v,l])=>`<button class="btn${pmbCond===v?' on':''}" onclick="pmbSetCond('${esc(v)}')">${esc(l)}</button>`).join('');
+  // Un seul bouton « Conduc » → boîte de choix (cases à cocher)
+  const n=pmbConds.length,lbl=!n?'Tous':n<=2?pmbConds.map(pmbCondLbl).join(', '):n+' conducteurs';
+  document.getElementById('pmb-chips').innerHTML=`<button class="btn${n?' on':''}" onclick="pmbCondDlg(event)" title="Choisir les conducteurs à afficher"><i class="ti ti-user"></i> Conduc : ${esc(lbl)} ▾</button>`;
+  // Filtre U / W
+  document.getElementById('pmb-uwchips').innerHTML=[['','U+W'],['U','U'],['W','W']]
+    .map(([v,l])=>`<button class="btn${pmbUW===v?' on':''}" onclick="pmbSetUW2('${v}')" title="${v?'Afficher seulement les '+v:'Afficher U et W'}">${l}</button>`).join('');
 }
 
 // ── Saisie ──
@@ -2251,10 +2328,11 @@ function pmbChips(all){
   const tb=document.getElementById('pmb-table');
   tb.addEventListener('focusout',e=>{
     const el=e.target;if(!el.classList||!el.classList.contains('pmb-in'))return;
-    const id=el.closest('tr').dataset.id,f=el.dataset.f,v=el.innerText.replace(/\n+$/,'').trim();
+    const id=el.closest('tr').dataset.id,f=el.dataset.f;let v=el.innerText.replace(/\n+$/,'').trim();
+    if(f==='pct'){const n=pmbPct(v);v=n==null?'':String(n);pmbPending=true;}
     const r=pmbNorm(pmbRows[id],id);
     if(r[f]!==v){r[f]=v;pmbRows[id]=r;pmbSvRows([id]);}
-    setTimeout(()=>{const a=document.activeElement;if(pmbPending&&!(a&&a.closest&&a.closest('#pmb-table')))pmbRender();else if(f==='pose'&&!(a&&a.closest&&a.closest('#pmb-table')))pmbRender();},0);
+    setTimeout(()=>{const a=document.activeElement;if(pmbPending&&!(a&&a.closest&&a.closest('#pmb-table')))pmbRender();else if((f==='pose'||f==='com')&&!(a&&a.closest&&a.closest('#pmb-table')))pmbRender();},0);
   });
   tb.addEventListener('keydown',e=>{
     if(e.target.classList&&e.target.classList.contains('pmb-in')&&e.key==='Enter'&&!e.shiftKey){e.preventDefault();e.target.blur();}
@@ -2273,16 +2351,72 @@ window.pmbTap=(id,i)=>{
 };
 window.pmbToggle=(id,i)=>{const r=pmbNorm(pmbRows[id],id);r.st[i]=r.st[i]?0:1;pmbRows[id]=r;pmbSvRows([id]);pmbRender();};
 window.pmbSearch=v=>{pmbQ=v;pmbRender();};
-window.pmbSetCond=c=>{pmbCond=c;pmbRender();};
+// Calendrier : ouvre le sélecteur natif (PC) — sur tablette le tap l'ouvre directement
+window.pmbPick=el=>{try{if(el.showPicker)el.showPicker();}catch(e){}};
+window.pmbSetDate=(id,f,v)=>{
+  const r=pmbNorm(pmbRows[id],id),m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(v||'');
+  const nv=m?m[3]+'/'+m[2]+'/'+m[1]:'';
+  if(r[f]===nv)return;r[f]=nv;pmbRows[id]=r;pmbSvRows([id]);keepScroll(pmbRender);
+};
+window.pmbSetUW=(id,v)=>{const r=pmbNorm(pmbRows[id],id);r.uw=v;pmbRows[id]=r;pmbSvRows([id]);keepScroll(pmbRender);};
+// Tri par date de pose : plus proche d'abord, plus lointaine d'abord, puis ordre manuel
+window.pmbDateSortCycle=()=>{pmbSort=pmbSort==='d1'?'d2':pmbSort==='d2'?'':'d1';pmbSavePref();pmbRender();toast(pmbSort?`Tri par date de pose ${pmbSort==='d1'?'(la plus proche d\'abord)':'(la plus lointaine d\'abord)'}`:'Ordre manuel');};
+window.pmbSetCond=c=>{pmbConds=c?[c]:[];pmbSavePref();pmbRender();};
+function pmbCondList(){
+  const fx=PMB_CONDS.map(c=>c.toLowerCase());
+  return [...fx,...[...new Set(pmbAll().map(r=>r.cond.trim().toLowerCase()).filter(c=>c&&!fx.includes(c)))].sort()];
+}
+function pmbCondDlgHtml(){
+  const cs=pmbCondList(),all=pmbAll().filter(r=>!r.arc);
+  const nb=c=>all.filter(r=>r.cond.trim().toLowerCase()===c).length;
+  return `<div class="pmb-dlgt">Conducteurs à afficher</div>`
+    +`<label class="pmb-chk"><input type="checkbox" ${pmbConds.length?'':'checked'} onchange="pmbCondPick('')"> <b>Tous</b></label>`
+    +cs.map(c=>`<label class="pmb-chk"><input type="checkbox" ${pmbConds.includes(c)?'checked':''} onchange="pmbCondPick('${esc(c).replace(/'/g,"\\'")}')"> ${esc(pmbCondLbl(c))} <small>${nb(c)}</small></label>`).join('')
+    +`<div class="pmb-dlgb"><button onclick="pmbCondOnly()">Fermer</button></div>`;
+}
+window.pmbCondDlg=ev=>{
+  ev.stopPropagation();pmbMenuId=null;const m=document.getElementById('pmb-menu');
+  m.innerHTML=pmbCondDlgHtml();m.classList.add('open','dlg');
+  const b=ev.currentTarget.getBoundingClientRect();m.style.left=Math.min(b.left,window.innerWidth-250)+'px';m.style.top=(b.bottom+4)+'px';
+};
+window.pmbCondPick=c=>{
+  if(!c)pmbConds=[];else pmbConds=pmbConds.includes(c)?pmbConds.filter(x=>x!==c):[...pmbConds,c];
+  pmbSavePref();pmbRender();const m=document.getElementById('pmb-menu');if(m.classList.contains('open'))m.innerHTML=pmbCondDlgHtml();
+};
+window.pmbCondOnly=()=>pmbMenuClose();
+// Menu ▼ de la colonne Conduc : liste + autre nom
+window.pmbCondMenu=(ev,id)=>{
+  ev.stopPropagation();pmbMenuId=null;const m=document.getElementById('pmb-menu');
+  const fx=PMB_CONDS.map(c=>c.toLowerCase());
+  const autres=[...new Set(pmbAll().map(r=>r.cond.trim()).filter(c=>c&&!fx.includes(c.toLowerCase())).map(pmbCondLbl))].sort();
+  m.innerHTML=[...PMB_CONDS,...autres].map(c=>`<div onclick="pmbSetCondRow('${id}','${esc(c).replace(/'/g,"\\'")}')"><i class="ti ti-user"></i> ${esc(c)}</div>`).join('')
+    +`<div onclick="pmbEditField('${id}','cond')"><i class="ti ti-pencil"></i> Autre conducteur…</div>`
+    +`<div class="red" onclick="pmbSetCondRow('${id}','')"><i class="ti ti-eraser"></i> Effacer</div>`;
+  m.classList.add('open');const b=ev.currentTarget.getBoundingClientRect();
+  m.style.left=Math.min(b.left,window.innerWidth-240)+'px';m.style.top=Math.max(4,Math.min(b.bottom+2,window.innerHeight-m.offsetHeight-8))+'px';
+};
+window.pmbSetCondRow=(id,v)=>{pmbMenuClose();const r=pmbNorm(pmbRows[id],id);if(r.cond===v)return;r.cond=v;pmbRows[id]=r;pmbSvRows([id]);keepScroll(pmbRender);};
+window.pmbEditField=(id,f)=>{pmbMenuClose();const el=document.querySelector(`#pmb-table tr[data-id="${id}"] [data-f="${f}"]`);if(!el)return;el.focus();const s=window.getSelection(),g=document.createRange();g.selectNodeContents(el);s.removeAllRanges();s.addRange(g);};
+window.pmbComMenu=(ev,id)=>{
+  ev.stopPropagation();pmbMenuId=null;const m=document.getElementById('pmb-menu');
+  m.innerHTML=`<div onclick="pmbSetCom('${id}','${PMB_ST_TXT}')"><i class="ti ti-building-factory-2"></i> ${PMB_ST_TXT}</div>`
+    +`<div onclick="pmbComEdit('${id}')"><i class="ti ti-pencil"></i> Taper un texte…</div>`
+    +`<div class="red" onclick="pmbSetCom('${id}','')"><i class="ti ti-eraser"></i> Effacer le commentaire</div>`;
+  m.classList.add('open');const b=ev.currentTarget.getBoundingClientRect();
+  m.style.left=Math.min(b.left,window.innerWidth-240)+'px';m.style.top=Math.min(b.bottom+2,window.innerHeight-140)+'px';
+};
+window.pmbSetCom=(id,v)=>{pmbMenuClose();const r=pmbNorm(pmbRows[id],id);if(r.com===v)return;r.com=v;pmbRows[id]=r;pmbSvRows([id]);keepScroll(pmbRender);};
+window.pmbComEdit=id=>{pmbMenuClose();const el=document.querySelector(`#pmb-table tr[data-id="${id}"] [data-f="com"]`);if(!el)return;el.focus();const s=window.getSelection(),g=document.createRange();g.selectNodeContents(el);g.collapse(false);s.removeAllRanges();s.addRange(g);};
+window.pmbSetUW2=v=>{pmbUW=v;pmbRender();};
 window.pmbToggleArch=()=>{pmbShowArc=!pmbShowArc;pmbSavePref();pmbRender();};
 window.pmbToggleSec=w=>{if(w==='att')pmbShowAtt=!pmbShowAtt;else pmbShowArc=!pmbShowArc;pmbSavePref();pmbRender();};
 // Tri par nom de chantier : A→Z, Z→A, puis ordre manuel
-window.pmbSortCycle=()=>{pmbSort=pmbSort===''?'az':pmbSort==='az'?'za':'';pmbSavePref();pmbRender();toast(pmbSort?`Tri par chantier ${pmbSort==='az'?'A → Z':'Z → A'}`:'Ordre manuel');};
+window.pmbSortCycle=()=>{pmbSort=pmbSort==='az'?'za':pmbSort==='za'?'':'az';pmbSavePref();pmbRender();toast(pmbSort?`Tri par chantier ${pmbSort==='az'?'A → Z':'Z → A'}`:'Ordre manuel');};
 // Changement de section : prod ⇄ en attente de pose ⇄ archivé
 window.pmbMove=(id,to)=>{
   const r=pmbNorm(pmbRows[id],id);
   if(to==='att'){
-    if(!r.arch&&!r.st[9]){toast('Coche d\'abord « Prêt à poser »');return;}
+    if(!r.arch&&!r.st[PMB_LAST]){toast('Coche d\'abord « Prêt à poser »');return;}
     if(!r.arch){r.an=new Date().getFullYear();if(!r.fin)r.fin=pmbToday();}
     r.arch=true;r.arc=false;toast(`« ${r.ch||'Chantier'} » → Terminés, en attente de pose ✓`);
   }else if(to==='arc'){r.arch=true;r.arc=true;if(!r.an)r.an=new Date().getFullYear();toast(`« ${r.ch||'Chantier'} » archivé ✓`);}
@@ -2295,7 +2429,7 @@ window.pmbAdd=()=>{
   // nouvelle ligne placée à la fin de la section « En production »
   const nxt=lastProd?all.find(r=>r.o>lastProd.o):all[0];
   const o=lastProd?(nxt?(lastProd.o+nxt.o)/2:lastProd.o+1):(nxt?nxt.o-1:1);
-  pmbRows[id]=pmbNorm({id,o,cond:pmbCond,st:[1,0,0,0,0,0,0,0,0,0]},id);
+  pmbRows[id]=pmbNorm({id,v:2,o,cond:pmbConds.length===1?pmbCondLbl(pmbConds[0]):'',st:[1]},id);
   pmbSvRows([id]);
   pmbQ='';document.getElementById('pmb-q').value='';pmbRender();
   setTimeout(()=>{const el=document.querySelector(`#pmb-table tr[data-id="${id}"] [data-f="ch"]`);if(el){el.scrollIntoView({block:'center'});el.focus();}},30);
@@ -2332,7 +2466,7 @@ window.pmbDelSel=()=>{
 window.pmbMenu=(ev,id)=>{
   ev.stopPropagation();pmbMenuId=id;const r=pmbNorm(pmbRows[id],id),m=document.getElementById('pmb-menu');
   let it='';
-  if(!r.arch)it+=r.st[9]?`<div onclick="pmbAct('att')"><i class="ti ti-truck-delivery"></i> Prêt à poser → Terminés (attente pose)</div>`
+  if(!r.arch)it+=r.st[PMB_LAST]?`<div onclick="pmbAct('att')"><i class="ti ti-truck-delivery"></i> Prêt à poser → Terminés (attente pose)</div>`
                         :`<div class="dis" title="Double-clic sur la case « Prêt à poser » d'abord"><i class="ti ti-truck-delivery"></i> Prêt à poser → Terminés <small>(cocher Prêt à poser)</small></div>`;
   else if(!r.arc)it+=`<div onclick="pmbAct('arc')"><i class="ti ti-archive"></i> Posé → Archiver</div><div onclick="pmbAct('prod')"><i class="ti ti-arrow-back-up"></i> Remettre en production</div>`;
   else it+=`<div onclick="pmbAct('att')"><i class="ti ti-arrow-back-up"></i> Désarchiver (en attente de pose)</div><div onclick="pmbAct('prod')"><i class="ti ti-arrow-back-up"></i> Remettre en production</div>`;
@@ -2342,8 +2476,8 @@ window.pmbMenu=(ev,id)=>{
   const b=ev.currentTarget.getBoundingClientRect();
   m.style.left=Math.min(b.right+4,window.innerWidth-280)+'px';m.style.top=Math.min(b.top,window.innerHeight-220)+'px';
 };
-function pmbMenuClose(){document.getElementById('pmb-menu').classList.remove('open');pmbMenuId=null;}
-document.addEventListener('click',e=>{if(!e.target.closest('#pmb-menu'))pmbMenuClose();});
+function pmbMenuClose(){document.getElementById('pmb-menu').classList.remove('open','dlg');pmbMenuId=null;}
+document.addEventListener('click',e=>{if(e.target.isConnected&&!e.target.closest('#pmb-menu'))pmbMenuClose();});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')pmbMenuClose();});
 window.pmbAct=a=>{
   const id=pmbMenuId;pmbMenuClose();if(!id||!pmbRows[id])return;
@@ -2360,7 +2494,7 @@ window.pmbAct=a=>{
 
 // ── Impression ──
 window.pmbPrint=()=>{
-  document.getElementById('pmb-print-hdr').innerHTML=`🪵 Suivi prod Mex bois <span>MAJ le : ${esc(pmbMaj)} · Imprimé le ${new Date().toLocaleDateString('fr-FR')}${pmbCond?' · '+esc(pmbCond):''}</span>`;
+  document.getElementById('pmb-print-hdr').innerHTML=`🪵 Suivi prod Mex bois <span>MAJ le : ${esc(pmbMaj)} · Imprimé le ${new Date().toLocaleDateString('fr-FR')}${pmbConds.length?' · '+esc(pmbConds.map(pmbCondLbl).join(', ')):''}${pmbUW?' · '+pmbUW:''}</span>`;
   setTimeout(()=>window.print(),150);
 };
 pmbLoadCache();
