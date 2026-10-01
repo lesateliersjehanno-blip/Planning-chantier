@@ -165,6 +165,9 @@ function render(){
 
 window.shiftW=n=>{start=addD(start,n*7);render();};
 window.goToday=()=>{start=monday(new Date());render();};
+// page restée ouverte plusieurs jours (onglet / écran d'accueil) : on recale sur la semaine en cours au retour
+let lastMon=monday(new Date()).getTime();
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState!=='visible')return;const m=monday(new Date()).getTime();if(m!==lastMon){lastMon=m;start=new Date(m);}render();});
 
 // ── écoute Firebase (lecture seule) ──
 render();
