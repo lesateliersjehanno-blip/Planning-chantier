@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Mon planning">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1c1c1e" media="(prefers-color-scheme: dark)">
+<title>Mon planning — Jehanno</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<style>
+:root{--bg:#f5f5f5;--card:#fff;--border:#e0e0e0;--text:#1a1a1a;--text2:#666;--text3:#999;--blue:#378ADD;--today:#EAF3FC;}
+@media (prefers-color-scheme:dark){:root{--bg:#1c1c1e;--card:#2c2c2e;--border:#3a3a3c;--text:#f0f0f0;--text2:#aaa;--text3:#777;--today:#1d3349;}}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;-webkit-text-size-adjust:100%;}
+header{position:sticky;top:0;z-index:5;background:var(--card);border-bottom:1px solid var(--border);padding:calc(10px + env(safe-area-inset-top)) 16px 10px;}
+.h-top{display:flex;align-items:center;gap:8px;}
+h1{font-size:17px;font-weight:700;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.sub{font-size:12px;color:var(--text2);margin-top:2px;}
+.sync{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--text3);flex-shrink:0;}
+.dot{width:8px;height:8px;border-radius:50%;background:#bbb;}
+.dot.ok{background:#3BB273;}.dot.err{background:#E5534B;}
+.nav{display:flex;align-items:center;gap:6px;margin-top:10px;}
+.nav button{border:1px solid var(--border);background:var(--card);color:var(--text);border-radius:8px;height:36px;min-width:36px;padding:0 10px;font-size:13px;display:inline-flex;align-items:center;justify-content:center;gap:4px;cursor:pointer;}
+.nav button:active{background:var(--bg);}
+.nav .lbl{flex:1;text-align:center;font-size:13px;font-weight:600;}
+main{padding:12px 16px calc(24px + env(safe-area-inset-bottom));max-width:640px;margin:0 auto;}
+.wk-title{font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.04em;margin:14px 2px 6px;}
+.wk-title:first-child{margin-top:2px;}
+.day{display:flex;gap:12px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:10px 12px;margin-bottom:6px;align-items:flex-start;}
+.day.today{background:var(--today);border-color:var(--blue);}
+.day.past{opacity:.55;}
+.d-date{width:44px;flex-shrink:0;text-align:center;line-height:1.1;}
+.d-dow{font-size:11px;color:var(--text2);text-transform:uppercase;}
+.d-num{font-size:20px;font-weight:700;}
+.day.today .d-num{color:var(--blue);}
+.d-body{flex:1;min-width:0;}
+.chip{display:inline-block;font-size:14px;font-weight:600;padding:3px 8px;border-radius:6px;word-break:break-word;}
+.task{font-size:13px;color:var(--text2);margin-top:4px;white-space:pre-wrap;word-break:break-word;}
+.empty{font-size:13px;color:var(--text3);font-style:italic;padding-top:3px;}
+.ferie{display:inline-block;font-size:10px;font-weight:700;color:#A03010;background:#FFEFE8;border-radius:4px;padding:1px 5px;margin-bottom:4px;}
+.wknd{font-size:12px;color:var(--text2);background:transparent;border:1px dashed var(--border);border-radius:10px;padding:7px 12px;margin-bottom:6px;}
+.msg{text-align:center;color:var(--text2);padding:48px 16px;font-size:14px;line-height:1.5;}
+.msg i{font-size:34px;display:block;margin-bottom:8px;color:var(--text3);}
+.foot{font-size:11px;color:var(--text3);text-align:center;margin-top:16px;}
+</style>
+</head>
+<body>
+<header>
+  <div class="h-top">
+    <h1 id="ttl">Mon planning</h1>
+    <div class="sync"><div class="dot" id="sd"></div><span id="sl">…</span></div>
+  </div>
+  <div class="sub" id="sub">Chargement…</div>
+  <div class="nav">
+    <button onclick="shiftW(-1)" aria-label="Semaine précédente"><i class="ti ti-chevron-left"></i></button>
+    <button onclick="goToday()"><i class="ti ti-calendar-event"></i> Aujourd'hui</button>
+    <span class="lbl" id="rng"></span>
+    <button onclick="shiftW(1)" aria-label="Semaine suivante"><i class="ti ti-chevron-right"></i></button>
+  </div>
+</header>
+<main id="main"><div class="msg"><i class="ti ti-loader-2"></i>Chargement du planning…</div></main>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+// Vue LECTURE SEULE d'une seule équipe : aucune écriture vers Firebase depuis cette page.
+const FC={apiKey:"AIzaSyASl9qnu-poSZqp_9eUoDK0YbbjVYAnnz0",authDomain:"oj-chantier-7ed1d.firebaseapp.com",databaseURL:"https://oj-chantier-7ed1d-default-rtdb.europe-west1.firebasedatabase.app",projectId:"oj-chantier-7ed1d",storageBucket:"oj-chantier-7ed1d.firebasestorage.app",messagingSenderId:"212267939056",appId:"1:212267939056:web:bf470ad83a6185671bfe35"};
+const db=getDatabase(initializeApp(FC));
+
+const qs=new URLSearchParams(location.search);
+const MODE=qs.get('p')==='ch'?'ch':'men';
+const TEAM_ID=(qs.get('t')||'').trim();
+const BASE=MODE==='ch'?'planning/v1/posech':'planning/v1';
+const MODE_LBL=MODE==='ch'?'Pose CH':'Pose MEN';
+const NB_WEEKS=3;
+const CACHE='jehanno_equipe_'+MODE+'_'+TEAM_ID;
+
+let teams=null,cells={},wAssign={},wNames={};
+let start=monday(new Date());
+
+// ── utilitaires dates ──
+function monday(d){const x=new Date(d);x.setHours(0,0,0,0);x.setDate(x.getDate()-((x.getDay()+6)%7));return x;}
+function ymd(x){return x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')+'-'+String(x.getDate()).padStart(2,'0');}
+function addD(d,n){const x=new Date(d);x.setDate(x.getDate()+n);return x;}
+function wkNum(date){const d=new Date(date);d.setHours(0,0,0,0);d.setDate(d.getDate()+3-(d.getDay()+6)%7);const w=new Date(d.getFullYear(),0,4);return 1+Math.round(((d-w)/86400000-3+(w.getDay()+6)%7)/7);}
+const FRC={};
+function feries(yr){
+  const f=new Set(),a=(m,d)=>f.add(yr+'-'+String(m).padStart(2,'0')+'-'+String(d).padStart(2,'0'));
+  a(1,1);a(5,1);a(5,8);a(7,14);a(8,15);a(11,1);a(11,11);a(12,25);
+  const A=yr%19,b=Math.floor(yr/100),c=yr%100,d2=Math.floor(b/4),e=b%4,f2=Math.floor((b+8)/25),g=Math.floor((b-f2+1)/3);
+  const h=(19*A+b-d2-g+15)%30,i=Math.floor(c/4),k=c%4,l=(32+2*e+2*i-h-k)%7,m2=Math.floor((A+11*h+22*l)/451);
+  const mo=Math.floor((h+l-7*m2+114)/31),da=((h+l-7*m2+114)%31)+1,P=new Date(yr,mo-1,da);
+  [1,39,50].forEach(o=>{const x=addD(P,o);a(x.getMonth()+1,x.getDate());});
+  return f;
+}
+const isFerie=d=>{const y=d.getFullYear();if(!FRC[y])FRC[y]=feries(y);return FRC[y].has(ymd(d));};
+const esc=s=>String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+// mêmes couleurs que le planning (1re lettre du chantier)
+const LC=[{bg:'#FADADD',tx:'#8B0000'},{bg:'#FFE4B5',tx:'#7B4B00'},{bg:'#FFFACD',tx:'#7A6800'},{bg:'#D4EDDA',tx:'#155724'},{bg:'#CCE5FF',tx:'#004085'},{bg:'#E2D9F3',tx:'#3A2070'},{bg:'#FDECEA',tx:'#7B2A2A'},{bg:'#D1ECF1',tx:'#0C5460'},{bg:'#FFF3CD',tx:'#856404'},{bg:'#D6EAF8',tx:'#1A5276'},{bg:'#FADBD8',tx:'#7B241C'},{bg:'#D5F5E3',tx:'#1E8449'},{bg:'#F9EBEA',tx:'#922B21'},{bg:'#EBF5FB',tx:'#1A5276'},{bg:'#FDF2E9',tx:'#784212'},{bg:'#E8F8F5',tx:'#148F77'},{bg:'#F4ECF7',tx:'#6C3483'},{bg:'#FDEDEC',tx:'#943126'},{bg:'#EAF2FF',tx:'#1F4E79'},{bg:'#E8F5E9',tx:'#1B5E20'},{bg:'#FFF8E7',tx:'#7D5A00'},{bg:'#E3F2FD',tx:'#0D47A1'},{bg:'#F3E5F5',tx:'#4A148C'},{bg:'#E0F7FA',tx:'#006064'},{bg:'#FFF9C4',tx:'#827717'},{bg:'#FCE4EC',tx:'#880E4F'}];
+const DC=[{bg:'#E8F4FD',tx:'#1A6EA8'},{bg:'#E8F8E8',tx:'#1A6E2A'},{bg:'#FFF0E8',tx:'#A04010'},{bg:'#F8E8FF',tx:'#6A10A0'},{bg:'#FFEFE8',tx:'#A03010'},{bg:'#E8FFF4',tx:'#0A7850'},{bg:'#F8F0E8',tx:'#7A5020'},{bg:'#E8EEFF',tx:'#2030A0'},{bg:'#FFF8E8',tx:'#907020'},{bg:'#F0E8FF',tx:'#5020A0'}];
+function col(s){const f=String(s||'').trim()[0];if(!f)return{bg:'#E4E4E7',tx:'#333'};if(/\d/.test(f))return DC[+f];const c=f.toUpperCase().charCodeAt(0);return(c>=65&&c<=90)?LC[c-65]:{bg:'#E4E4E7',tx:'#333'};}
+
+// ── synchro ──
+function ss(s){document.getElementById('sd').className='dot '+s;document.getElementById('sl').textContent=s==='ok'?'À jour':s==='err'?'Hors ligne':'…';}
+function saveCache(){try{const ti=teamIndex();if(ti<0)return;const mine={};const pre=ti+'_';Object.keys(cells).forEach(k=>{if(k.startsWith(pre))mine[k.slice(pre.length)]=cells[k];});localStorage.setItem(CACHE,JSON.stringify({team:teams[ti],cells:mine,ts:Date.now()}));}catch(e){}}
+let cached=null;
+try{cached=JSON.parse(localStorage.getItem(CACHE)||'null');}catch(e){}
+
+function teamIndex(){return Array.isArray(teams)?teams.findIndex(t=>t&&t.id===TEAM_ID):-1;}
+
+// ── affichage ──
+function render(){
+  const main=document.getElementById('main');
+  const end=addD(start,NB_WEEKS*7-1);
+  document.getElementById('rng').textContent=`S${wkNum(start)} → S${wkNum(end)}`;
+  if(!TEAM_ID){main.innerHTML='<div class="msg"><i class="ti ti-link-off"></i>Lien incomplet.<br>Demandez un nouveau lien au bureau.</div>';document.getElementById('sub').textContent='';return;}
+
+  let team=null,getCell;
+  const ti=teamIndex();
+  if(ti>=0){team=teams[ti];getCell=d=>cells[ti+'_'+ymd(d)];}
+  else if(teams===null&&cached&&cached.team){team=cached.team;getCell=d=>cached.cells[ymd(d)];}
+  else if(teams===null){return;}
+  else{main.innerHTML='<div class="msg"><i class="ti ti-users-minus"></i>Cette équipe n\'existe plus dans le planning.<br>Demandez un nouveau lien au bureau.</div>';document.getElementById('sub').textContent=MODE_LBL;return;}
+
+  const names=(team.compagnons&&team.compagnons.length)?team.compagnons.map(c=>c.name).join(', '):(team.name||'Équipe');
+  document.getElementById('ttl').textContent=names;
+  document.getElementById('sub').textContent='Planning '+MODE_LBL+' · lecture seule';
+  document.title=names+' — Planning';
+
+  const today=new Date();today.setHours(0,0,0,0);
+  let h='';
+  for(let w=0;w<NB_WEEKS;w++){
+    const mon=addD(start,w*7),fri=addD(mon,4);
+    h+=`<div class="wk-title">Semaine ${wkNum(mon)} · ${mon.getDate()} ${mon.toLocaleString('fr-FR',{month:'short'})} – ${fri.getDate()} ${fri.toLocaleString('fr-FR',{month:'short'})}</div>`;
+    for(let i=0;i<5;i++){
+      const d=addD(mon,i),c=getCell(d),fe=isFerie(d);
+      const cls='day'+(d.getTime()===today.getTime()?' today':d<today?' past':'');
+      let body='';
+      if(fe)body+='<div class="ferie">FÉRIÉ</div>';
+      if(c&&(c.chantier||c.tache)){
+        const k=col(c.chantier);
+        if(c.chantier)body+=`<div><span class="chip" style="background:${k.bg};color:${k.tx}">${esc(c.chantier)}</span></div>`;
+        if(c.tache)body+=`<div class="task">${esc(c.tache)}</div>`;
+      }else if(!fe)body+='<div class="empty">Rien de prévu</div>';
+      h+=`<div class="${cls}"><div class="d-date"><div class="d-dow">${d.toLocaleString('fr-FR',{weekday:'short'}).replace('.','')}</div><div class="d-num">${d.getDate()}</div></div><div class="d-body">${body}</div></div>`;
+    }
+    // week-end : affiché seulement s'il a été renseigné explicitement dans le planning
+    if(ti>=0){
+      const sat=addD(mon,5),k=TEAM_ID+'_'+ymd(sat);
+      let wk=null;
+      if(Array.isArray(wNames[k])){wk=wNames[k].filter(Boolean).join(', ');}
+      else if(wAssign[k]&&wAssign[k]!==TEAM_ID){const t=teams.find(x=>x&&x.id===wAssign[k]);if(t)wk=(t.compagnons||[]).map(c=>c.name).join(', ')||t.name;}
+      if(wk)h+=`<div class="wknd"><i class="ti ti-calendar-week"></i> Week-end ${sat.getDate()}–${addD(sat,1).getDate()} : <b>${esc(wk)}</b></div>`;
+    }
+  }
+  if(teams===null)h+='<div class="foot">Affichage hors ligne (dernière version enregistrée sur ce téléphone)</div>';
+  main.innerHTML=h;
+}
+
+window.shiftW=n=>{start=addD(start,n*7);render();};
+window.goToday=()=>{start=monday(new Date());render();};
+// page restée ouverte plusieurs jours (onglet / écran d'accueil) : on recale sur la semaine en cours au retour
+let lastMon=monday(new Date()).getTime();
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState!=='visible')return;const m=monday(new Date()).getTime();if(m!==lastMon){lastMon=m;start=new Date(m);}render();});
+
+// ── écoute Firebase (lecture seule) ──
+render();
+onValue(ref(db,BASE+'/teams'),s=>{const v=s.val();teams=Array.isArray(v)?v:[];ss('ok');saveCache();render();},()=>{ss('err');render();});
+onValue(ref(db,BASE+'/cells'),s=>{cells=s.val()||{};saveCache();render();});
+onValue(ref(db,BASE+'/weekend'),s=>{wAssign=s.val()||{};render();});
+onValue(ref(db,BASE+'/weekendNames'),s=>{wNames=s.val()||{};render();});
+onValue(ref(db,'.info/connected'),s=>{if(s.val()===false&&teams!==null)ss('err');else if(s.val())ss('ok');});
+</script>
+</body>
+</html>

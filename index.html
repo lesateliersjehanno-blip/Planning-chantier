@@ -310,6 +310,7 @@ tr.row-moving .team-cell{background:rgba(55,138,221,.1);}
 #tab-prodb{--tc:#D9822B;}
 #tab-prodalu{--tc:#12C4D6;}
 #tab-proda{--tc:#F2416F;}
+<<<<<<< HEAD
 .tabs{align-items:center;}
 .tab[id]{background:var(--bg);color:var(--text2);border-bottom:3px solid var(--tc);}
 .tab[id].on{background:var(--tc);color:#fff;font-size:14px;font-weight:800;padding:7px 16px;border-bottom-color:transparent;text-shadow:0 1px 1px rgba(0,0,0,.35);box-shadow:0 1px 4px rgba(0,0,0,.35);}
@@ -323,6 +324,10 @@ header:has(#tab-prodb.on){box-shadow:inset 0 -4px 0 #D9822B;}
 header:has(#tab-prodalu.on){box-shadow:inset 0 -4px 0 #12C4D6;}
 header:has(#tab-proda.on){box-shadow:inset 0 -4px 0 #F2416F;}
 @media print{header{box-shadow:none!important;}}
+=======
+.tab[id]{background:color-mix(in srgb,var(--tc) 60%,transparent);color:var(--text);}
+.tab[id].on{background:var(--tc);color:#1a1a1a;box-shadow:0 1px 3px rgba(0,0,0,.3);}
+>>>>>>> 01885a4884efa9ce4bfc8952282fb21db674cbd0
 body.mode-atelier header .toolbar:not(#atl-toolbar),body.mode-atelier .poles-bar,body.mode-atelier #panel,body.mode-atelier #gantt-wrap,body.mode-atelier #mobile-hdr-wrap,body.mode-atelier #print-hdr,body.mode-atelier .move-toolbar{display:none!important;}
 body:not(.mode-atelier) #atl-toolbar,body:not(.mode-atelier) #atl-filter,body:not(.mode-atelier) #atelier-view{display:none!important;}
 @media(max-width:560px){.h1-txt{display:none;}.tab{padding:5px 7px;font-size:11px;}.tab i{display:none;}.tabs{overflow-x:auto;flex-shrink:1;min-width:0;scrollbar-width:none;}}
