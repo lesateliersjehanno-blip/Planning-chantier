@@ -178,6 +178,9 @@ thead th.th{background:#E8820C!important;color:#fff!important;font-weight:700;}
 .dtb:hover{color:#f44336;background:#FDECEA;opacity:1!important;}
 @media(hover:none){.dtb{opacity:.55;}}
 @media print{.dtb{display:none!important;}}
+.shr{display:inline-flex;align-items:center;gap:2px;font-size:9.5px;color:var(--text3);cursor:pointer;padding:1px 4px;border-radius:3px;margin-top:2px;margin-right:2px;opacity:.7;}
+.shr:hover{color:var(--blue);background:var(--bg2);opacity:1;}
+@media print{.shr{display:none!important;}}
 
 /* -- Poignee de deplacement d'equipe (appui long) -- */
 .acb-wrap{position:relative;display:inline-flex;flex-shrink:0;}
@@ -294,9 +297,32 @@ tr.row-moving .team-cell{background:rgba(55,138,221,.1);}
 }
 
 /* ══ ONGLETS POSE / ATELIER ══════════════════════════════════ */
-.tabs{display:flex;background:var(--bg2);border-radius:8px;padding:2px;gap:2px;flex-shrink:0;}
+.tabs{display:flex;background:var(--bg2);border-radius:8px;padding:2px;gap:2px;flex-shrink:1;min-width:0;overflow-x:auto;scrollbar-width:none;}
+.tabs::-webkit-scrollbar{display:none;}
+.tab{white-space:nowrap;flex-shrink:0;}
 .tab{font-size:12px;font-weight:600;padding:5px 12px;border-radius:6px;border:none;background:transparent;color:var(--text2);cursor:pointer;display:inline-flex;align-items:center;gap:4px;font-family:inherit;}
 .tab.on{background:var(--bg);color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.14);}
+/* une couleur vive par onglet : un ton en dessous quand il est inactif, couleur pleine quand il est actif */
+#tab-pose{--tc:#1F8BF2;}
+#tab-posech{--tc:#5DBB1E;}
+#tab-atelier{--tc:#FF8A00;}
+#tab-prod{--tc:#9B5CF0;}
+#tab-prodb{--tc:#D9822B;}
+#tab-prodalu{--tc:#12C4D6;}
+#tab-proda{--tc:#F2416F;}
+.tabs{align-items:center;}
+.tab[id]{background:var(--bg);color:var(--text2);border-bottom:3px solid var(--tc);}
+.tab[id].on{background:var(--tc);color:#fff;font-size:14px;font-weight:800;padding:7px 16px;border-bottom-color:transparent;text-shadow:0 1px 1px rgba(0,0,0,.35);box-shadow:0 1px 4px rgba(0,0,0,.35);}
+.tab[id].on::before{content:"\25B6";font-size:10px;}
+@media(max-width:560px){.tab[id].on{font-size:12px;padding:6px 9px;}}
+header:has(#tab-pose.on){box-shadow:inset 0 -4px 0 #1F8BF2;}
+header:has(#tab-posech.on){box-shadow:inset 0 -4px 0 #5DBB1E;}
+header:has(#tab-atelier.on){box-shadow:inset 0 -4px 0 #FF8A00;}
+header:has(#tab-prod.on){box-shadow:inset 0 -4px 0 #9B5CF0;}
+header:has(#tab-prodb.on){box-shadow:inset 0 -4px 0 #D9822B;}
+header:has(#tab-prodalu.on){box-shadow:inset 0 -4px 0 #12C4D6;}
+header:has(#tab-proda.on){box-shadow:inset 0 -4px 0 #F2416F;}
+@media print{header{box-shadow:none!important;}}
 body.mode-atelier header .toolbar:not(#atl-toolbar),body.mode-atelier .poles-bar,body.mode-atelier #panel,body.mode-atelier #gantt-wrap,body.mode-atelier #mobile-hdr-wrap,body.mode-atelier #print-hdr,body.mode-atelier .move-toolbar{display:none!important;}
 body:not(.mode-atelier) #atl-toolbar,body:not(.mode-atelier) #atl-filter,body:not(.mode-atelier) #atelier-view{display:none!important;}
 @media(max-width:560px){.h1-txt{display:none;}.tab{padding:5px 7px;font-size:11px;}.tab i{display:none;}.tabs{overflow-x:auto;flex-shrink:1;min-width:0;scrollbar-width:none;}}
@@ -436,19 +462,19 @@ body:not(.mode-prod) #pmb-toolbar,body:not(.mode-prod) #pmb-view{display:none!im
 .pmb-maj{font-size:11px;color:var(--text2);white-space:nowrap;flex-shrink:0;padding:0 4px;}
 .pmb-maj b{color:var(--text);}
 #pmb-chips{display:flex;gap:4px;flex-shrink:0;}
-#pmb-wrap{overflow:auto;-webkit-overflow-scrolling:touch;max-height:calc(100vh - 88px);max-height:calc(100dvh - 88px);}
-#pmb-table{border-collapse:separate;border-spacing:0;min-width:max-content;font-size:12px;}
-#pmb-table th,#pmb-table td{border-right:.5px solid var(--border);border-bottom:.5px solid var(--border);}
-#pmb-table thead{display:table-header-group!important;}
-#pmb-table thead th{position:sticky;top:0;z-index:4;background:#EAD1DC;color:#333;font-size:11px;font-weight:600;padding:5px 4px;vertical-align:bottom;line-height:1.2;}
-#pmb-table thead th.y{background:#FFF2CC;}
-#pmb-table thead th.pmb-sth{width:62px;min-width:62px;max-width:62px;white-space:normal;text-align:center;font-size:10px;hyphens:auto;-webkit-hyphens:auto;padding:5px 1px;letter-spacing:-.2px;}
-#pmb-table thead th.pmb-sth span{display:block;border-bottom:3px solid;padding-bottom:3px;}
-#pmb-table .pmb-chh,#pmb-table td.pmb-ch{position:sticky;left:0;}
-#pmb-table thead th.pmb-chh{z-index:6;background:#EFEFEF;text-align:left;}
-#pmb-table td.pmb-ch{z-index:2;background:var(--bg);font-weight:600;}
-#pmb-table td{vertical-align:top;padding:0;background:var(--bg);}
-#pmb-table td.pmb-a{width:26px;min-width:26px;text-align:center;vertical-align:middle;}
+:is(#pmb-wrap,#ao-wrap){overflow:auto;-webkit-overflow-scrolling:touch;max-height:calc(100vh - 88px);max-height:calc(100dvh - 88px);}
+:is(#pmb-table,#ao-table){border-collapse:separate;border-spacing:0;min-width:max-content;font-size:12px;}
+:is(#pmb-table,#ao-table) th,:is(#pmb-table,#ao-table) td{border-right:.5px solid var(--border);border-bottom:.5px solid var(--border);}
+:is(#pmb-table,#ao-table) thead{display:table-header-group!important;}
+:is(#pmb-table,#ao-table) thead th{position:sticky;top:0;z-index:4;background:#EAD1DC;color:#333;font-size:11px;font-weight:600;padding:5px 4px;vertical-align:bottom;line-height:1.2;}
+:is(#pmb-table,#ao-table) thead th.y{background:#FFF2CC;}
+:is(#pmb-table,#ao-table) thead th.pmb-sth{width:62px;min-width:62px;max-width:62px;white-space:normal;text-align:center;font-size:10px;hyphens:auto;-webkit-hyphens:auto;padding:5px 1px;letter-spacing:-.2px;}
+:is(#pmb-table,#ao-table) thead th.pmb-sth span{display:block;border-bottom:3px solid;padding-bottom:3px;}
+:is(#pmb-table,#ao-table) .pmb-chh,:is(#pmb-table,#ao-table) td.pmb-ch{position:sticky;left:0;}
+:is(#pmb-table,#ao-table) thead th.pmb-chh{z-index:6;background:#EFEFEF;text-align:left;}
+:is(#pmb-table,#ao-table) td.pmb-ch{z-index:2;background:var(--bg);font-weight:600;}
+:is(#pmb-table,#ao-table) td{vertical-align:top;padding:0;background:var(--bg);}
+:is(#pmb-table,#ao-table) td.pmb-a{width:26px;min-width:26px;text-align:center;vertical-align:middle;}
 .pmb-a button{width:22px;height:24px;border:none;background:transparent;color:var(--text3);cursor:pointer;font-size:15px;border-radius:4px;line-height:1;}
 .pmb-a button:hover{background:var(--bg2);color:var(--text);}
 .pmb-in{min-height:28px;padding:6px 6px;line-height:1.3;outline:none;word-break:break-word;white-space:pre-wrap;cursor:text;}
@@ -465,13 +491,27 @@ td.w-qte{width:62px;min-width:62px;max-width:62px;text-align:center;}
 td.w-fin{width:90px;min-width:90px;max-width:90px;background:#EDEDED!important;}
 td.w-t{width:66px;min-width:66px;max-width:66px;text-align:center;}
 td.w-ral{width:170px;min-width:170px;max-width:170px;}
+td.w-cn{width:62px;min-width:62px;max-width:62px;text-align:center;vertical-align:middle!important;background:#F7F7F7!important;cursor:pointer;font-weight:700;font-size:12px;color:#333;user-select:none;}
+td.w-cn:hover{box-shadow:inset 0 0 0 2px var(--blue);}
+td.w-cn.on{background:#E1BEE7!important;}
+.btn.pmb-addbtn{background:#FCE4EC;border-color:#F3B6CB;color:#8A1C4A;font-weight:600;}
+.btn.pmb-addbtn:hover{background:#F8D0DE;}
+td.w-dcv{width:92px;min-width:92px;max-width:92px;}
+td.w-apv{width:150px;min-width:150px;max-width:150px;vertical-align:middle!important;}
+.pmb-cd{margin:5px 3px;padding:3px 3px;overflow:hidden;text-overflow:ellipsis;border-radius:999px;font-size:11px;font-weight:700;text-align:center;white-space:nowrap;color:#1a1a1a;
+  background:linear-gradient(to right,var(--c,#E8E6E1) var(--p,0%),#E8E6E1 var(--p,0%));-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+.pmb-cd.late{color:#fff;}
+.pmb-cd:empty::before{content:attr(data-ph);color:var(--text3);font-weight:400;}
+td.w-apv:hover .pmb-cd{box-shadow:0 0 0 2px var(--blue);}
+:is(#pmb-table,#ao-table) thead th.pmb-dcvh{width:92px;min-width:92px;max-width:92px;white-space:normal;text-align:center;font-size:10px;}
+td.w-tps{width:84px;min-width:84px;max-width:84px;text-align:center;}
 td.w-com{position:relative;}
 td.w-com .pmb-in{padding-right:20px;}
 .pmb-cbtn{position:absolute;top:4px;right:2px;width:17px;height:20px;border:none;border-radius:4px;background:transparent;color:var(--text3);cursor:pointer;font-size:10px;line-height:1;padding:0;opacity:.55;}
 td.w-com:hover .pmb-cbtn,.pmb-cbtn:focus{opacity:1;background:var(--bg2);color:var(--text);}
-#pmb-table tr.is-st td:not(.on):not(.pct){background:#EFE3D3!important;}
-#pmb-table tr.is-st td.w-com .pmb-in{color:#6D4C41;font-weight:600;}
-@media print{.pmb-cbtn{display:none!important;}#pmb-table tr.is-st td{-webkit-print-color-adjust:exact;print-color-adjust:exact;}}
+:is(#pmb-table,#ao-table) tr.is-st td:not(.on):not(.pct){background:#EFE3D3!important;}
+:is(#pmb-table,#ao-table) tr.is-st td.w-com .pmb-in{color:#6D4C41;font-weight:600;}
+@media print{.pmb-cbtn{display:none!important;}:is(#pmb-table,#ao-table) tr.is-st td{-webkit-print-color-adjust:exact;print-color-adjust:exact;}}
 td.w-uw{width:62px;min-width:62px;max-width:62px;text-align:center;vertical-align:middle!important;background:#F7F7F7!important;}
 .pmb-uw{width:56px;height:24px;border:none;background:transparent;font:inherit;font-weight:700;text-align:center;text-align-last:center;cursor:pointer;color:var(--text);-webkit-appearance:none;appearance:none;padding:0;}
 .pmb-uw.u{color:#1565C0;}.pmb-uw.w{color:#AD1457;}.pmb-uw.uw{color:#6A1B9A;}
@@ -485,22 +525,24 @@ td.w-dt input.pmb-dtin::-webkit-calendar-picker-indicator{position:absolute;inse
 td.w-fin.late .pmb-dt{color:#d32f2f;font-weight:700;}
 td.w-pose.late .pmb-dt{color:#d32f2f;font-weight:700;}
 td.w-pct{width:58px;min-width:58px;max-width:58px;text-align:center;vertical-align:middle!important;}
-td.w-pct .pmb-in{font-weight:700;}
-#pmb-table thead th.pmb-pcth{width:58px;min-width:58px;max-width:58px;text-align:center;font-size:10px;padding:5px 1px;white-space:normal;}
+td.w-pct .pmb-in{font-weight:700;font-size:11px;text-align:center;min-height:0;margin:5px 5px;padding:3px 2px;border-radius:999px;color:#1a1a1a;white-space:nowrap;
+  background:linear-gradient(to right,#C5E8A8 var(--p,0%),#E8E6E1 var(--p,0%));-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+td.w-pct .pmb-in:focus{background:#EAF3FD;}
+:is(#pmb-table,#ao-table) thead th.pmb-pcth{width:58px;min-width:58px;max-width:58px;text-align:center;font-size:10px;padding:5px 1px;white-space:normal;}
 td.pmb-st.pct{color:#1a1a1a;font-size:10px;font-weight:600;}
 td.pmb-st{width:62px;min-width:62px;max-width:62px;text-align:center;vertical-align:middle!important;cursor:pointer;font-weight:700;font-size:12px;color:#fff;user-select:none;}
 td.pmb-st:hover{box-shadow:inset 0 0 0 2px var(--blue);}
 td.pmb-st.on{opacity:.45;}
 td.pmb-st.cur{opacity:1;}
 td.pmb-st.last{background:#F0F0F0!important;}
-#pmb-table tr.pmb-sec td{background:#C9DAF8;color:#1a1a1a;font-weight:700;font-size:12px;padding:7px 10px;cursor:default;}
-#pmb-table tr.pmb-sec.arch td{cursor:pointer;background:#DCE6F5;}
-#pmb-table tr.pmb-sec td .pmb-secin{position:sticky;left:10px;display:inline-flex;align-items:center;gap:6px;}
-#pmb-table tr.pmb-yr td{background:#D9D9D9;font-weight:700;padding:4px 10px;font-size:11px;}
-#pmb-table tr.pmb-yr td .pmb-secin{position:sticky;left:10px;}
-#pmb-table tr.pmb-emp td{padding:14px;color:var(--text3);text-align:center;}
-#pmb-table tr.is-arch td.pmb-st.on{opacity:.8;}
-#pmb-table tbody tr:hover td.pmb-ch{background:var(--bg2);}
+:is(#pmb-table,#ao-table) tr.pmb-sec td{background:#C9DAF8;color:#1a1a1a;font-weight:700;font-size:12px;padding:7px 10px;cursor:default;}
+:is(#pmb-table,#ao-table) tr.pmb-sec.arch td{cursor:pointer;background:#DCE6F5;}
+:is(#pmb-table,#ao-table) tr.pmb-sec td .pmb-secin{position:sticky;left:10px;display:inline-flex;align-items:center;gap:6px;}
+:is(#pmb-table,#ao-table) tr.pmb-yr td{background:#D9D9D9;font-weight:700;padding:4px 10px;font-size:11px;}
+:is(#pmb-table,#ao-table) tr.pmb-yr td .pmb-secin{position:sticky;left:10px;}
+:is(#pmb-table,#ao-table) tr.pmb-emp td{padding:14px;color:var(--text3);text-align:center;}
+:is(#pmb-table,#ao-table) tr.is-arch td.pmb-st.on{opacity:.8;}
+:is(#pmb-table,#ao-table) tbody tr:hover td.pmb-ch{background:var(--bg2);}
 .pmb-menu{display:none;position:fixed;background:var(--bg);border:.5px solid var(--border);border-radius:10px;padding:4px;z-index:400;min-width:210px;box-shadow:var(--shadow);}
 .pmb-menu.open{display:block;}
 .pmb-menu div{display:flex;align-items:center;gap:7px;padding:8px 11px;border-radius:5px;font-size:12px;cursor:pointer;color:var(--text);}
@@ -518,14 +560,14 @@ td.pmb-st.last{background:#F0F0F0!important;}
 .pmb-menu .pmb-dlgb{justify-content:flex-end;padding:6px 4px 2px;cursor:default;}
 .pmb-menu .pmb-dlgb:hover{background:none;}
 .pmb-menu .pmb-dlgb button{font:inherit;font-size:12px;padding:6px 14px;border-radius:6px;border:none;background:var(--blue);color:#fff;cursor:pointer;}
-#pmb-table td.pmb-a{width:48px;min-width:48px;white-space:nowrap;}
+:is(#pmb-table,#ao-table) td.pmb-a{width:48px;min-width:48px;white-space:nowrap;}
 .pmb-a button.pmb-go{color:#fff;background:#2E7D32;width:18px;height:20px;font-size:11px;margin-left:1px;border-radius:4px;}
 .pmb-a button.pmb-go:hover{background:#1B5E20;color:#fff;}
-#pmb-table tr.pmb-sec.att td{cursor:pointer;background:#DCE6F5;}
-#pmb-table tr.pmb-sec.arc td{cursor:pointer;background:#E0E0E0;color:#555;}
-#pmb-table tr.is-arc td{opacity:.8;}
-#pmb-table tr.is-sel td{opacity:1;}
-#pmb-table tr.is-sel td:not(.on){background:#FDECEA!important;}
+:is(#pmb-table,#ao-table) tr.pmb-sec.att td{cursor:pointer;background:#DCE6F5;}
+:is(#pmb-table,#ao-table) tr.pmb-sec.arc td{cursor:pointer;background:#E0E0E0;color:#555;}
+:is(#pmb-table,#ao-table) tr.is-arc td{opacity:.8;}
+:is(#pmb-table,#ao-table) tr.is-sel td{opacity:1;}
+:is(#pmb-table,#ao-table) tr.is-sel td:not(.on){background:#FDECEA!important;}
 .pmb-sel{width:15px;height:15px;vertical-align:middle;accent-color:#d32f2f;cursor:pointer;margin:0 1px 0 0;}
 .pmb-yrsel{margin-left:14px;font-weight:500;font-size:11px;color:#555;cursor:pointer;display:inline-flex;align-items:center;gap:4px;}
 .pmb-yrsel input{accent-color:#d32f2f;width:14px;height:14px;cursor:pointer;}
@@ -534,22 +576,22 @@ td.pmb-st.last{background:#F0F0F0!important;}
 .pmb-selbar button{font-size:12px;padding:7px 12px;border-radius:18px;border:none;cursor:pointer;background:#3a3a3c;color:#fff;display:inline-flex;align-items:center;gap:4px;font-family:inherit;}
 .pmb-selbar button.del{background:#d32f2f;}
 @media print{.pmb-selbar,.pmb-sel,.pmb-yrsel{display:none!important;}}
-#pmb-table th.pmb-sortable{cursor:pointer;user-select:none;}
-#pmb-table th.pmb-sortable:hover{background:#e2e2e2;}
-#pmb-table th.pmb-sortable.on{background:#D6E4F7;}
-@media(prefers-color-scheme:dark){td.w-com,td.w-cond{background:#26262a!important;}td.w-fin{background:#2e2e32!important;}#pmb-table tr.pmb-sec td,#pmb-table tr.pmb-yr td,#pmb-table thead th{color:#1a1a1a;}}
+:is(#pmb-table,#ao-table) th.pmb-sortable{cursor:pointer;user-select:none;}
+:is(#pmb-table,#ao-table) th.pmb-sortable:hover{background:#e2e2e2;}
+:is(#pmb-table,#ao-table) th.pmb-sortable.on{background:#D6E4F7;}
+@media(prefers-color-scheme:dark){td.w-com,td.w-cond{background:#26262a!important;}td.w-fin{background:#2e2e32!important;}:is(#pmb-table,#ao-table) tr.pmb-sec td,:is(#pmb-table,#ao-table) tr.pmb-yr td,:is(#pmb-table,#ao-table) thead th{color:#1a1a1a;}}
 @media(max-width:900px){
-  td.pmb-ch,#pmb-table th.pmb-chh{width:130px!important;min-width:130px!important;max-width:130px!important;}
+  td.pmb-ch,:is(#pmb-table,#ao-table) th.pmb-chh{width:130px!important;min-width:130px!important;max-width:130px!important;}
   .pmb-search{width:120px;}
-  #pmb-wrap{max-height:calc(100vh - 80px);max-height:calc(100dvh - 80px);}
+  :is(#pmb-wrap,#ao-wrap){max-height:calc(100vh - 80px);max-height:calc(100dvh - 80px);}
 }
 #pmb-print-hdr{display:none;}
 @media print{
   body.mode-prod #pmb-print-hdr{display:flex!important;align-items:baseline;gap:12px;padding:0 0 4mm;font-size:13px;font-weight:600;border-bottom:1px solid #ccc;margin-bottom:3mm;}
   #pmb-print-hdr span{font-size:10px;color:#666;font-weight:400;}
-  #pmb-wrap{overflow:visible!important;max-height:none!important;}
-  #pmb-table thead th,#pmb-table .pmb-chh,#pmb-table td.pmb-ch,#pmb-table .pmb-secin{position:static!important;}
-  #pmb-table{font-size:8px!important;}
+  :is(#pmb-wrap,#ao-wrap){overflow:visible!important;max-height:none!important;}
+  :is(#pmb-table,#ao-table) thead th,:is(#pmb-table,#ao-table) .pmb-chh,:is(#pmb-table,#ao-table) td.pmb-ch,:is(#pmb-table,#ao-table) .pmb-secin{position:static!important;}
+  :is(#pmb-table,#ao-table){font-size:8px!important;}
   .pmb-in{min-height:0!important;padding:2px 3px!important;}
   td.pmb-a,th.pmb-a,.pmb-menu{display:none!important;}
   td.pmb-st,th.pmb-sth{width:34px!important;min-width:34px!important;max-width:34px!important;}
@@ -566,6 +608,16 @@ html,body{touch-action:manipulation;}
   input[type=text],input[type=search],input[type=number],input[type=date],textarea,select{font-size:16px!important;}
 }
 @media (hover:none) and (pointer:coarse){.dc{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;}}
+
+/* ── Mode sombre : texte foncé sur les fonds clairs fixes (saisie lisible) ── */
+@media(prefers-color-scheme:dark){
+  .pmb-in:focus{color:#1a1a1a;caret-color:#1a1a1a;}
+  td.w-dt:not(.late):hover .pmb-dt{color:#1a1a1a;}
+  td.w-uw .pmb-uw:not(.u):not(.w):not(.uw){color:#1a1a1a;}
+  :is(#pmb-table,#ao-table) tr.is-st td:not(.on):not(.pct),:is(#pmb-table,#ao-table) tr.is-sel td:not(.on){color:#1a1a1a;}
+  :is(#pmb-table,#ao-table) tr.is-st td:not(.on):not(.pct) .pmb-uw:not(.u):not(.w):not(.uw),:is(#pmb-table,#ao-table) tr.is-sel td:not(.on) .pmb-uw:not(.u):not(.w):not(.uw){color:#1a1a1a;}
+  .cd.ir,.mh-day.fe,thead th.fe,.atl-sp-days button.fe,.atl-sp-days button.fe b{color:#1a1a1a;}
+}
 </style>
 </head>
 <body>
@@ -578,6 +630,9 @@ html,body{touch-action:manipulation;}
       <button class="tab" id="tab-posech" role="tab" onclick="setTab('posech')"><i class="ti ti-home-2"></i> Pose CH</button>
       <button class="tab" id="tab-atelier" role="tab" onclick="setTab('atelier')"><i class="ti ti-tools"></i> Atelier</button>
       <button class="tab" id="tab-prod" role="tab" onclick="setTab('prod')"><i class="ti ti-list-check"></i> Prod Mex Bois</button>
+      <button class="tab" id="tab-prodb" role="tab" onclick="setTab('prodb')"><i class="ti ti-wood"></i> Prod BOIS</button>
+      <button class="tab" id="tab-prodalu" role="tab" onclick="setTab('prodalu')"><i class="ti ti-frame"></i> Prod ALU</button>
+      <button class="tab" id="tab-proda" role="tab" onclick="setTab('proda')"><i class="ti ti-armchair"></i> Prod Agencement</button>
     </div>
     <div class="sync-badge"><div class="sync-dot" id="sd"></div><span id="sl">…</span></div>
   </div>
@@ -621,15 +676,16 @@ html,body{touch-action:manipulation;}
   <div id="atl-filter"><span class="atl-flbl"><i class="ti ti-filter"></i> Centres</span><div id="atl-chips"></div></div>
   <!-- Barre d'outils PROD MEX BOIS -->
   <div class="toolbar" id="pmb-toolbar">
+    <button class="btn pmb-addbtn" onclick="pmbAdd()" title="Ajouter une ligne"><i class="ti ti-plus"></i> Ligne</button>
+    <div class="sep"></div>
     <input type="search" class="pmb-search" id="pmb-q" placeholder="Rechercher un chantier…" oninput="pmbSearch(this.value)">
     <div class="sep"></div>
     <div id="pmb-chips"></div>
     <div class="sep"></div>
     <div id="pmb-uwchips" style="display:flex;gap:4px;flex-shrink:0;"></div>
     <div class="sep"></div>
-    <button class="btn" onclick="pmbAdd()"><i class="ti ti-plus"></i> Ligne</button>
     <button class="btn" id="pmb-sort-btn" onclick="pmbSortCycle()" title="Trier par nom de chantier"><i class="ti ti-sort-ascending-letters"></i> A → Z</button>
-    <button class="btn" id="pmb-dsort-btn" onclick="pmbDateSortCycle()" title="Trier par date de pose"><i class="ti ti-calendar"></i> Date pose</button>
+    <button class="btn" id="pmb-dsort-btn" onclick="pmbDateSortCycle()" title="Trier par date"><i class="ti ti-calendar"></i> Date pose</button>
     <button class="btn" id="pmb-arch-btn" onclick="pmbToggleArch()" title="Afficher / masquer les chantiers archivés"><i class="ti ti-archive"></i> Archivés</button>
     <button class="btn" onclick="pmbPrint()" title="Imprimer le suivi prod"><i class="ti ti-printer"></i></button>
     <div class="sep"></div>
@@ -911,13 +967,16 @@ function loadCache(){
 // ── SAUVEGARDE / RESTAURATION MANUELLE (fichier .json sur le PC) ──
 window.exportBackup=function(){
   try{
-    poseStash();const M=PST.men,C=PST.ch;
+    poseStash();pmbStash();const M=PST.men,C=PST.ch;
     const data={
       teams:M.teams, cells:M.cells, poles:M.poles, weekend:M.weekend, weekendNames:M.names,
       posech:C.teams?{teams:C.teams, cells:C.cells, poles:C.poles, weekend:C.weekend, weekendNames:C.names}:null,
       range:{start:startDate.toISOString().split('T')[0], days:nbDays},
       atelier:{centres:atlCentres, semaines:atlWk, chantiers:atlChantiers},
-      prodbois:{rows:pmbRows, maj:pmbMaj},
+      prodbois:{rows:PMB_S.mex.rows, maj:PMB_S.mex.maj},
+      prod_bois:{rows:PMB_S.bois.rows, maj:PMB_S.bois.maj},
+      prod_agencement:{rows:PMB_S.agc.rows, maj:PMB_S.agc.maj},
+      prod_alu:{rows:PMB_S.alu.rows, maj:PMB_S.alu.maj},
       exportedAt:new Date().toISOString()
     };
     const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
@@ -951,9 +1010,9 @@ window.importBackup=function(event){
       weekendAssign=(d.weekend&&typeof d.weekend==='object')?d.weekend:{};
       weekendNames=(d.weekendNames&&typeof d.weekendNames==='object')?d.weekendNames:{};
       if(d.poles&&Array.isArray(d.poles))POLES=d.poles;
-      if(d.prodbois&&d.prodbois.rows&&typeof d.prodbois.rows==='object'){
-        pmbRows=d.prodbois.rows;set(ref(db,PB+'/rows'),pmbRows).catch(()=>{});pmbSaveCache();pmbRefresh();
-      }
+      [['prodbois','mex'],['prod_bois','bois'],['prod_agencement','agc'],['prod_alu','alu']].forEach(([key,k])=>{
+        const x=d[key];if(x&&x.rows&&typeof x.rows==='object')pmbImport(k,x.rows);
+      });
       if(d.atelier&&typeof d.atelier==='object'){
         const ac=atlNormCentres(d.atelier.centres);if(ac.length)atlCentres=ac;
         atlWk=(d.atelier.semaines&&typeof d.atelier.semaines==='object')?d.atelier.semaines:{};
@@ -1048,7 +1107,7 @@ async function svN(){saveCache();try{await set(ref(db,NR),Object.keys(weekendNam
 
 // Conserve le défilement (page + tableaux) quand une modif arrive d'un autre utilisateur
 function keepScroll(fn){
-  const w=[window.scrollX,window.scrollY],el=['gantt-wrap','atl-wrap','pmb-wrap'].map(id=>{const e=document.getElementById(id);return e?[e,e.scrollLeft,e.scrollTop]:null;}).filter(Boolean);
+  const w=[window.scrollX,window.scrollY],el=['gantt-wrap','atl-wrap','pmb-wrap','ao-wrap'].map(id=>{const e=document.getElementById(id);return e?[e,e.scrollLeft,e.scrollTop]:null;}).filter(Boolean);
   const wraps=el.map(([e])=>{const h=e.offsetHeight;e.style.minHeight=h?h+'px':'';return e;});
   try{fn();}finally{
     el.forEach(([e,l,t])=>{e.scrollLeft=l;e.scrollTop=t;});window.scrollTo(w[0],w[1]);
@@ -1419,6 +1478,7 @@ function teamRow(team,ti,pole){
       <span class="dcb" onclick="delC(${ti},${ci})"><i class="ti ti-x" style="font-size:10px"></i></span>
     </div>`;
   });
+  ch+=`<span class="shr" onclick="shareTeam(${ti})" title="Envoyer à cette équipe un lien vers SON planning (lecture seule)"><i class="ti ti-send"></i> envoyer</span>`;
   ch+=`<span class="dtb" onclick="delTeam(${ti})" title="Supprimer l'équipe"><i class="ti ti-trash"></i> équipe</span>`;
   let row=`<tr data-ti="${ti}"><td class="team-cell" style="border-left:3px solid ${pole.bg};${isSAV?'vertical-align:middle':''}">${ch}</td>`;
   renderCols.forEach(col=>{
@@ -1620,6 +1680,21 @@ window.delC=(ti,ci)=>{
   }
   t.compagnons.splice(ci,1);
   render();buildChips();svT();
+};
+// ── PARTAGE : lien lecture seule vers le planning d'UNE équipe (equipe.html) ──
+const SHARE_BASE='https://lesateliersjehanno-blip.github.io/Planning-chantier/';
+window.shareTeam=async ti=>{
+  const t=teams[ti];if(!t)return;
+  if(!t.id){ensureTeamIds();svT();}
+  const base=location.protocol.startsWith('http')?new URL('equipe.html',location.href).href:SHARE_BASE+'equipe.html';
+  const url=base+'?p='+poseMode+'&t='+encodeURIComponent(t.id);
+  const who=teamNamesLabel(t);
+  const text='Ton planning ('+PLBL[poseMode]+') : '+who;
+  try{
+    if(navigator.share&&matchMedia('(pointer:coarse)').matches){await navigator.share({title:'Planning '+who,text,url});return;}
+  }catch(e){if(e&&e.name==='AbortError')return;}
+  try{await navigator.clipboard.writeText(url);toast('Lien copié pour '+who+' ✓ — collez-le dans un SMS / WhatsApp');}
+  catch(e){prompt('Lien à envoyer à '+who+' :',url);}
 };
 window.addTeam=()=>{teams.push({id:'tm_'+Date.now()+'_'+Math.random().toString(36).slice(2,8),name:'Nouvelle équipe',compagnons:[{name:'Compagnon',actId:POLES[0].id}]});render();buildChips();svT();};
 
@@ -2147,18 +2222,23 @@ window.atlPrint=()=>{
 
 // ── Onglets Pose / Atelier ──
 window.setTab=t=>{
-  curTab=['atelier','prod','posech'].includes(t)?t:'pose';
+  curTab=['atelier','prod','prodb','prodalu','proda','posech'].includes(t)?t:'pose';
+  const isP=curTab in PROD_TABS;
   document.body.classList.toggle('mode-atelier',curTab==='atelier');
-  document.body.classList.toggle('mode-prod',curTab==='prod');
+  document.body.classList.toggle('mode-prod',isP);
+  if(isP)pmbSetKind(PROD_TABS[curTab]);
   document.getElementById('tab-prod').classList.toggle('on',curTab==='prod');
+  document.getElementById('tab-prodb').classList.toggle('on',curTab==='prodb');
+  document.getElementById('tab-prodalu').classList.toggle('on',curTab==='prodalu');
+  document.getElementById('tab-proda').classList.toggle('on',curTab==='proda');
   document.getElementById('tab-pose').classList.toggle('on',curTab==='pose');
   document.getElementById('tab-posech').classList.toggle('on',curTab==='posech');
   document.getElementById('tab-atelier').classList.toggle('on',curTab==='atelier');
   try{localStorage.setItem(TAB_KEY,curTab);}catch(e){}
   if(window.closeAll)closeAll();
   atlClose();
-  document.getElementById('pmb-selbar').classList.toggle('open',curTab==='prod'&&pmbSel.size>0);
-  if(curTab==='atelier'){atlBuildChips();atlRender();}else if(curTab==='prod'){pmbRender();}
+  document.getElementById('pmb-selbar').classList.toggle('open',isP&&pmbSel.size>0);
+  if(curTab==='atelier'){atlBuildChips();atlRender();}else if(isP){pmbRender();}
   else{
     const m=curTab==='posech'?'ch':'men';
     if(m!==poseMode){
@@ -2181,25 +2261,71 @@ atlBuildChips();
 //   v=2 : st à 11 colonnes (« En Préparation BE » ajoutée en tête) — les lignes sans v sont migrées à la lecture
 //   meta : { seeded:true, maj:"JJ/MM/AAAA" }
 // st = colonnes d'avancement (En Préparation BE → Prêt à poser), double-clic = X.
-// pct = % d'avancement (0-100) → remplit la case « Prêt à poser » de gauche à droite.
+// pct = % d'avancement (0-100) → pastille de progression dans la colonne « % avancement ».
 // arch = ligne terminée (section « [En attente Pose] » groupée par conducteur/année).
 // ══════════════════════════════════════════════════════════════
-const PB=B+"/prodbois";
-const PMB_CACHE='jehanno_prodbois_cache';
-const PMB_ST=['En Préparation BE','Attente Débit','Débit','Attente usinage CN','Usinages CN','Att. Assemblage','Assemblage','Peintures','Prêt à vitrer','Nettoyage','Prêt à poser'];
-const PMB_COL=['#8E24AA','#9E9E9E','#FB8C00','#F9A825','#EF6C00','#7CB342','#558B2F','#1E88E5','#00ACC1','#00897B','#2E7D32'];
-const PMB_FIELDS=['com','cond','uw','pose','ch','pct','qte','fin','tcn','tfab','ral'];
-const PMB_N=PMB_ST.length,PMB_LAST=PMB_N-1; // Prêt à poser
+let PB=B+"/prodbois";
+let PMB_CACHE='jehanno_prodbois_cache';
+let PMB_ST=['En Préparation BE','Attente Débit','Débit','Attente usinage CN','Usinages CN','Att. Assemblage','Assemblage','Peintures','Prêt à vitrer','Nettoyage','Prêt à poser'];
+let PMB_COL=['#8E24AA','#9E9E9E','#FB8C00','#F9A825','#EF6C00','#7CB342','#558B2F','#1E88E5','#00ACC1','#00897B','#2E7D32'];
+let PMB_FIELDS=['com','cond','uw','pose','ch','pct','qte','fin','tcn','tfab','ral'];
+let PMB_N=PMB_ST.length,PMB_LAST=PMB_N-1; // Prêt à poser
 const PMB_SEED=[{"id":"p001","o":1,"com":"","cond":"olivier","pose":"13/07/2026","ch":"Charité PE ANC OE/OI","st":[0,0,0,0,0,1,1,0,0,0],"qte":"3","fin":"","tcn":"20H","tfab":"","ral":"Impression","arch":false,"an":""},{"id":"p002","o":2,"com":"","cond":"olivier","pose":"20/07/2026","ch":"13 Tribunaux","st":[0,0,0,0,0,1,0,0,0,0],"qte":"1","fin":"","tcn":"8H","tfab":"","ral":"RAL 3009","arch":false,"an":""},{"id":"p003","o":3,"com":"","cond":"olivier","pose":"27/07/2026","ch":"20 Saint Patern - PE","st":[0,0,0,0,0,0,1,0,0,0],"qte":"2","fin":"","tcn":"4H","tfab":"","ral":"RAL 7038","arch":false,"an":""},{"id":"p004","o":4,"com":"","cond":"olivier","pose":"01/09/2026","ch":"COËTION","st":[1,0,0,0,0,0,0,0,0,0],"qte":"4","fin":"","tcn":"","tfab":"","ral":"Impression","arch":false,"an":""},{"id":"p005","o":5,"com":"ATT validation","cond":"olivier","pose":"01/09/2026","ch":"Pérenès (Chapelle)","st":[1,0,0,0,0,0,0,0,0,0],"qte":"13","fin":"","tcn":"","tfab":"","ral":"Impression","arch":false,"an":""},{"id":"p006","o":6,"com":"","cond":"olivier","pose":"05/09/2026","ch":"15 Rue Hoche","st":[0,0,0,0,0,1,0,0,0,0],"qte":"1","fin":"","tcn":"8H","tfab":"","ral":"3 couches blanches","arch":false,"an":""},{"id":"p007","o":7,"com":"","cond":"olivier","pose":"11/09/2026","ch":"Thiers / Drezen","st":[0,0,0,0,0,1,0,0,0,0],"qte":"5","fin":"","tcn":"26 H","tfab":"","ral":"Impression","arch":false,"an":""},{"id":"p008","o":8,"com":"","cond":"olivier","pose":"14/09/2026","ch":"Château Grégo","st":[0,0,1,0,0,0,0,0,0,0],"qte":"5","fin":"","tcn":"","tfab":"","ral":"Impression","arch":false,"an":""},{"id":"p009","o":9,"com":"","cond":"olivier","pose":"21/09/2026","ch":"LE ROHELLO","st":[0,1,1,1,1,0,0,0,0,0],"qte":"33","fin":"","tcn":"32H","tfab":"","ral":"RAL 9002","arch":false,"an":""},{"id":"p010","o":10,"com":"","cond":"olivier","pose":"15/10/2026","ch":"BERNARD","st":[0,0,0,0,0,0,1,0,0,0],"qte":"2","fin":"","tcn":"6H","tfab":"","ral":"RAL 5003","arch":false,"an":""},{"id":"p011","o":11,"com":"ATT validation","cond":"olivier","pose":"01/12/2026","ch":"LE CONTE","st":[1,0,0,0,0,0,0,0,0,0],"qte":"5","fin":"","tcn":"","tfab":"","ral":"??","arch":false,"an":""},{"id":"p012","o":12,"com":"","cond":"olivier","pose":"07/12/2026","ch":"LOCOYARN","st":[1,0,0,0,0,0,0,0,0,0],"qte":"43","fin":"","tcn":"","tfab":"","ral":"","arch":false,"an":""},{"id":"p013","o":13,"com":"ATT validation","cond":"olivier","pose":"04/01/2027","ch":"Château de l'Hermine","st":[1,0,0,0,0,0,0,0,0,0],"qte":"89","fin":"","tcn":"","tfab":"","ral":"","arch":false,"an":""},{"id":"p014","o":14,"com":"","cond":"laurent","pose":"14/09/2026","ch":"Boulay","st":[0,0,0,0,0,1,1,0,0,0],"qte":"5","fin":"","tcn":"8H","tfab":"","ral":"Bleu Grange CH1 0479 Ext / Blanc Isola CH1 0008 Int","arch":false,"an":""},{"id":"p015","o":15,"com":"","cond":"laurent","pose":"28/07/2026","ch":"PENHIRIN (3 PE)","st":[0,0,0,1,0,0,0,0,0,0],"qte":"3","fin":"","tcn":"3H","tfab":"","ral":"??","arch":false,"an":""},{"id":"p016","o":16,"com":"WINLINE","cond":"laurent","pose":"01/12/2026","ch":"Caillère","st":[0,0,0,0,0,1,0,0,0,0],"qte":"4+4dorm","fin":"","tcn":"16H","tfab":"","ral":"Impression","arch":false,"an":""},{"id":"p017","o":17,"com":"Att RAL","cond":"laurent","pose":"?","ch":"Paysage (SAV)","st":[0,0,0,0,0,0,1,0,0,0],"qte":"1","fin":"","tcn":"/","tfab":"/","ral":"Att RAL","arch":false,"an":""},{"id":"p018","o":18,"com":"","cond":"laurent","pose":"?","ch":"Giboire - PE","st":[0,0,0,0,1,0,0,0,0,0],"qte":"1","fin":"","tcn":"2H30","tfab":"","ral":"idem Senechal","arch":false,"an":""},{"id":"p019","o":19,"com":"","cond":"laurent","pose":"30/09/2026","ch":"Lepeltier SAV","st":[0,0,0,0,0,0,1,0,0,0],"qte":"6","fin":"","tcn":"8H","tfab":"","ral":"","arch":false,"an":""},{"id":"p020","o":20,"com":"","cond":"olivier","pose":"Posé","ch":"Pont-Scorff","st":[0,0,0,0,0,0,0,0,0,1],"qte":"1","fin":"20/07/2025","tcn":"/","tfab":"/","ral":"","arch":true,"an":2025},{"id":"p021","o":21,"com":"","cond":"olivier","pose":"Posé","ch":"(GDL) Salomon","st":[0,0,0,0,0,0,0,0,0,1],"qte":"1","fin":"30/07/2025","tcn":"/","tfab":"/","ral":"","arch":true,"an":2025},{"id":"p022","o":22,"com":"","cond":"olivier","pose":"Posé","ch":"10 RSV Porte","st":[0,0,0,0,0,0,0,0,0,1],"qte":"1","fin":"22/09/2025","tcn":"/","tfab":"/","ral":"","arch":true,"an":2025},{"id":"p023","o":23,"com":"","cond":"olivier","pose":"Posé","ch":"13 Salomon","st":[0,0,0,0,0,0,0,0,0,1],"qte":"4","fin":"16/10/2025","tcn":"18H","tfab":"35H","ral":"","arch":true,"an":2025},{"id":"p024","o":24,"com":"","cond":"olivier","pose":"Posé","ch":"Touli","st":[0,0,0,0,0,0,0,0,0,1],"qte":"2","fin":"31/10/2025","tcn":"5H","tfab":"30H","ral":"","arch":true,"an":2025},{"id":"p025","o":25,"com":"","cond":"olivier","pose":"Posé","ch":"6 Salomon","st":[0,0,0,0,0,0,0,0,0,1],"qte":"1","fin":"31/10/2025","tcn":"3H","tfab":"/","ral":"","arch":true,"an":2025},{"id":"p026","o":26,"com":"","cond":"olivier","pose":"posé","ch":"Bouhant SAV","st":[0,0,0,0,0,0,0,0,0,1],"qte":"1","fin":"03/11/2025","tcn":"2H","tfab":"8H","ral":"","arch":true,"an":2025},{"id":"p027","o":27,"com":"","cond":"olivier","pose":"Posé","ch":"7 Porte Prison","st":[0,0,0,0,0,0,0,0,0,1],"qte":"7","fin":"06/11/2025","tcn":"17h","tfab":"/","ral":"","arch":true,"an":2025},{"id":"p028","o":28,"com":"","cond":"olivier","pose":"Posé","ch":"7 PPP","st":[0,0,0,0,0,0,0,0,0,1],"qte":"1","fin":"21/11/2025","tcn":"3H","tfab":"20H","ral":"","arch":true,"an":2025},{"id":"p029","o":29,"com":"","cond":"olivier","pose":"Posé","ch":"15 Salomon","st":[0,0,0,0,0,0,0,0,0,1],"qte":"2","fin":"24/11/2025","tcn":"7H","tfab":"","ral":"","arch":true,"an":2025},{"id":"p030","o":30,"com":"","cond":"olivier","pose":"Posé","ch":"12 RSV","st":[0,0,0,0,0,0,0,0,0,1],"qte":"7","fin":"25/11/2025","tcn":"22H","tfab":"/","ral":"","arch":true,"an":2025},{"id":"p031","o":31,"com":"","cond":"olivier","pose":"Posé","ch":"26 rue des vierges","st":[0,0,0,0,0,0,0,0,0,1],"qte":"6","fin":"27/11/2025","tcn":"20H","tfab":"/","ral":"","arch":true,"an":2025},{"id":"p032","o":32,"com":"","cond":"olivier","pose":"Posé","ch":"20 Salomon (Lamour)","st":[0,0,0,0,0,0,0,0,0,1],"qte":"3","fin":"Terminé","tcn":"/","tfab":"/","ral":"","arch":true,"an":2025},{"id":"p033","o":33,"com":"","cond":"olivier","pose":"Posé","ch":"Boro SAV (OUV)","st":[0,0,0,0,0,0,0,0,0,1],"qte":"1","fin":"17/10/2025","tcn":"4H","tfab":"12H","ral":"","arch":true,"an":2026},{"id":"p034","o":34,"com":"","cond":"olivier","pose":"Posé","ch":"Marchais","st":[0,0,0,0,0,0,0,0,0,1],"qte":"23","fin":"23/10/2025","tcn":"/","tfab":"/","ral":"","arch":true,"an":2026},{"id":"p035","o":35,"com":"","cond":"olivier","pose":"Posé","ch":"Charité 2ème partie","st":[0,0,0,0,0,0,0,0,0,1],"qte":"11","fin":"17/11/2025","tcn":"30H","tfab":"/","ral":"Impression","arch":true,"an":2026},{"id":"p036","o":36,"com":"","cond":"olivier","pose":"Posé","ch":"Fourure","st":[0,0,0,0,0,0,0,0,0,1],"qte":"1","fin":"24/11/2025","tcn":"1H30","tfab":"5H","ral":"","arch":true,"an":2026},{"id":"p037","o":37,"com":"","cond":"olivier","pose":"Posé","ch":"Le Bihan","st":[0,0,0,0,0,0,0,0,0,1],"qte":"1","fin":"14/01/2026","tcn":"/","tfab":"/","ral":"","arch":true,"an":2026},{"id":"p038","o":38,"com":"","cond":"olivier","pose":"Posé","ch":"8-10 Fontaine","st":[0,0,0,0,0,0,0,0,0,1],"qte":"9","fin":"18/02/2026","tcn":"42H","tfab":"/","ral":"","arch":true,"an":2026},{"id":"p039","o":39,"com":"","cond":"olivier","pose":"Posé","ch":"Moureaux","st":[0,0,0,0,0,0,0,0,0,1],"qte":"1","fin":"06/03/2026","tcn":"/","tfab":"","ral":"3 x Blanc","arch":true,"an":2026},{"id":"p040","o":40,"com":"","cond":"olivier","pose":"Réalisé","ch":"Echantillon MGL58 V12mm","st":[0,0,0,0,0,0,0,0,0,1],"qte":"1","fin":"13/03/2026","tcn":"/","tfab":"","ral":"","arch":true,"an":2026},{"id":"p041","o":41,"com":"","cond":"olivier","pose":"Posé","ch":"Charité","st":[0,0,0,0,0,0,0,0,0,1],"qte":"2","fin":"20/03/2026","tcn":"4H30","tfab":"","ral":"Impression","arch":true,"an":2026},{"id":"p042","o":42,"com":"","cond":"olivier","pose":"Posé","ch":"Locmalo","st":[0,0,0,0,0,0,0,0,0,1],"qte":"4","fin":"24/03/2026","tcn":"/","tfab":"","ral":"Vert bronze","arch":true,"an":2026},{"id":"p043","o":43,"com":"","cond":"olivier","pose":"Posé","ch":"Morio","st":[0,0,0,0,0,0,0,0,0,1],"qte":"2","fin":"27/03/2026","tcn":"1H","tfab":"","ral":"Impression","arch":true,"an":2026},{"id":"p044","o":44,"com":"","cond":"olivier","pose":"Posé","ch":"Groupama","st":[0,0,0,0,0,0,0,0,0,1],"qte":"6","fin":"03/04/2026","tcn":"22H","tfab":"","ral":"NCSS3050Y20R","arch":true,"an":2026},{"id":"p045","o":45,"com":"","cond":"olivier","pose":"01/04/2026","ch":"Psalette","st":[0,0,0,0,0,0,0,0,0,1],"qte":"3","fin":"10/12/2025","tcn":"4H","tfab":"/","ral":"3 x Blanc","arch":true,"an":2026},{"id":"p046","o":46,"com":"","cond":"olivier","pose":"01/04/2026","ch":"Dufourcq","st":[0,0,0,0,0,0,0,0,0,1],"qte":"15","fin":"","tcn":"70H","tfab":"","ral":"Green stone 270","arch":true,"an":2026},{"id":"p047","o":47,"com":"","cond":"olivier","pose":"01/04/2026","ch":"5 Salomon","st":[0,0,0,0,0,0,0,0,0,1],"qte":"2","fin":"03/04/2026","tcn":"3H","tfab":"","ral":"Keim 9064","arch":true,"an":2026},{"id":"p048","o":48,"com":"","cond":"olivier","pose":"01/04/2026","ch":"13 Pl. Poissonnerie","st":[0,0,0,0,0,0,0,0,0,1],"qte":"4","fin":"08/04/2026","tcn":"14H","tfab":"","ral":"Impression","arch":true,"an":2026},{"id":"p049","o":49,"com":"Posé","cond":"olivier","pose":"20/04/2026","ch":"20 Saint Patern - FEN","st":[0,0,0,0,0,0,0,0,0,1],"qte":"4","fin":"27/04/2026","tcn":"13H","tfab":"","ral":"RAL 7038","arch":true,"an":2026},{"id":"p050","o":50,"com":"Posé","cond":"olivier","pose":"20/04/2026","ch":"9 Closmadeuc PH1","st":[0,0,0,0,0,0,0,0,0,1],"qte":"10","fin":"27/04/2026","tcn":"25H","tfab":"","ral":"RAL 7032","arch":true,"an":2026},{"id":"p051","o":51,"com":"Posé","cond":"olivier","pose":"01/06/2026","ch":"9 Closma. PH2 (PE)","st":[0,0,0,0,0,0,0,0,0,1],"qte":"1","fin":"01/06/2026","tcn":"3H","tfab":"","ral":"RAL 7023","arch":true,"an":2026},{"id":"p052","o":52,"com":"Posé","cond":"olivier","pose":"15/06/2026","ch":"9 Closma. PH3","st":[0,0,0,0,0,0,0,0,0,1],"qte":"1","fin":"29/06/2026","tcn":"3H","tfab":"","ral":"7032 gris silex","arch":true,"an":2026},{"id":"p053","o":53,"com":"","cond":"olivier","pose":"30/04/2026","ch":"7-9 Saint-Nicolas","st":[0,0,0,0,0,0,0,0,0,1],"qte":"5","fin":"30/04/2026","tcn":"14H","tfab":"","ral":"Impression","arch":true,"an":2026},{"id":"p054","o":54,"com":"","cond":"olivier","pose":"01/07/2026","ch":"Boutet","st":[0,0,0,0,0,0,0,0,0,1],"qte":"2","fin":"10/07/2026","tcn":"9H","tfab":"","ral":"Impression","arch":true,"an":2026},{"id":"p055","o":55,"com":"","cond":"olivier","pose":"20/07/2026","ch":"17 Salomon","st":[0,0,0,0,0,0,0,0,0,1],"qte":"1","fin":"13/07/2026","tcn":"20Min","tfab":"","ral":"3 couches blanches","arch":true,"an":2026},{"id":"p056","o":56,"com":"","cond":"olivier","pose":"20/07/2026","ch":"12 Saint Patern - FEN","st":[0,0,0,0,0,0,0,0,0,1],"qte":"3","fin":"15/07/2026","tcn":"9H","tfab":"","ral":"Ch2 1158","arch":true,"an":2026},{"id":"p057","o":57,"com":"","cond":"olivier","pose":"15/06/2026","ch":"Mané M10","st":[0,0,0,0,0,0,0,0,0,1],"qte":"1","fin":"22/07/2026","tcn":"2H","tfab":"","ral":"Shadow white 282","arch":true,"an":2026},{"id":"p058","o":58,"com":"","cond":"olivier","pose":"31/07/2026","ch":"13 PDLP BIS","st":[0,0,0,0,0,0,0,0,0,1],"qte":"5","fin":"16/09/2026","tcn":"23H","tfab":"","ral":"Impression","arch":true,"an":2026},{"id":"p059","o":59,"com":"","cond":"olivier","pose":"20/07/2026","ch":"12 Saint Patern - MIXTE","st":[0,0,0,0,0,0,0,0,0,1],"qte":"3","fin":"23/09/2026","tcn":"4H","tfab":"","ral":"CH2 1158","arch":true,"an":2026},{"id":"p060","o":60,"com":"Posé","cond":"olivier","pose":"08/06/2026","ch":"Lanvaudan FEN","st":[0,0,0,0,0,0,0,0,0,1],"qte":"4","fin":"15/07/2026","tcn":"14H","tfab":"","ral":"RAL 3009","arch":true,"an":2026},{"id":"p061","o":61,"com":"","cond":"laurent","pose":"Posé","ch":"Flinois (2ème)","st":[0,0,0,0,0,0,0,0,0,1],"qte":"6","fin":"02/12/2025","tcn":"16H30","tfab":"/","ral":"","arch":true,"an":2025},{"id":"p062","o":62,"com":"","cond":"laurent","pose":"Posé","ch":"Senechal","st":[0,0,0,0,0,0,0,0,0,1],"qte":"1","fin":"04/12/2025","tcn":"/","tfab":"","ral":"","arch":true,"an":2025},{"id":"p063","o":63,"com":"","cond":"laurent","pose":"Posé","ch":"Senechal V2","st":[0,0,0,0,0,0,0,0,0,1],"qte":"1","fin":"09/12/2025","tcn":"/","tfab":"/","ral":"","arch":true,"an":2025},{"id":"p064","o":64,"com":"","cond":"laurent","pose":"Posé","ch":"Les volets verts (Ouv)","st":[0,0,0,0,0,0,0,0,0,1],"qte":"","fin":"X","tcn":"/","tfab":"/","ral":"","arch":true,"an":2025},{"id":"p065","o":65,"com":"","cond":"laurent","pose":"1Porte 2Vtx","ch":"CHEZE - PE 2VTX","st":[0,0,0,0,0,0,0,0,0,1],"qte":"1","fin":"02/12/2025","tcn":"3H","tfab":"","ral":"","arch":true,"an":2025},{"id":"p066","o":66,"com":"","cond":"laurent","pose":"posé","ch":"Lhopitallier (1 porte)","st":[0,0,0,0,0,0,0,0,0,1],"qte":"1","fin":"20/01/2026","tcn":"/","tfab":"/","ral":"","arch":true,"an":2026},{"id":"p067","o":67,"com":"","cond":"laurent","pose":"posé","ch":"Blue Oak Dormant","st":[0,0,0,0,0,0,0,0,0,1],"qte":"1","fin":"21/01/2026","tcn":"/","tfab":"/","ral":"","arch":true,"an":2026},{"id":"p068","o":68,"com":"","cond":"laurent","pose":"posé","ch":"Blue Oak ouvrant","st":[0,0,0,0,0,0,0,0,0,1],"qte":"1","fin":"26/01/2026","tcn":"/","tfab":"/","ral":"","arch":true,"an":2026},{"id":"p069","o":69,"com":"","cond":"laurent","pose":"Posé","ch":"Krotoff DORMANT","st":[0,0,0,0,0,0,0,0,0,1],"qte":"1","fin":"X","tcn":"30 Min","tfab":"4H","ral":"","arch":true,"an":2026},{"id":"p070","o":70,"com":"","cond":"laurent","pose":"Posé","ch":"Puech NV6","st":[0,0,0,0,0,0,0,0,0,1],"qte":"8","fin":"02/03/2026","tcn":"44H","tfab":"","ral":"","arch":true,"an":2026},{"id":"p071","o":71,"com":"","cond":"laurent","pose":"Posé","ch":"Krotoff OUVRANT","st":[0,0,0,0,0,0,0,0,0,1],"qte":"1","fin":"03/03/2026","tcn":"2H30","tfab":"","ral":"","arch":true,"an":2026},{"id":"p072","o":72,"com":"","cond":"laurent","pose":"Posé","ch":"De Labbey","st":[0,0,0,0,0,0,0,0,0,1],"qte":"14","fin":"12/03/2023","tcn":"58H","tfab":"","ral":"","arch":true,"an":2026},{"id":"p073","o":73,"com":"","cond":"laurent","pose":"Posé","ch":"CHEZE (ORIEL)","st":[0,0,0,0,0,0,0,0,0,1],"qte":"3","fin":"08/04/2026","tcn":"13H","tfab":"","ral":"INT 9010/EXT 6021","arch":true,"an":2026},{"id":"p074","o":74,"com":"","cond":"laurent","pose":"Posé","ch":"LENORMAND","st":[0,0,0,0,0,0,0,0,0,1],"qte":"2","fin":"21/04/2026","tcn":"/","tfab":"","ral":"","arch":true,"an":2026},{"id":"p075","o":75,"com":"","cond":"laurent","pose":"Posé","ch":"Delabbey 2 eme","st":[0,0,0,0,0,0,0,0,0,1],"qte":"3","fin":"03/04/2026","tcn":"11H","tfab":"","ral":"Impression","arch":true,"an":2026},{"id":"p076","o":76,"com":"","cond":"laurent","pose":"Posé","ch":"BEAUGRAND (1 PE)","st":[0,0,0,0,0,0,0,0,0,1],"qte":"1","fin":"21/04/2026","tcn":"2H","tfab":"","ral":"NOIR","arch":true,"an":2026},{"id":"p077","o":77,"com":"","cond":"laurent","pose":"Posé","ch":"BARRA","st":[0,0,0,0,0,0,0,0,0,1],"qte":"1","fin":"30/04/2026","tcn":"","tfab":"","ral":"","arch":true,"an":2026},{"id":"p078","o":78,"com":"","cond":"laurent","pose":"01/08/2026","ch":"Laurent (perso)","st":[0,0,0,0,0,0,0,0,0,1],"qte":"2","fin":"17/03/2026","tcn":"8H","tfab":"/","ral":"gris","arch":true,"an":2026},{"id":"p079","o":79,"com":"","cond":"laurent","pose":"?","ch":"BEAUGRAND CLOT","st":[0,0,0,0,0,0,0,0,0,1],"qte":"1","fin":"X","tcn":"","tfab":"","ral":"Brut","arch":true,"an":2026},{"id":"p080","o":80,"com":"","cond":"laurent","pose":"24/07/2026","ch":"Delabbey BIS","st":[0,0,0,0,0,0,0,0,0,1],"qte":"1 ouv","fin":"15/07/2026","tcn":"3H","tfab":"","ral":"","arch":true,"an":2026},{"id":"p081","o":81,"com":"","cond":"laurent","pose":"24/07/2026","ch":"Delabbey PH3","st":[0,0,0,0,0,0,0,0,0,1],"qte":"2 ouv","fin":"17/07/2026","tcn":"3H","tfab":"","ral":"3 couches blanches","arch":true,"an":2026}];
 const PMB_CONDS=['Laurent','Olivier','Pierre-Yves','Mathieu']; // conducteurs proposés (on peut en taper un autre)
 let pmbUW='',pmbRows={},pmbMaj='24/09/2026',pmbQ='',pmbConds=[],pmbShowAtt=true,pmbShowArc=false,pmbSort='',pmbMenuId=null,pmbSeeding=false,pmbPending=false;
 PMB_SEED.forEach(r=>{pmbRows[r.id]=r;});
 
+// ── Les 3 suivis de prod partagent le même tableau : Prod Mex Bois / Prod BOIS / Prod Agencement ──
+// Firebase : planning/v1/prodbois (Mex bois) · planning/v1/prod_bois · planning/v1/prod_agencement · planning/v1/prod_alu
+// Prod ALU : rows { id: {o,com,cond,pose,ch,tps,st:[7×0/1],nbc(=nb de châssis),apv(=date prévisionnelle de pose → compte à rebours),dcp(=date de commande profil),dcv(=date de commande vitrage),pct,ral,arch,arc,an} } — pas de colonne CN
+// Prod BOIS / Agencement : rows { id: {o,com,cond,mach,pose,ch,tps,st:[5×0/1],pct,ral(=Couleur finition),arch,arc,an} }
+const PROD_TABS={prod:'mex',prodb:'bois',prodalu:'alu',proda:'agc'};
+const PMB_ST3=['En préparation BE','Commande barre','Commande vitrage','Débit','Assemblage','Finition','Prêt à poser'];
+const PMB_COL3=['#8E24AA','#6D4C41','#00ACC1','#FB8C00','#558B2F','#1E88E5','#2E7D32'];
+const PMB_FIELDS3=['com','cond','pose','nbc','apv','ch','tps','dcp','dcv','pct','ral'];
+const PMB_DCP=1,PMB_DCV=2; // dates de commande : profil après « Commande barre », vitrage après « Commande vitrage »
+const PMB_ST2=['Débit','Usinage CN','Assemblage','Finition','Prêt à poser'];
+const PMB_COL2=['#FB8C00','#EF6C00','#558B2F','#1E88E5','#2E7D32'];
+const PMB_FIELDS2=['com','cond','mach','pose','apv','ch','tps','pct','ral']; // « pose » n'est plus affichée (remplacée par « Date prévisionnelle de pose : ») mais reste conservée
+// Prod BOIS / ALU / Agencement : la colonne date est « Date prévisionnelle de pose : » (apv) à la place de la date de pose
+const pmbApvOnly=()=>pmbKind!=='mex';
+const pmbDF=()=>pmbApvOnly()?'apv':'pose'; // champ date utilisé pour le tri par date
+const PMB_KINDS={
+  mex:{path:B+'/prodbois',cache:'jehanno_prodbois_cache',prefs:'jehanno_prodbois_prefs',titre:'🪵 Suivi prod Mex bois',st:PMB_ST,col:PMB_COL,fields:PMB_FIELDS},
+  bois:{path:B+'/prod_bois',cache:'jehanno_prod_bois_cache',prefs:'jehanno_prod_bois_prefs',titre:'🪚 Suivi prod BOIS',st:PMB_ST2,col:PMB_COL2,fields:PMB_FIELDS2},
+  alu:{path:B+'/prod_alu',cache:'jehanno_prod_alu_cache',prefs:'jehanno_prod_alu_prefs',titre:'🪟 Suivi prod ALU',st:PMB_ST3,col:PMB_COL3,fields:PMB_FIELDS3},
+  agc:{path:B+'/prod_agencement',cache:'jehanno_prod_agc_cache',prefs:'jehanno_prod_agc_prefs',titre:'🛋️ Suivi prod Agencement',st:PMB_ST2,col:PMB_COL2,fields:PMB_FIELDS2}
+};
+let pmbKind='mex';
+const pmbBlank=()=>({rows:{},maj:'',q:'',conds:[],att:true,arc:false,sort:'',uw:'',sel:new Set(),selLast:null});
+const PMB_S={mex:pmbBlank(),bois:pmbBlank(),alu:pmbBlank(),agc:pmbBlank()};
+// préférences + cache des onglets non affichés
+['bois','alu','agc'].forEach(k=>{const c=PMB_KINDS[k],S=PMB_S[k];
+  try{const p=JSON.parse(localStorage.getItem(c.prefs)||'null');if(p){S.conds=Array.isArray(p.conds)?p.conds.filter(x=>typeof x==='string'):[];S.att=p.att!==false;S.arc=!!p.arc;S.sort=['az','za','d1','d2'].includes(p.sort)?p.sort:'';}}catch(e){}
+  try{const d=JSON.parse(localStorage.getItem(c.cache)||'null');if(d&&d.rows&&typeof d.rows==='object'){S.rows=d.rows;S.maj=d.maj||'';}}catch(e){}
+});
+function pmbStash(){Object.assign(PMB_S[pmbKind],{rows:pmbRows,maj:pmbMaj,q:pmbQ,conds:pmbConds,att:pmbShowAtt,arc:pmbShowArc,sort:pmbSort,uw:pmbUW,sel:pmbSel,selLast:pmbSelLast});}
+function pmbSetKind(k){
+  if(k===pmbKind||!PMB_KINDS[k])return;
+  pmbStash();pmbMenuClose();
+  const c=PMB_KINDS[k],S=PMB_S[k];
+  pmbKind=k;PB=c.path;PMB_CACHE=c.cache;PMB_ST=c.st;PMB_COL=c.col;PMB_FIELDS=c.fields;PMB_N=PMB_ST.length;PMB_LAST=PMB_N-1;
+  pmbRows=S.rows;pmbMaj=S.maj;pmbQ=S.q;pmbConds=S.conds;pmbShowAtt=S.att;pmbShowArc=S.arc;pmbSort=S.sort;pmbUW=S.uw;pmbSel=S.sel;pmbSelLast=S.selLast;
+  pmbPending=false;document.getElementById('pmb-q').value=pmbQ;
+}
+function pmbKindCache(k){try{localStorage.setItem(PMB_KINDS[k].cache,JSON.stringify({rows:PMB_S[k].rows,maj:PMB_S[k].maj}));}catch(e){}}
+// Restauration d'une sauvegarde .json pour un des 3 suivis
+function pmbImport(k,rows){
+  set(ref(db,PMB_KINDS[k].path+'/rows'),rows).catch(()=>{});
+  if(k===pmbKind){pmbRows=rows;pmbSaveCache();pmbRefresh();}else{PMB_S[k].rows=rows;pmbKindCache(k);}
+}
+
+
 const pmbToday=()=>{const d=new Date();return String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+d.getFullYear();};
 function pmbDate(s){const m=/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})$/.exec(String(s||'').trim());if(!m)return null;let y=+m[3];if(y<100)y+=2000;return new Date(y,m[2]-1,+m[1]);}
 function pmbNorm(r,id){
   r=r||{};const st=atlList(r.st).map(x=>x?1:0);
-  if(r.v!==2)st.unshift(0); // ancien format (10 colonnes) : on insère « En Préparation BE »
+  if(pmbKind==='mex'&&r.v!==2)st.unshift(0); // ancien format (10 colonnes) : on insère « En Préparation BE »
   while(st.length<PMB_N)st.push(0);
   const o={id:r.id||id,v:2,o:+r.o||0,st:st.slice(0,PMB_N),arch:!!r.arch,an:r.an||''};
   PMB_FIELDS.forEach(f=>o[f]=String(r[f]==null?'':r[f]));
@@ -2207,7 +2333,7 @@ function pmbNorm(r,id){
   o.arc=o.arch&&(r.arc!==undefined?!!r.arc:/pos[ée]|réalis/i.test(o.pose+' '+o.com));
   return o;
 }
-function pmbSavePref(){try{localStorage.setItem('jehanno_prodbois_prefs',JSON.stringify({att:pmbShowAtt,arc:pmbShowArc,sort:pmbSort,conds:pmbConds,uw:pmbUW}));}catch(e){}}
+function pmbSavePref(){try{localStorage.setItem(PMB_KINDS[pmbKind].prefs,JSON.stringify({att:pmbShowAtt,arc:pmbShowArc,sort:pmbSort,conds:pmbConds,uw:pmbUW}));}catch(e){}}
 // Nom affiché : « olivier » → « Olivier », « pierre-yves » → « Pierre-Yves »
 function pmbCondLbl(c){c=String(c||'').trim();const f=PMB_CONDS.find(x=>x.toLowerCase()===c.toLowerCase());return f||c.replace(/(^|[\s-])(\S)/g,(m,a,b)=>a+b.toUpperCase());}
 (function(){try{const p=JSON.parse(localStorage.getItem('jehanno_prodbois_prefs')||'null');if(p){pmbUW=['U','W','U+W'].includes(p.uw)?p.uw:'';pmbConds=Array.isArray(p.conds)?p.conds.filter(c=>typeof c==='string'):(p.cond?[p.cond]:[]);pmbShowAtt=p.att!==false;pmbShowArc=!!p.arc;pmbSort=['az','za','d1','d2'].includes(p.sort)?p.sort:'';}}catch(e){}})();
@@ -2222,19 +2348,27 @@ async function pmbUpd(o){
   catch(e){ss('err');toast('Hors ligne : sauvegardé sur l\'appareil, sync au retour du réseau');}
 }
 function pmbSvRows(ids){const o={};ids.forEach(id=>{o['rows/'+id]=pmbRows[id]?JSON.parse(JSON.stringify(pmbNorm(pmbRows[id],id))):null;});return pmbUpd(o);}
-onValue(ref(db,PB+'/meta'),s=>{
-  const m=s.val()||{};
-  if(m.maj)pmbMaj=m.maj;
-  if(!m.seeded&&!pmbSeeding){ // 1re ouverture : on envoie le tableau Excel dans Firebase
-    pmbSeeding=true;const o={'meta/seeded':true,'meta/maj':pmbMaj};
-    PMB_SEED.forEach(r=>{o['rows/'+r.id]=r;});
-    update(ref(db,PB),o).catch(()=>{pmbSeeding=false;});
-  }
-  pmbRefresh();
-});
-onValue(ref(db,PB+'/rows'),s=>{const v=s.val();if(v&&typeof v==='object'){pmbRows=v;pmbSaveCache();keepScroll(pmbRefresh);}});
+function pmbListen(k){
+  const c=PMB_KINDS[k],S=PMB_S[k];
+  onValue(ref(db,c.path+'/meta'),s=>{
+    const m=s.val()||{};
+    if(m.maj){if(k===pmbKind)pmbMaj=m.maj;else S.maj=m.maj;}
+    if(k==='mex'&&!m.seeded&&!pmbSeeding){ // 1re ouverture : on envoie le tableau Excel dans Firebase
+      pmbSeeding=true;const o={'meta/seeded':true,'meta/maj':m.maj||'24/09/2026'};
+      PMB_SEED.forEach(r=>{o['rows/'+r.id]=r;});
+      update(ref(db,c.path),o).catch(()=>{pmbSeeding=false;});
+    }
+    if(k===pmbKind)pmbRefresh();
+  });
+  onValue(ref(db,c.path+'/rows'),s=>{
+    const v=s.val();if(!v||typeof v!=='object')return;
+    if(k===pmbKind){pmbRows=v;pmbSaveCache();keepScroll(pmbRefresh);}
+    else{S.rows=v;pmbKindCache(k);}
+  });
+}
+Object.keys(PMB_KINDS).forEach(pmbListen);
 function pmbRefresh(){
-  if(curTab!=='prod')return;
+  if(!(curTab in PROD_TABS))return;
   // ne pas re-dessiner pendant une saisie (on perdrait le curseur)
   const a=document.activeElement;if(a&&a.closest&&a.closest('#pmb-table')){pmbPending=true;return;}
   pmbRender();
@@ -2245,6 +2379,18 @@ function pmbCell(r,f,cls,ph){return `<td class="${cls}"><div class="pmb-in" cont
 // Cellule date : affichage jj/mm/aaaa + calendrier natif au clic
 function pmbISO(s){const d=pmbDate(s);return d?d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'):'';}
 function pmbDateCell(r,f,cls,ph){return `<td class="${cls} w-dt" title="Cliquer pour choisir une date"><div class="pmb-dt" data-ph="${ph||''}">${esc(r[f])}</div><input type="date" class="pmb-dtin" value="${pmbISO(r[f])}" onclick="pmbPick(this)" onchange="pmbSetDate('${r.id}','${f}',this.value)" tabindex="-1"></td>`;}
+function pmbCountCell(r,f){
+  const d=pmbDate(r[f]),inp=`<input type="date" class="pmb-dtin" value="${pmbISO(r[f])}" onclick="pmbPick(this)" onchange="pmbSetDate('${r.id}','${f}',this.value)" tabindex="-1">`;
+  if(!d)return `<td class="w-apv w-dt" title="Cliquer pour choisir une date"><div class="pmb-cd" data-ph="jj/mm/aaaa">${esc(r[f]||'')}</div>${inp}</td>`;
+  const t=new Date();t.setHours(0,0,0,0);const n=Math.round((d-t)/864e5);
+  const sd=r[f].replace(/\/(?:19|20)(\d\d)$/,'/$1'); // date courte jj/mm/aa pour gagner de la place
+  let txt,col,p,cls='';
+  if(r.arc){txt=sd;col='#E8E6E1';p=0;} // archivé (posé) : simple rappel de la date
+  else if(n<0){txt=sd+' · Dépassé '+(-n)+' j';col='#C62828';p=100;cls=' late';}
+  else if(n===0){txt=sd+" · Aujourd'hui";col='#FB8C00';p=100;}
+  else{txt=sd+' · J-'+n;col=n<=14?'#FB8C00':'#43A047';p=Math.max(14,Math.min(100,Math.round(100-n/30*100)));} // la barre se remplit sur les 30 derniers jours
+  return `<td class="w-apv w-dt" title="Date prévisionnelle de pose : ${esc(r[f])} — cliquer pour changer la date"><div class="pmb-cd${cls}" style="--p:${p}%;--c:${col}">${esc(txt)}</div>${inp}</td>`;
+}
 function pmbPct(v){const n=parseFloat(String(v||'').replace(',','.').replace(/[^\d.]/g,''));return isNaN(n)?null:Math.max(0,Math.min(100,Math.round(n)));}
 // Ligne sous-traitée : commentaire « Sous-traitante » (ou sous-traitance, sous traitant…) → ligne en marron très clair
 const PMB_ST_TXT='Sous-traitante';
@@ -2260,22 +2406,24 @@ function pmbRowHtml(r){
   const sel=r.arc?`<input type="checkbox" class="pmb-sel" ${pmbSel.has(r.id)?'checked':''} onclick="pmbSelToggle(event,'${r.id}')" title="Sélectionner (Maj+clic = plage)">`:'';
   let h=`<tr data-id="${r.id}" class="${pmbIsST(r)?'is-st ':''}${r.arch?'is-arch':''}${r.arc?' is-arc':''}${pmbSel.has(r.id)?' is-sel':''}"><td class="pmb-a">${sel}<button onclick="pmbMenu(event,'${r.id}')" title="Actions">⋮</button>${go}</td>`;
   const uw=pmbUWn(r.uw);
-  h+=pmbCell(r,'com','w-com').replace('</td>',`<button class="pmb-cbtn" onclick="pmbComMenu(event,'${r.id}')" title="Choisir : Sous-traitante">▼</button></td>`)+pmbCell({...r,cond:pmbCondLbl(r.cond)},'cond','w-cond').replace('</td>',`<button class="pmb-cbtn" onclick="pmbCondMenu(event,'${r.id}')" title="Choisir le conducteur">▼</button></td>`)
-    +`<td class="w-uw"><select class="pmb-uw ${uw==='U'?'u':uw==='W'?'w':uw==='U+W'?'uw':''}" onchange="pmbSetUW('${r.id}',this.value)" title="Machine : U, W ou U+W"><option value=""${uw?'':' selected'}>–</option><option value="U"${uw==='U'?' selected':''}>U</option><option value="W"${uw==='W'?' selected':''}>W</option><option value="U+W"${uw==='U+W'?' selected':''}>U+W</option></select></td>`
-    +pmbDateCell(r,'pose','w-pose'+(late?' late':''),'jj/mm/aaaa')+pmbCell(r,'ch','pmb-ch','Chantier…');
+  h+=pmbCell(r,'ch','pmb-ch','Chantier…')+pmbCell(r,'com','w-com').replace('</td>',`<button class="pmb-cbtn" onclick="pmbComMenu(event,'${r.id}')" title="Choisir : Sous-traitante">▼</button></td>`)+pmbCell({...r,cond:pmbCondLbl(r.cond)},'cond','w-cond').replace('</td>',`<button class="pmb-cbtn" onclick="pmbCondMenu(event,'${r.id}')" title="Choisir le conducteur">▼</button></td>`)
+    +(pmbKind==='mex'?`<td class="w-uw"><select class="pmb-uw ${uw==='U'?'u':uw==='W'?'w':uw==='U+W'?'uw':''}" onchange="pmbSetUW('${r.id}',this.value)" title="Machine : U, W ou U+W"><option value=""${uw?'':' selected'}>–</option><option value="U"${uw==='U'?' selected':''}>U</option><option value="W"${uw==='W'?' selected':''}>W</option><option value="U+W"${uw==='U+W'?' selected':''}>U+W</option></select></td>`:pmbKind==='alu'?'':`<td class="w-cn${r.mach?' on':''}" onclick="pmbTapCN('${r.id}')" title="CN — double-clic pour mettre / enlever la croix">${r.mach?'X':''}</td>`)
+    +(pmbKind==='alu'?pmbCell(r,'nbc','w-qte'):'')+pmbCountCell(r,pmbDF())+(pmbKind==='mex'?'':pmbCell(r,'tps','w-tps'));
   r.st.forEach((on,i)=>{
-    if(i===PMB_LAST)h+=`<td class="w-pct"><div class="pmb-in" contenteditable="true" spellcheck="false" inputmode="numeric" data-f="pct" data-ph="">${pc==null?'':pc+' %'}</div></td>`;
-    // « Prêt à poser » non coché : remplissage progressif selon le % d'avancement
-    const grad=!on&&i===PMB_LAST&&pc?`background:linear-gradient(to right,#A5D6A7 ${pc}%,transparent ${pc}%)`:'';
-    h+=`<td class="pmb-st${on?' on':''}${i===last?' cur':''}${grad?' pct':''}" style="${on?'background:'+PMB_COL[i]:grad}" onclick="pmbTap('${r.id}',${i})" title="${PMB_ST[i]}${i===PMB_LAST&&pc!=null?' — avancement '+pc+' %':''} — double-clic pour mettre / enlever la croix">${on?'X':''}</td>`;
+    if(i===PMB_LAST)h+=`<td class="w-pct"><div class="pmb-in" contenteditable="true" spellcheck="false" inputmode="numeric" data-f="pct" data-ph="" style="--p:${pc||0}%" title="Avancement${pc==null?'':' '+pc+' %'} — cliquer pour modifier">${pc==null?'':pc+' %'}</div></td>`;
+    // (le % d'avancement s'affiche en pastille dans sa colonne, plus dans « Prêt à poser »)
+    const grad='';
+    h+=`<td class="pmb-st${on?' on':''}${i===last?' cur':''}${grad?' pct':''}" style="${on?'background:'+PMB_COL[i]:grad}" onclick="pmbTap('${r.id}',${i})" title="${PMB_ST[i]}— double-clic pour mettre / enlever la croix">${on?'X':''}</td>`;
+    if(pmbKind==='alu'&&i===PMB_DCP)h+=pmbDateCell(r,'dcp','w-dcv','jj/mm/aaaa');
+    if(pmbKind==='alu'&&i===PMB_DCV)h+=pmbDateCell(r,'dcv','w-dcv','jj/mm/aaaa');
   });
-  h+=pmbCell(r,'qte','w-qte')+pmbDateCell(r,'fin','w-fin')+pmbCell(r,'tcn','w-t')+pmbCell(r,'tfab','w-t')+pmbCell(r,'ral','w-ral');
+  h+=pmbKind==='mex'?pmbCell(r,'qte','w-qte')+pmbDateCell(r,'fin','w-fin')+pmbCell(r,'tcn','w-t')+pmbCell(r,'tfab','w-t')+pmbCell(r,'ral','w-ral'):pmbCell(r,'ral','w-ral');
   return h+'</tr>';
 }
 function pmbSorted(l){
   if(!pmbSort)return l;
   if(pmbSort==='d1'||pmbSort==='d2'){ // tri par date de pose (sans date → en bas)
-    const k=r=>{const d=pmbDate(r.pose);return d?d.getTime():null;};
+    const f=pmbDF(),k=r=>{const d=pmbDate(r[f]);return d?d.getTime():null;};
     return l.slice().sort((a,b)=>{const x=k(a),y=k(b);if(x===y)return a.o-b.o;if(x==null)return 1;if(y==null)return -1;return (x-y)*(pmbSort==='d2'?-1:1);});
   }
   const k=r=>r.ch.toLocaleLowerCase('fr').trim();
@@ -2293,12 +2441,12 @@ function pmbRender(){
   pmbPending=false;
   const tb=document.getElementById('pmb-table');if(!tb)return;
   const all=pmbAll(),q=pmbQ.trim().toLowerCase();
-  const match=r=>(!pmbConds.length||pmbConds.includes(r.cond.trim().toLowerCase()))&&(!pmbUW||pmbUWn(r.uw)===pmbUW)&&(!q||[r.ch,r.com,r.cond,r.uw,r.ral,r.pose,r.qte].join(' ').toLowerCase().includes(q));
+  const match=r=>(!pmbConds.length||pmbConds.includes(r.cond.trim().toLowerCase()))&&(!pmbUW||pmbUWn(r.uw)===pmbUW)&&(!q||[r.ch,r.com,r.cond,r.uw,r.mach,r.tps,r.nbc,r.apv,r.dcp,r.dcv,r.ral,r.pose,r.qte].join(' ').toLowerCase().includes(q));
   const prod=all.filter(r=>!r.arch&&match(r)),att=all.filter(r=>r.arch&&!r.arc&&match(r)),arc=all.filter(r=>r.arc&&match(r));
-  const NC=7+PMB_N+6,arrow=pmbSort==='az'?' ▲':pmbSort==='za'?' ▼':'',darrow=pmbSort==='d1'?' ▲':pmbSort==='d2'?' ▼':'';
-  let h=`<thead><tr><th class="pmb-a"></th><th>Commentaires</th><th>Conduc</th><th title="Machine : U, W ou U+W">Machine</th><th class="pmb-sortable${darrow?' on':''}" onclick="pmbDateSortCycle()" title="Trier par date de pose">Date POSE${darrow}</th><th class="pmb-chh pmb-sortable" onclick="pmbSortCycle()" title="Trier par nom de chantier">Chantiers${arrow}</th>`+
-    PMB_ST.map((s,i)=>(i===PMB_LAST?`<th class="pmb-pcth y">% avan&shy;cement</th>`:'')+`<th class="pmb-sth y"><span style="border-bottom-color:${PMB_COL[i]}">${s}</span></th>`).join('')+
-    `<th class="y">Quantité</th><th class="y">Prod terminé</th><th class="y">Tps travail CN</th><th class="y">Tps travail Fab</th><th class="y">Finition</th></tr></thead><tbody>`;
+  const mex=pmbKind==='mex',alu=pmbKind==='alu',NC=7+PMB_N+6,arrow=pmbSort==='az'?' ▲':pmbSort==='za'?' ▼':'',darrow=pmbSort==='d1'?' ▲':pmbSort==='d2'?' ▼':'';
+  let h=`<thead><tr><th class="pmb-a"></th><th class="pmb-chh pmb-sortable" onclick="pmbSortCycle()" title="Trier par nom de chantier">Chantiers${arrow}</th><th>Commentaires</th><th>Conduc</th>${alu?'':`<th title="${mex?'Machine : U, W ou U+W':'Commande numérique'}">${mex?'Machine':'CN'}</th>`}${alu?'<th>Nb de châssis</th>':''}<th class="pmb-sortable${darrow?' on':''}" onclick="pmbDateSortCycle()" title="Trier par date" style="white-space:normal;width:150px;min-width:150px;max-width:150px;text-align:center">Date prévisionnelle de pose :${darrow}</th>`+(mex?'':`<th class="y">Temps estimatif</th>`)+
+    PMB_ST.map((s,i)=>(i===PMB_LAST?`<th class="pmb-pcth y">% avan&shy;cement</th>`:'')+`<th class="pmb-sth y"><span style="border-bottom-color:${PMB_COL[i]}">${s}</span></th>`+(alu&&i===PMB_DCP?`<th class="y pmb-dcvh">Date de commande profil</th>`:'')+(alu&&i===PMB_DCV?`<th class="y pmb-dcvh">Date de commande vitrage</th>`:'')).join('')+
+    (mex?`<th class="y">Quantité</th><th class="y">Prod terminé</th><th class="y">Tps travail CN</th><th class="y">Tps travail Fab</th><th class="y">Finition</th>`:`<th class="y">Couleur finition</th>`)+`</tr></thead><tbody>`;
   h+=`<tr class="pmb-sec"><td colspan="${NC}"><span class="pmb-secin"><i class="ti ti-tools"></i> En production · ${prod.length} chantier${prod.length>1?'s':''}</span></td></tr>`;
   h+=prod.length?pmbSorted(prod).map(pmbRowHtml).join(''):`<tr class="pmb-emp"><td colspan="${NC}">Aucun chantier en production${q||pmbConds.length||pmbUW?' pour ce filtre':''}</td></tr>`;
   const sA=pmbShowAtt||!!q,sR=pmbShowArc||!!q;
@@ -2313,7 +2461,7 @@ function pmbRender(){
   document.getElementById('pmb-sort-btn').classList.toggle('on',pmbSort==='az'||pmbSort==='za');
   document.getElementById('pmb-sort-btn').innerHTML=`<i class="ti ti-sort-ascending-letters"></i> ${pmbSort==='za'?'Z → A':'A → Z'}`;
   document.getElementById('pmb-dsort-btn').classList.toggle('on',pmbSort==='d1'||pmbSort==='d2');
-  document.getElementById('pmb-dsort-btn').innerHTML=`<i class="ti ti-calendar"></i> Date pose${pmbSort==='d2'?' ▼':pmbSort==='d1'?' ▲':''}`;
+  document.getElementById('pmb-dsort-btn').innerHTML=`<i class="ti ti-calendar"></i> Date prév. pose${pmbSort==='d2'?' ▼':pmbSort==='d1'?' ▲':''}`;
   pmbChips(all);
 }
 function pmbChips(all){
@@ -2321,7 +2469,7 @@ function pmbChips(all){
   const n=pmbConds.length,lbl=!n?'Tous':n<=2?pmbConds.map(pmbCondLbl).join(', '):n+' conducteurs';
   document.getElementById('pmb-chips').innerHTML=`<button class="btn${n?' on':''}" onclick="pmbCondDlg(event)" title="Choisir les conducteurs à afficher"><i class="ti ti-user"></i> Conduc : ${esc(lbl)} ▾</button>`;
   // Filtre U / W
-  document.getElementById('pmb-uwchips').innerHTML=`<button class="btn${pmbUW?' on':''}" onclick="pmbUWDlg(event)" title="Filtrer par machine">Machine : ${pmbUW||'Tout'} ▾</button>`;
+  document.getElementById('pmb-uwchips').innerHTML=pmbKind!=='mex'?'':`<button class="btn${pmbUW?' on':''}" onclick="pmbUWDlg(event)" title="Filtrer par machine">Machine : ${pmbUW||'Tout'} ▾</button>`;
 }
 
 // ── Saisie ──
@@ -2350,6 +2498,11 @@ window.pmbTap=(id,i)=>{
   if(pmbLastTap.k===k&&now-pmbLastTap.t<450){pmbLastTap={k:'',t:0};pmbToggle(id,i);}
   else pmbLastTap={k,t:now};
 };
+window.pmbTapCN=id=>{
+  const k=id+'_cn',now=Date.now();
+  if(pmbLastTap.k===k&&now-pmbLastTap.t<450){pmbLastTap={k:'',t:0};const r=pmbNorm(pmbRows[id],id);r.mach=r.mach?'':'X';pmbRows[id]=r;pmbSvRows([id]);pmbRender();}
+  else pmbLastTap={k,t:now};
+};
 window.pmbToggle=(id,i)=>{const r=pmbNorm(pmbRows[id],id);r.st[i]=r.st[i]?0:1;pmbRows[id]=r;pmbSvRows([id]);pmbRender();};
 window.pmbSearch=v=>{pmbQ=v;pmbRender();};
 // Calendrier : ouvre le sélecteur natif (PC) — sur tablette le tap l'ouvre directement
@@ -2361,7 +2514,7 @@ window.pmbSetDate=(id,f,v)=>{
 };
 window.pmbSetUW=(id,v)=>{const r=pmbNorm(pmbRows[id],id);r.uw=v;pmbRows[id]=r;pmbSvRows([id]);keepScroll(pmbRender);};
 // Tri par date de pose : plus proche d'abord, plus lointaine d'abord, puis ordre manuel
-window.pmbDateSortCycle=()=>{pmbSort=pmbSort==='d1'?'d2':pmbSort==='d2'?'':'d1';pmbSavePref();pmbRender();toast(pmbSort?`Tri par date de pose ${pmbSort==='d1'?'(la plus proche d\'abord)':'(la plus lointaine d\'abord)'}`:'Ordre manuel');};
+window.pmbDateSortCycle=()=>{pmbSort=pmbSort==='d1'?'d2':pmbSort==='d2'?'':'d1';pmbSavePref();pmbRender();toast(pmbSort?`Tri par date prévisionnelle de pose ${pmbSort==='d1'?'(la plus proche d\'abord)':'(la plus lointaine d\'abord)'}`:'Ordre manuel');};
 window.pmbSetCond=c=>{pmbConds=c?[c]:[];pmbSavePref();pmbRender();};
 function pmbCondList(){
   const fx=PMB_CONDS.map(c=>c.toLowerCase());
@@ -2438,7 +2591,7 @@ window.pmbAdd=()=>{
   // nouvelle ligne placée à la fin de la section « En production »
   const nxt=lastProd?all.find(r=>r.o>lastProd.o):all[0];
   const o=lastProd?(nxt?(lastProd.o+nxt.o)/2:lastProd.o+1):(nxt?nxt.o-1:1);
-  pmbRows[id]=pmbNorm({id,v:2,o,cond:pmbConds.length===1?pmbCondLbl(pmbConds[0]):'',st:[1]},id);
+  pmbRows[id]=pmbNorm({id,v:2,o,cond:pmbConds.length===1?pmbCondLbl(pmbConds[0]):'',st:pmbKind==='mex'||pmbKind==='alu'?[1]:[]},id);
   pmbSvRows([id]);
   pmbQ='';document.getElementById('pmb-q').value='';pmbRender();
   setTimeout(()=>{const el=document.querySelector(`#pmb-table tr[data-id="${id}"] [data-f="ch"]`);if(el){el.scrollIntoView({block:'center'});el.focus();}},30);
@@ -2459,7 +2612,7 @@ window.pmbSelClear=()=>{pmbSel.clear();pmbSelLast=null;pmbRender();};
 function pmbSelBar(){
   [...pmbSel].forEach(id=>{const r=pmbRows[id];if(!r||!pmbNorm(r,id).arc)pmbSel.delete(id);});
   const b=document.getElementById('pmb-selbar'),n=pmbSel.size;
-  b.classList.toggle('open',n>0&&curTab==='prod');
+  b.classList.toggle('open',n>0&&(curTab in PROD_TABS));
   document.getElementById('pmb-selnb').textContent=`${n} chantier${n>1?'s':''} sélectionné${n>1?'s':''}`;
 }
 window.pmbDelSel=()=>{
@@ -2503,10 +2656,12 @@ window.pmbAct=a=>{
 
 // ── Impression ──
 window.pmbPrint=()=>{
-  document.getElementById('pmb-print-hdr').innerHTML=`🪵 Suivi prod Mex bois <span>MAJ le : ${esc(pmbMaj)} · Imprimé le ${new Date().toLocaleDateString('fr-FR')}${pmbConds.length?' · '+esc(pmbConds.map(pmbCondLbl).join(', ')):''}${pmbUW?' · Machine '+pmbUW:''}</span>`;
+  document.getElementById('pmb-print-hdr').innerHTML=`${PMB_KINDS[pmbKind].titre} <span>MAJ le : ${esc(pmbMaj)} · Imprimé le ${new Date().toLocaleDateString('fr-FR')}${pmbConds.length?' · '+esc(pmbConds.map(pmbCondLbl).join(', ')):''}${pmbUW?' · Machine '+pmbUW:''}</span>`;
   setTimeout(()=>window.print(),150);
 };
 pmbLoadCache();
+
+
 
 // ── INIT ──────────────────────────────────────────────────────
 const t0=new Date();t0.setHours(0,0,0,0);let dw=t0.getDay();if(dw===0)dw=7;t0.setDate(t0.getDate()-(dw-1));
@@ -2520,9 +2675,9 @@ updRB();buildChips();updLbl();renderCal();render();
 document.getElementById('bsort').classList.toggle('on',sortByPole);
 updMobileHdrPos();
 setTimeout(updMobileHdrPos,300);
-// Onglet mémorisé (Pose MEN / Pose CH / Atelier / Prod Mex Bois)
+// Onglet mémorisé (Pose MEN / Pose CH / Atelier / Prod Mex Bois / Prod BOIS / Prod ALU / Prod Agencement)
 poseStash();
-try{const t=localStorage.getItem(TAB_KEY);if(t==='atelier'||t==='prod'||t==='posech')setTab(t);}catch(e){}
+try{const t=localStorage.getItem(TAB_KEY);if(t==='atelier'||t==='prod'||t==='prodb'||t==='prodalu'||t==='proda'||t==='posech')setTab(t);}catch(e){}
 
 // ── MIGRATION : nettoyer les anciennes cellules (format ti_offset) ──
 // Une seule fois : si des clés Firebase ne suivent pas le format ti_YYYY-MM-DD, on les efface.
