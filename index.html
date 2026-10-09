@@ -302,27 +302,16 @@ tr.row-moving .team-cell{background:rgba(55,138,221,.1);}
 .tab{white-space:nowrap;flex-shrink:0;}
 .tab{font-size:12px;font-weight:600;padding:5px 12px;border-radius:6px;border:none;background:transparent;color:var(--text2);cursor:pointer;display:inline-flex;align-items:center;gap:4px;font-family:inherit;}
 .tab.on{background:var(--bg);color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.14);}
-/* une couleur vive par onglet : un ton en dessous quand il est inactif, couleur pleine quand il est actif */
-#tab-pose{--tc:#1F8BF2;}
-#tab-posech{--tc:#5DBB1E;}
-#tab-atelier{--tc:#FF8A00;}
-#tab-prod{--tc:#9B5CF0;}
-#tab-prodb{--tc:#D9822B;}
-#tab-prodalu{--tc:#12C4D6;}
-#tab-proda{--tc:#F2416F;}
-.tabs{align-items:center;}
-.tab[id]{background:var(--bg);color:var(--text2);border-bottom:3px solid var(--tc);}
-.tab[id].on{background:var(--tc);color:#fff;font-size:14px;font-weight:800;padding:7px 16px;border-bottom-color:transparent;text-shadow:0 1px 1px rgba(0,0,0,.35);box-shadow:0 1px 4px rgba(0,0,0,.35);}
-.tab[id].on::before{content:"\25B6";font-size:10px;}
-@media(max-width:560px){.tab[id].on{font-size:12px;padding:6px 9px;}}
-header:has(#tab-pose.on){box-shadow:inset 0 -4px 0 #1F8BF2;}
-header:has(#tab-posech.on){box-shadow:inset 0 -4px 0 #5DBB1E;}
-header:has(#tab-atelier.on){box-shadow:inset 0 -4px 0 #FF8A00;}
-header:has(#tab-prod.on){box-shadow:inset 0 -4px 0 #9B5CF0;}
-header:has(#tab-prodb.on){box-shadow:inset 0 -4px 0 #D9822B;}
-header:has(#tab-prodalu.on){box-shadow:inset 0 -4px 0 #12C4D6;}
-header:has(#tab-proda.on){box-shadow:inset 0 -4px 0 #F2416F;}
-@media print{header{box-shadow:none!important;}}
+/* une couleur par onglet : fond clair quand il est inactif, couleur pleine quand il est actif */
+#tab-pose{--tc:#1565C0;--tl:#DCEBFB;}
+#tab-posech{--tc:#2E7D32;--tl:#DDF0DE;}
+#tab-atelier{--tc:#E65100;--tl:#FFE6D0;}
+#tab-prod{--tc:#6A1B9A;--tl:#EEDCF5;}
+#tab-prodb{--tc:#6D4C41;--tl:#EADFD9;}
+#tab-prodalu{--tc:#00838F;--tl:#D3F0F3;}
+#tab-proda{--tc:#AD1457;--tl:#FBDCE8;}
+.tab[id]{background:var(--tl);color:var(--tc);}
+.tab[id].on{background:var(--tc);color:#fff;}
 body.mode-atelier header .toolbar:not(#atl-toolbar),body.mode-atelier .poles-bar,body.mode-atelier #panel,body.mode-atelier #gantt-wrap,body.mode-atelier #mobile-hdr-wrap,body.mode-atelier #print-hdr,body.mode-atelier .move-toolbar{display:none!important;}
 body:not(.mode-atelier) #atl-toolbar,body:not(.mode-atelier) #atl-filter,body:not(.mode-atelier) #atelier-view{display:none!important;}
 @media(max-width:560px){.h1-txt{display:none;}.tab{padding:5px 7px;font-size:11px;}.tab i{display:none;}.tabs{overflow-x:auto;flex-shrink:1;min-width:0;scrollbar-width:none;}}
@@ -497,6 +486,15 @@ td.w-cn.on{background:#E1BEE7!important;}
 .btn.pmb-addbtn{background:#FCE4EC;border-color:#F3B6CB;color:#8A1C4A;font-weight:600;}
 .btn.pmb-addbtn:hover{background:#F8D0DE;}
 td.w-dcv{width:92px;min-width:92px;max-width:92px;}
+td.w-opt{width:58px;min-width:58px;max-width:58px;text-align:center;vertical-align:middle!important;padding:2px 0!important;}
+td.w-opt.on{background:#E0F4F6!important;}
+.pmb-optd{position:relative;display:none;font-size:10px;font-weight:600;color:#00838F;line-height:1.2;margin-top:1px;cursor:pointer;min-height:12px;}
+td.w-opt.on .pmb-optd{display:block;}
+.pmb-optd.vide::before{content:'date ?';color:var(--text3);font-weight:400;}
+.pmb-optin{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;border:none;padding:0;margin:0;font-size:16px;}
+.pmb-optin::-webkit-calendar-picker-indicator{position:absolute;inset:0;width:auto;height:auto;opacity:0;cursor:pointer;}
+.pmb-opt{width:16px;height:16px;cursor:pointer;accent-color:#00838F;margin:0;}
+:is(#pmb-table,#ao-table) thead th.pmb-opth{width:58px;min-width:58px;max-width:58px;text-align:center;padding:5px 1px;font-size:10px;}
 td.w-apv{width:150px;min-width:150px;max-width:150px;vertical-align:middle!important;}
 .pmb-cd{margin:5px 3px;padding:3px 3px;overflow:hidden;text-overflow:ellipsis;border-radius:999px;font-size:11px;font-weight:700;text-align:center;white-space:nowrap;color:#1a1a1a;
   background:linear-gradient(to right,var(--c,#E8E6E1) var(--p,0%),#E8E6E1 var(--p,0%));-webkit-print-color-adjust:exact;print-color-adjust:exact;}
@@ -608,16 +606,6 @@ html,body{touch-action:manipulation;}
   input[type=text],input[type=search],input[type=number],input[type=date],textarea,select{font-size:16px!important;}
 }
 @media (hover:none) and (pointer:coarse){.dc{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;}}
-
-/* ── Mode sombre : texte foncé sur les fonds clairs fixes (saisie lisible) ── */
-@media(prefers-color-scheme:dark){
-  .pmb-in:focus{color:#1a1a1a;caret-color:#1a1a1a;}
-  td.w-dt:not(.late):hover .pmb-dt{color:#1a1a1a;}
-  td.w-uw .pmb-uw:not(.u):not(.w):not(.uw){color:#1a1a1a;}
-  :is(#pmb-table,#ao-table) tr.is-st td:not(.on):not(.pct),:is(#pmb-table,#ao-table) tr.is-sel td:not(.on){color:#1a1a1a;}
-  :is(#pmb-table,#ao-table) tr.is-st td:not(.on):not(.pct) .pmb-uw:not(.u):not(.w):not(.uw),:is(#pmb-table,#ao-table) tr.is-sel td:not(.on) .pmb-uw:not(.u):not(.w):not(.uw){color:#1a1a1a;}
-  .cd.ir,.mh-day.fe,thead th.fe,.atl-sp-days button.fe,.atl-sp-days button.fe b{color:#1a1a1a;}
-}
 </style>
 </head>
 <body>
@@ -2277,12 +2265,13 @@ PMB_SEED.forEach(r=>{pmbRows[r.id]=r;});
 
 // ── Les 3 suivis de prod partagent le même tableau : Prod Mex Bois / Prod BOIS / Prod Agencement ──
 // Firebase : planning/v1/prodbois (Mex bois) · planning/v1/prod_bois · planning/v1/prod_agencement · planning/v1/prod_alu
-// Prod ALU : rows { id: {o,com,cond,pose,ch,tps,st:[7×0/1],nbc(=nb de châssis),apv(=date prévisionnelle de pose → compte à rebours),dcp(=date de commande profil),dcv(=date de commande vitrage),pct,ral,arch,arc,an} } — pas de colonne CN
+// Prod ALU : rows { id: {o,com,cond,pose,ch,tps,st:[7×0/1],nbc(=nb de châssis),vr/bso/store(''|'1'=coché sans date|'jj/mm/aaaa'),apv(=date prévisionnelle de pose → compte à rebours),dcp(=date de commande profil),dcv(=date de commande vitrage),pct,ral,arch,arc,an} } — pas de colonne CN
 // Prod BOIS / Agencement : rows { id: {o,com,cond,mach,pose,ch,tps,st:[5×0/1],pct,ral(=Couleur finition),arch,arc,an} }
 const PROD_TABS={prod:'mex',prodb:'bois',prodalu:'alu',proda:'agc'};
 const PMB_ST3=['En préparation BE','Commande barre','Commande vitrage','Débit','Assemblage','Finition','Prêt à poser'];
 const PMB_COL3=['#8E24AA','#6D4C41','#00ACC1','#FB8C00','#558B2F','#1E88E5','#2E7D32'];
-const PMB_FIELDS3=['com','cond','pose','nbc','apv','ch','tps','dcp','dcv','pct','ral'];
+const PMB_FIELDS3=['com','cond','pose','nbc','apv','ch','tps','dcp','dcv','vr','bso','store','pct','ral'];
+const PMB_OPT=[['vr','VR','Volet roulant'],['bso','BSO','Brise-soleil orientable'],['store','Store','Store']]; // cases à cocher après la date de commande vitrage
 const PMB_DCP=1,PMB_DCV=2; // dates de commande : profil après « Commande barre », vitrage après « Commande vitrage »
 const PMB_ST2=['Débit','Usinage CN','Assemblage','Finition','Prêt à poser'];
 const PMB_COL2=['#FB8C00','#EF6C00','#558B2F','#1E88E5','#2E7D32'];
@@ -2415,7 +2404,7 @@ function pmbRowHtml(r){
     const grad='';
     h+=`<td class="pmb-st${on?' on':''}${i===last?' cur':''}${grad?' pct':''}" style="${on?'background:'+PMB_COL[i]:grad}" onclick="pmbTap('${r.id}',${i})" title="${PMB_ST[i]}— double-clic pour mettre / enlever la croix">${on?'X':''}</td>`;
     if(pmbKind==='alu'&&i===PMB_DCP)h+=pmbDateCell(r,'dcp','w-dcv','jj/mm/aaaa');
-    if(pmbKind==='alu'&&i===PMB_DCV)h+=pmbDateCell(r,'dcv','w-dcv','jj/mm/aaaa');
+    if(pmbKind==='alu'&&i===PMB_DCV)h+=pmbDateCell(r,'dcv','w-dcv','jj/mm/aaaa')+PMB_OPT.map(([f,l,t])=>pmbOptCell(r,f,t)).join('');
   });
   h+=pmbKind==='mex'?pmbCell(r,'qte','w-qte')+pmbDateCell(r,'fin','w-fin')+pmbCell(r,'tcn','w-t')+pmbCell(r,'tfab','w-t')+pmbCell(r,'ral','w-ral'):pmbCell(r,'ral','w-ral');
   return h+'</tr>';
@@ -2445,7 +2434,7 @@ function pmbRender(){
   const prod=all.filter(r=>!r.arch&&match(r)),att=all.filter(r=>r.arch&&!r.arc&&match(r)),arc=all.filter(r=>r.arc&&match(r));
   const mex=pmbKind==='mex',alu=pmbKind==='alu',NC=7+PMB_N+6,arrow=pmbSort==='az'?' ▲':pmbSort==='za'?' ▼':'',darrow=pmbSort==='d1'?' ▲':pmbSort==='d2'?' ▼':'';
   let h=`<thead><tr><th class="pmb-a"></th><th class="pmb-chh pmb-sortable" onclick="pmbSortCycle()" title="Trier par nom de chantier">Chantiers${arrow}</th><th>Commentaires</th><th>Conduc</th>${alu?'':`<th title="${mex?'Machine : U, W ou U+W':'Commande numérique'}">${mex?'Machine':'CN'}</th>`}${alu?'<th>Nb de châssis</th>':''}<th class="pmb-sortable${darrow?' on':''}" onclick="pmbDateSortCycle()" title="Trier par date" style="white-space:normal;width:150px;min-width:150px;max-width:150px;text-align:center">Date prévisionnelle de pose :${darrow}</th>`+(mex?'':`<th class="y">Temps estimatif</th>`)+
-    PMB_ST.map((s,i)=>(i===PMB_LAST?`<th class="pmb-pcth y">% avan&shy;cement</th>`:'')+`<th class="pmb-sth y"><span style="border-bottom-color:${PMB_COL[i]}">${s}</span></th>`+(alu&&i===PMB_DCP?`<th class="y pmb-dcvh">Date de commande profil</th>`:'')+(alu&&i===PMB_DCV?`<th class="y pmb-dcvh">Date de commande vitrage</th>`:'')).join('')+
+    PMB_ST.map((s,i)=>(i===PMB_LAST?`<th class="pmb-pcth y">% avan&shy;cement</th>`:'')+`<th class="pmb-sth y"><span style="border-bottom-color:${PMB_COL[i]}">${s}</span></th>`+(alu&&i===PMB_DCP?`<th class="y pmb-dcvh">Date de commande profil</th>`:'')+(alu&&i===PMB_DCV?`<th class="y pmb-dcvh">Date de commande vitrage</th>`+PMB_OPT.map(([f,l,t])=>`<th class="y pmb-opth" title="${t}">${l}</th>`).join(''):'')).join('')+
     (mex?`<th class="y">Quantité</th><th class="y">Prod terminé</th><th class="y">Tps travail CN</th><th class="y">Tps travail Fab</th><th class="y">Finition</th>`:`<th class="y">Couleur finition</th>`)+`</tr></thead><tbody>`;
   h+=`<tr class="pmb-sec"><td colspan="${NC}"><span class="pmb-secin"><i class="ti ti-tools"></i> En production · ${prod.length} chantier${prod.length>1?'s':''}</span></td></tr>`;
   h+=prod.length?pmbSorted(prod).map(pmbRowHtml).join(''):`<tr class="pmb-emp"><td colspan="${NC}">Aucun chantier en production${q||pmbConds.length||pmbUW?' pour ce filtre':''}</td></tr>`;
@@ -2502,6 +2491,27 @@ window.pmbTapCN=id=>{
   const k=id+'_cn',now=Date.now();
   if(pmbLastTap.k===k&&now-pmbLastTap.t<450){pmbLastTap={k:'',t:0};const r=pmbNorm(pmbRows[id],id);r.mach=r.mach?'':'X';pmbRows[id]=r;pmbSvRows([id]);pmbRender();}
   else pmbLastTap={k,t:now};
+};
+// VR / BSO / Store : case à cocher + date. Cocher → le calendrier s'ouvre ; décocher → efface la date.
+// Valeur stockée : '' (non coché), '1' (coché sans date) ou 'jj/mm/aaaa'.
+function pmbOptCell(r,f,t){
+  const v=r[f]||'',on=!!v,dt=pmbDate(v),sd=dt?v.replace(/\/(?:19|20)(\d\d)$/,'/$1'):'';
+  return `<td class="w-opt${on?' on':''}" title="${t}${dt?' — '+esc(v):''}"><input type="checkbox" class="pmb-opt" ${on?'checked':''} onchange="pmbSetOpt(this,'${r.id}','${f}')">`
+    +`<label class="pmb-optd${dt?'':' vide'}">${esc(sd)}<input type="date" class="pmb-optin" value="${pmbISO(v)}" onchange="pmbSetOptDate('${r.id}','${f}',this.value)" tabindex="-1"></label></td>`;
+}
+window.pmbSetOpt=(el,id,f)=>{
+  const r=pmbNorm(pmbRows[id],id);
+  if(!el.checked){r[f]='';pmbRows[id]=r;pmbSvRows([id]);keepScroll(pmbRender);return;}
+  r[f]=r[f]||'1';pmbRows[id]=r;
+  // ouvre le calendrier tout de suite (sans redessiner, sinon le sélecteur se ferme)
+  const inp=el.parentNode.querySelector('.pmb-optin');el.parentNode.classList.add('on');
+  try{inp.focus({preventScroll:true});}catch(e){} // focus dans le tableau → la synchro ne redessine pas pendant le choix
+  try{if(inp.showPicker)inp.showPicker();else{inp.focus();inp.click();}}catch(e){try{inp.focus();inp.click();}catch(_){}}
+  pmbSvRows([id]);
+};
+window.pmbSetOptDate=(id,f,v)=>{
+  const r=pmbNorm(pmbRows[id],id),m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(v||'');
+  r[f]=m?m[3]+'/'+m[2]+'/'+m[1]:(r[f]?'1':'');pmbRows[id]=r;pmbSvRows([id]);keepScroll(pmbRender);
 };
 window.pmbToggle=(id,i)=>{const r=pmbNorm(pmbRows[id],id);r.st[i]=r.st[i]?0:1;pmbRows[id]=r;pmbSvRows([id]);pmbRender();};
 window.pmbSearch=v=>{pmbQ=v;pmbRender();};
