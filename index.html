@@ -2375,11 +2375,11 @@ function pmbRefresh(){
 function pmbCell(r,f,cls,ph){return `<td class="${cls}"><div class="pmb-in" contenteditable="true" spellcheck="false" data-f="${f}" data-ph="${ph||''}">${esc(r[f])}</div></td>`;}
 // Cellule date : affichage jj/mm/aaaa + calendrier natif au clic
 function pmbISO(s){const d=pmbDate(s);return d?d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'):'';}
-// Saisie vitrage (Prod Mex Bois) : calendrier au clic ; date passée → rouge, aujourd'hui ou après → vert
+// Vitrage livré le : (Prod Mex Bois) : calendrier au clic ; date passée → rouge, aujourd'hui ou après → vert
 function pmbVitCell(r){
   const d=pmbDate(r.svit),t0=new Date();t0.setHours(0,0,0,0);
   const c=!d?'':d<t0?' vit-late':' vit-ok';
-  return pmbDateCell(r,'svit','w-vit'+c,'jj/mm/aaaa').replace('title="Cliquer pour choisir une date"',`title="Saisie vitrage${d?' : '+esc(r.svit)+(d<t0?' — date passée':''):''} — cliquer pour choisir une date"`);
+  return pmbDateCell(r,'svit','w-vit'+c,'jj/mm/aaaa').replace('title="Cliquer pour choisir une date"',`title="Vitrage livré le${d?' : '+esc(r.svit)+(d<t0?' — date passée':''):''} — cliquer pour choisir une date"`);
 }
 function pmbDateCell(r,f,cls,ph){return `<td class="${cls} w-dt" title="Cliquer pour choisir une date"><div class="pmb-dt" data-ph="${ph||''}">${esc(r[f])}</div><input type="date" class="pmb-dtin" value="${pmbISO(r[f])}" onclick="pmbPick(this)" onchange="pmbSetDate('${r.id}','${f}',this.value)" tabindex="-1"></td>`;}
 function pmbCountCell(r,f){
@@ -2449,7 +2449,7 @@ function pmbRender(){
   const mex=pmbKind==='mex',alu=pmbKind==='alu',NC=7+PMB_N+6,arrow=pmbSort==='az'?' ▲':pmbSort==='za'?' ▼':'',darrow=pmbSort==='d1'?' ▲':pmbSort==='d2'?' ▼':'';
   let h=`<thead><tr><th class="pmb-a"></th><th class="pmb-chh pmb-sortable" onclick="pmbSortCycle()" title="Trier par nom de chantier">Chantiers${arrow}</th><th>Commentaires</th><th>Conduc</th>${alu?'':`<th title="${mex?'Machine : U, W ou U+W':'Commande numérique'}">${mex?'Machine':'CN'}</th>`}${alu?'<th>Nb de châssis</th>':''}<th class="pmb-sortable${darrow?' on':''}" onclick="pmbDateSortCycle()" title="Trier par date" style="white-space:normal;width:150px;min-width:150px;max-width:150px;text-align:center">Date prévisionnelle de pose :${darrow}</th>`+(mex?'':`<th class="y">Temps estimatif</th>`)+
     PMB_ST.map((s,i)=>(i===PMB_LAST?`<th class="pmb-pcth y">% avan&shy;cement</th>`:'')+`<th class="pmb-sth y"><span style="border-bottom-color:${PMB_COL[i]}">${s}</span></th>`+(alu&&i===PMB_DCP?`<th class="y pmb-dcvh">Date de commande profil</th>`:'')+(alu&&i===PMB_DCV?`<th class="y pmb-dcvh">Date de commande vitrage</th>`+PMB_OPT.map(([f,l,t])=>`<th class="y pmb-opth" title="${t}">${l}</th>`).join(''):'')).join('')+
-    (mex?`<th class="y">Quantité</th><th class="y">Prod terminé</th><th class="y">Tps travail CN</th><th class="y">Saisie vitrage</th><th class="y">Finition</th>`:`<th class="y">Couleur finition</th>`)+`</tr></thead><tbody>`;
+    (mex?`<th class="y">Quantité</th><th class="y">Prod terminé</th><th class="y">Tps travail CN</th><th class="y">Vitrage livré le :</th><th class="y">Finition</th>`:`<th class="y">Couleur finition</th>`)+`</tr></thead><tbody>`;
   h+=`<tr class="pmb-sec"><td colspan="${NC}"><span class="pmb-secin"><i class="ti ti-tools"></i> En production · ${prod.length} chantier${prod.length>1?'s':''}</span></td></tr>`;
   h+=prod.length?pmbSorted(prod).map(pmbRowHtml).join(''):`<tr class="pmb-emp"><td colspan="${NC}">Aucun chantier en production${q||pmbConds.length||pmbUW?' pour ce filtre':''}</td></tr>`;
   const sA=pmbShowAtt||!!q,sR=pmbShowArc||!!q;
