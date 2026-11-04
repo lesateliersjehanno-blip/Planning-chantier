@@ -226,6 +226,15 @@ tr.row-moving .team-cell{background:rgba(55,138,221,.1);}
 .dc.drag-over .ci{outline:2px dashed #378ADD;outline-offset:-2px;border-radius:5px;background:rgba(55,138,221,.08);}
 .cc{flex:0 0 30px;border-radius:4px;font-size:11px;font-weight:500;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden;padding:2px 4px;line-height:1.2;}
 .ct{flex:1;min-height:26px;border-radius:4px;font-size:10px;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden;padding:2px 4px;line-height:1.2;border:.5px solid transparent;}
+.sv-it{flex:1;display:flex;flex-direction:column;gap:1px;min-height:0;}
+.sv-it .cc{flex:0 0 auto;min-height:16px;font-size:10px;padding:1px 4px;}
+.sv-it .ct{flex:1;min-height:14px;font-size:9px;line-height:1.2;-webkit-line-clamp:2;display:-webkit-box;-webkit-box-orient:vertical;white-space:normal;}
+.sv-n{display:none;}
+.popup .sv-slot{border-top:.5px dashed var(--border);padding-top:9px;margin-top:2px;}
+.popup .sv-slot .sv-h{display:flex;align-items:center;justify-content:space-between;font-size:11px;font-weight:600;color:var(--text2);margin-bottom:6px;}
+.popup .sv-slot .sv-h span.rm{cursor:pointer;color:#f44336;font-weight:400;}
+.popup .sv-add{width:100%;margin-bottom:11px;padding:7px;border-radius:var(--rs);border:.5px dashed var(--blue);background:transparent;color:var(--blue);font-size:12px;cursor:pointer;font-family:inherit;}
+.popup.sav-mode{max-height:92vh;overflow-y:auto;}
 .ct.ct-sav{min-height:48px;white-space:normal;line-height:1.3;-webkit-line-clamp:3;display:-webkit-box;-webkit-box-orient:vertical;}
 .sc{font-size:0;border-radius:3px;}.sc.ct{border:.5px solid transparent;}
 
@@ -824,6 +833,16 @@ html,body{touch-action:manipulation;}
   <input type="text" id="ich" placeholder="Nom du chantier…" maxlength="35">
   <label>Tâche / descriptif</label>
   <textarea id="ita" placeholder="Ex : pose charpente…" maxlength="120" rows="2"></textarea>
+  <!-- SAV : jusqu'à 3 chantiers dans la même case -->
+  <div id="sv-box" style="display:none">
+    <div class="sv-slot" id="sv-s2"><div class="sv-h">Chantier 2 <span class="rm" onclick="svRm(2)"><i class="ti ti-x"></i> retirer</span></div>
+      <input type="text" id="ich2" placeholder="Nom du chantier…" maxlength="35">
+      <textarea id="ita2" placeholder="Tâche / descriptif…" maxlength="120" rows="2"></textarea></div>
+    <div class="sv-slot" id="sv-s3"><div class="sv-h">Chantier 3 <span class="rm" onclick="svRm(3)"><i class="ti ti-x"></i> retirer</span></div>
+      <input type="text" id="ich3" placeholder="Nom du chantier…" maxlength="35">
+      <textarea id="ita3" placeholder="Tâche / descriptif…" maxlength="120" rows="2"></textarea></div>
+    <button type="button" class="sv-add" id="sv-addb" onclick="svAdd()"><i class="ti ti-plus"></i> Ajouter un chantier (max 3)</button>
+  </div>
   <div class="cp-btns">
     <button class="cpb" id="cpybtn" onclick="popCopy()"><i class="ti ti-copy" style="font-size:13px"></i> Copier</button>
     <button class="cpb" id="pastbtn" onclick="popPaste()"><i class="ti ti-clipboard" style="font-size:13px"></i> Coller</button>
@@ -1322,7 +1341,7 @@ function openCtx(e,ti,d){
   if(y+155>window.innerHeight)y=window.innerHeight-160;
   m.style.left=x+'px';m.style.top=y+'px';
 }
-window.ctxCopy=()=>{if(!ctxCell)return;const c=cells[K(ctxCell.ti,ctxCell.d)];if(!c){toast('Case vide');return;}clipboard={...c};closeCtx();toast('📋 '+c.chantier);};
+window.ctxCopy=()=>{if(!ctxCell)return;const c=cells[K(ctxCell.ti,ctxCell.d)];if(!c){toast('Case vide');return;}clipboard={...c};closeCtx();toast('📋 '+cellItems(c).map(it=>it.chantier).filter(Boolean).join(' + '));};
 window.ctxPaste=()=>{if(!ctxCell||!clipboard)return;cells[K(ctxCell.ti,ctxCell.d)]={...clipboard};closeCtx();render();svC();toast('✅ Collé');};
 window.ctxEdit=()=>{if(!ctxCell)return;closeCtx();openCPDirect(ctxCell.ti,ctxCell.d);};
 window.ctxClear=()=>{if(!ctxCell)return;delete cells[K(ctxCell.ti,ctxCell.d)];closeCtx();render();svC();};
@@ -1517,6 +1536,12 @@ function teamRow(team,ti,pole){
       const pb=`background:${cbg};color:${ctx2};-webkit-print-color-adjust:exact;print-color-adjust:exact`;
       const tb=`background:${cbg};color:${ctx2};opacity:0.75;border-color:${cbg};-webkit-print-color-adjust:exact;print-color-adjust:exact`;
       if(sl){cH=`<div class="cc sc" style="${pb};opacity:.8"></div>`;tH=`<div class="ct sc" style="${tb};opacity:.8"></div>`;}
+      else if(isSAV&&cellItems(c).length>1){
+        // SAV : plusieurs chantiers dans la même journée (max 3), empilés, chacun avec sa couleur
+        cH=cellItems(c).map(it=>{const l2=letterColor(it.chantier),bg=l2?l2.bg:pole.bg,tx=l2?l2.tx:pole.text,pa='-webkit-print-color-adjust:exact;print-color-adjust:exact';
+          return `<div class="sv-it" title="${esc(it.chantier)}${it.tache?' — '+esc(it.tache):''}"><div class="cc" style="background:${bg};color:${tx};${pa}">${esc(it.chantier)}</div>${it.tache?`<div class="ct" style="background:${bg};color:${tx};opacity:.75;border-color:${bg};${pa}">${esc(it.tache)}</div>`:''}</div>`;}).join('');
+        tH='';
+      }
       else{cH=`<div class="cc" style="${pb}">${esc(c.chantier)}</div>`;tH=`<div class="ct${isSAV?' ct-sav':''}" style="${tb}">${esc(c.tache||'')}</div>`;}
     }
     const isDraggable=!!c&&!sl;
@@ -1526,6 +1551,14 @@ function teamRow(team,ti,pole){
 }
 
 // ── CELL POPUP ────────────────────────────────────────────────
+// SAV multi-chantiers : cells[k] = {chantier,tache, x:[{chantier,tache},{chantier,tache}]}
+function cellItems(c){if(!c)return[];const a=[{chantier:c.chantier||'',tache:c.tache||''}];if(Array.isArray(c.x))c.x.forEach(it=>{if(it&&(it.chantier||it.tache))a.push({chantier:it.chantier||'',tache:it.tache||''});});return a.filter(it=>it.chantier||it.tache).slice(0,3);}
+let popSAV=false,svCount=0;
+function svShow(n){svCount=Math.max(0,Math.min(2,n));document.getElementById('sv-s2').style.display=svCount>=1?'':'none';document.getElementById('sv-s3').style.display=svCount>=2?'':'none';document.getElementById('sv-addb').style.display=svCount>=2?'none':'';}
+function svRead(){const a=[];for(let n=2;n<=1+svCount;n++){const ch=document.getElementById('ich'+n).value.trim(),ta=document.getElementById('ita'+n).value.trim();if(ch||ta)a.push({chantier:ch,tache:ta});}return a;}
+window.svAdd=()=>{svShow(svCount+1);document.getElementById('ita').rows=2;setTimeout(()=>document.getElementById('ich'+(1+svCount)).focus(),30);};
+window.svRm=n=>{const a=svRead();const keep=[];for(let i=2;i<=1+svCount;i++){if(i!==n)keep.push({chantier:document.getElementById('ich'+i).value,tache:document.getElementById('ita'+i).value});}
+  [2,3].forEach(i=>{const it=keep[i-2]||{};document.getElementById('ich'+i).value=it.chantier||'';document.getElementById('ita'+i).value=it.tache||'';});svShow(keep.length);};
 function openCPDirect(ti,d){
   popCell={ti,d};
   const c=cells[K(ti,d)]||{};
@@ -1535,7 +1568,13 @@ function openCPDirect(ti,d){
   itaEl.value=c.tache||'';
   const teamPole=teams[ti]?poleById(domAct(teams[ti])):null;
   const isSAV=teamPole&&teamPole.label&&teamPole.label.trim().toUpperCase()==='SAV';
-  itaEl.rows=isSAV?4:2;
+  itaEl.rows=isSAV?(cellItems(c).length>1?2:4):2;
+  popSAV=!!isSAV;
+  const xs=(isSAV&&Array.isArray(c.x))?c.x:[];
+  [2,3].forEach(n=>{const it=xs[n-2]||{};document.getElementById('ich'+n).value=it.chantier||'';document.getElementById('ita'+n).value=it.tache||'';});
+  document.getElementById('sv-box').style.display=isSAV?'':'none';
+  document.getElementById('cpop').classList.toggle('sav-mode',!!isSAV);
+  svShow(isSAV?xs.filter(it=>it&&(it.chantier||it.tache)).length:0);
   document.getElementById('cpybtn').style.opacity=(c.chantier||c.tache)?'1':'0.4';
   document.getElementById('pastbtn').style.opacity=clipboard?'1':'0.4';
   document.getElementById('cpop').classList.add('open');
@@ -1548,7 +1587,8 @@ window.openCP=(e,ti,d)=>{e.stopPropagation();if(Date.now()-tapOpened<700)return;
 window.popOk=()=>{
   if(!popCell)return;
   const ch=document.getElementById('ich').value.trim(),ta=document.getElementById('ita').value.trim(),k=K(popCell.ti,popCell.d);
-  if(ch||ta)cells[k]={chantier:ch,tache:ta};else delete cells[k];
+  const x=popSAV?svRead():[];
+  if(ch||ta||x.length){const o={chantier:ch,tache:ta};if(x.length)o.x=x;cells[k]=o;}else delete cells[k];
   closeAll();render();svC();
 };
 window.popDel=()=>{if(!popCell)return;delete cells[K(popCell.ti,popCell.d)];closeAll();render();svC();};
@@ -1556,6 +1596,7 @@ window.popCopy=()=>{
   const ch=document.getElementById('ich').value.trim(),ta=document.getElementById('ita').value.trim();
   if(!ch&&!ta){toast('Rien à copier');return;}
   clipboard={chantier:ch,tache:ta};
+  if(popSAV){const x=svRead();if(x.length)clipboard.x=x;}
   const b=document.getElementById('cpybtn');b.style.background='#C0DD97';b.style.color='#27500A';b.innerHTML='<i class="ti ti-check"></i> Copié !';
   setTimeout(()=>{b.style.background='';b.style.color='';b.innerHTML='<i class="ti ti-copy" style="font-size:13px"></i> Copier';},1500);
 };
@@ -1563,6 +1604,7 @@ window.popPaste=()=>{
   if(!clipboard){toast('Presse-papier vide');return;}
   document.getElementById('ich').value=clipboard.chantier||'';
   document.getElementById('ita').value=clipboard.tache||'';
+  if(popSAV){const xs=Array.isArray(clipboard.x)?clipboard.x:[];[2,3].forEach(n=>{const it=xs[n-2]||{};document.getElementById('ich'+n).value=it.chantier||'';document.getElementById('ita'+n).value=it.tache||'';});svShow(xs.length);}
   const b=document.getElementById('pastbtn');b.style.background='#B5D4F4';b.style.color='#0C447C';b.innerHTML='<i class="ti ti-check"></i> Collé !';
   setTimeout(()=>{b.style.background='';b.style.color='';b.innerHTML='<i class="ti ti-clipboard" style="font-size:13px"></i> Coller';},1500);
 };
