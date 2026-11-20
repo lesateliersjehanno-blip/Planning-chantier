@@ -220,6 +220,13 @@ tr.row-moving .team-cell{background:rgba(55,138,221,.1);}
 .wknd-add{font-size:9px;opacity:.55;cursor:pointer;padding:1px 4px;margin-top:1px;border-radius:3px;}
 .wknd-add:active{opacity:1;background:rgba(255,255,255,.4);}
 .dc:active{background:#e3f0fd!important;}
+/* Case sélectionnée d'un clic (touche Suppr pour l'effacer) */
+.dc.sel .ci{outline:2px solid #378ADD;outline-offset:-1px;border-radius:5px;}
+/* Chantier IMPÉRATIF : simple encadré rouge */
+.dc.imp .ci{outline:2px solid #D32F2F;outline-offset:-1px;border-radius:5px;}
+.dc.imp.sel .ci{outline-color:#378ADD;box-shadow:0 0 0 2px #D32F2F inset;}
+.popup .imp-box{display:flex;align-items:center;gap:8px;margin:0 0 12px;padding:7px 10px;border-radius:var(--rs);border:1.5px solid #D32F2F;color:var(--text);font-size:13px;cursor:pointer;user-select:none;}
+.popup .imp-box input{width:16px;height:16px;margin:0;accent-color:#D32F2F;cursor:pointer;flex:none;}
 .ci{display:flex;flex-direction:column;gap:2px;min-height:60px;}
 .ci[draggable="true"]{cursor:grab;}
 .ci.dragging{opacity:0.35;}
@@ -228,6 +235,7 @@ tr.row-moving .team-cell{background:rgba(55,138,221,.1);}
 .ct{flex:1;min-height:26px;border-radius:4px;font-size:10px;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden;padding:2px 4px;line-height:1.2;border:.5px solid transparent;}
 .sv-it{flex:1;display:flex;flex-direction:column;gap:1px;min-height:0;}
 .sv-it .cc{flex:0 0 auto;min-height:16px;font-size:10px;padding:1px 4px;}
+.sv-it .cc.solo{flex:1 1 auto;} /* pas de tâche : le chantier prend toute la hauteur (pas de zone blanche) */
 .sv-it .ct{flex:1;min-height:14px;font-size:9px;line-height:1.2;-webkit-line-clamp:2;display:-webkit-box;-webkit-box-orient:vertical;white-space:normal;}
 .sv-n{display:none;}
 .popup .sv-slot{border-top:.5px dashed var(--border);padding-top:9px;margin-top:2px;}
@@ -833,6 +841,7 @@ html,body{touch-action:manipulation;}
   <input type="text" id="ich" placeholder="Nom du chantier…" maxlength="35">
   <label>Tâche / descriptif</label>
   <textarea id="ita" placeholder="Ex : pose charpente…" maxlength="120" rows="2"></textarea>
+  <label class="imp-box" id="imp-box"><input type="checkbox" id="iimp"><span>Impératif</span></label>
   <!-- SAV : jusqu'à 3 chantiers dans la même case -->
   <div id="sv-box" style="display:none">
     <div class="sv-slot" id="sv-s2"><div class="sv-h">Chantier 2 <span class="rm" onclick="svRm(2)"><i class="ti ti-x"></i> retirer</span></div>
@@ -939,6 +948,7 @@ let teams=[
   {id:'team-pierre',  name:'Équipe Pierre', compagnons:[{name:'Pierre',actId:'charpente'}]},
 ];
 let cells={},startDate=new Date(),nbDays=15;
+let selKey=null,lastDelCell=null; // case sélectionnée (touche Suppr) + dernière case supprimée (Ctrl+Z)
 let weekendAssign={};
 let weekendNames={};
 let renderCols=[];
@@ -1345,6 +1355,30 @@ window.ctxCopy=()=>{if(!ctxCell)return;const c=cells[K(ctxCell.ti,ctxCell.d)];if
 window.ctxPaste=()=>{if(!ctxCell||!clipboard)return;cells[K(ctxCell.ti,ctxCell.d)]={...clipboard};closeCtx();render();svC();toast('✅ Collé');};
 window.ctxEdit=()=>{if(!ctxCell)return;closeCtx();openCPDirect(ctxCell.ti,ctxCell.d);};
 window.ctxClear=()=>{if(!ctxCell)return;delete cells[K(ctxCell.ti,ctxCell.d)];closeCtx();render();svC();};
+// ── Sélection d'une case + touche Suppr ───────────────────────
+function selectCell(k){
+  document.querySelectorAll('.dc.sel').forEach(x=>x.classList.remove('sel'));
+  selKey=k||null;
+  if(selKey){const td=document.querySelector(`.dc[data-key="${selKey}"]`);if(td)td.classList.add('sel');}
+}
+document.addEventListener('click',e=>{if(!e.target.closest('.dc')&&!e.target.closest('#tst'))selectCell(null);});
+document.addEventListener('keydown',e=>{
+  const a=document.activeElement;
+  if(a&&(a.tagName==='INPUT'||a.tagName==='TEXTAREA'||a.tagName==='SELECT'||a.isContentEditable))return;
+  if(document.querySelector('.popup.open'))return;
+  // Ctrl+Z : remet la dernière case supprimée avec la touche Suppr
+  if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='z'&&lastDelCell){
+    e.preventDefault();cells[lastDelCell.k]=lastDelCell.c;selKey=lastDelCell.k;lastDelCell=null;render();svC();toast('↩ Case remise');return;
+  }
+  if((e.key==='Delete'||e.key==='Backspace')&&selKey){
+    if(!cells[selKey])return;
+    e.preventDefault();
+    lastDelCell={k:selKey,c:cells[selKey]};
+    const nm=cellItems(cells[selKey]).map(it=>it.chantier).filter(Boolean).join(' + ')||'case';
+    delete cells[selKey];render();svC();
+    toast('🗑 '+nm+' supprimé — Ctrl+Z pour annuler');
+  }
+});
 function closeCtx(){document.getElementById('ctx').classList.remove('open');ctxCell=null;}
 document.addEventListener('click',e=>{if(!e.target.closest('#ctx'))closeCtx();});
 
@@ -1434,6 +1468,7 @@ function render(){
     const ti=parseInt(td.dataset.ti),d=parseInt(td.dataset.d);
     // clic droit (souris) = menu ; au doigt : plus d'appui long, on ignore le « clic droit » tactile
     td.addEventListener('contextmenu',e=>{if(Date.now()-lastTouchT<1500){e.preventDefault();return;}openCtx(e,ti,d);});
+    td.addEventListener('click',()=>{selectCell(td.dataset.key);});
     td.addEventListener('touchstart',()=>{lastTouchT=Date.now();},{passive:true});
     td.addEventListener('touchend',e=>{
       clearTimeout(lpt);
@@ -1528,7 +1563,7 @@ function teamRow(team,ti,pole){
     }
     const d=col.days[0];
     const k=K(ti,d),c=cells[k],sl=isSlim(d),fe=isFO(d),td=isToday(d);
-    let cls='dc'+(sl?' ds':' dn')+(fe?' fe':'')+(td?' tc':'');
+    let cls='dc'+(sl?' ds':' dn')+(fe?' fe':'')+(td?' tc':'')+(c&&c.imp?' imp':'')+(selKey===k?' sel':'');
     let cH='<div class="cc"></div>',tH=`<div class="ct${isSAV?' ct-sav':''}"></div>`;
     if(c){
       const lc=letterColor(c.chantier);
@@ -1536,12 +1571,13 @@ function teamRow(team,ti,pole){
       const pb=`background:${cbg};color:${ctx2};-webkit-print-color-adjust:exact;print-color-adjust:exact`;
       const tb=`background:${cbg};color:${ctx2};opacity:0.75;border-color:${cbg};-webkit-print-color-adjust:exact;print-color-adjust:exact`;
       if(sl){cH=`<div class="cc sc" style="${pb};opacity:.8"></div>`;tH=`<div class="ct sc" style="${tb};opacity:.8"></div>`;}
-      else if(isSAV&&cellItems(c).length>1){
+      else if(cellItems(c).length>1){
         // SAV : plusieurs chantiers dans la même journée (max 3), empilés, chacun avec sa couleur
         cH=cellItems(c).map(it=>{const l2=letterColor(it.chantier),bg=l2?l2.bg:pole.bg,tx=l2?l2.tx:pole.text,pa='-webkit-print-color-adjust:exact;print-color-adjust:exact';
-          return `<div class="sv-it" title="${esc(it.chantier)}${it.tache?' — '+esc(it.tache):''}"><div class="cc" style="background:${bg};color:${tx};${pa}">${esc(it.chantier)}</div>${it.tache?`<div class="ct" style="background:${bg};color:${tx};opacity:.75;border-color:${bg};${pa}">${esc(it.tache)}</div>`:''}</div>`;}).join('');
+          return `<div class="sv-it" title="${esc(it.chantier)}${it.tache?' — '+esc(it.tache):''}"><div class="cc${it.tache?'':' solo'}" style="background:${bg};color:${tx};${pa}">${esc(it.chantier)}</div>${it.tache?`<div class="ct" style="background:${bg};color:${tx};opacity:.75;border-color:${bg};${pa}">${esc(it.tache)}</div>`:''}</div>`;}).join('');
         tH='';
       }
+      else if(!c.tache){cH=`<div class="cc" style="${pb};flex:1 1 auto">${esc(c.chantier)}</div>`;tH='';} // pas de tâche : le chantier remplit la case
       else{cH=`<div class="cc" style="${pb}">${esc(c.chantier)}</div>`;tH=`<div class="ct${isSAV?' ct-sav':''}" style="${tb}">${esc(c.tache||'')}</div>`;}
     }
     const isDraggable=!!c&&!sl;
@@ -1566,15 +1602,17 @@ function openCPDirect(ti,d){
   document.getElementById('ich').value=c.chantier||'';
   const itaEl=document.getElementById('ita');
   itaEl.value=c.tache||'';
+  document.getElementById('iimp').checked=!!c.imp;
+  document.getElementById('imp-box').classList.toggle('on',!!c.imp);
   const teamPole=teams[ti]?poleById(domAct(teams[ti])):null;
   const isSAV=teamPole&&teamPole.label&&teamPole.label.trim().toUpperCase()==='SAV';
   itaEl.rows=isSAV?(cellItems(c).length>1?2:4):2;
-  popSAV=!!isSAV;
-  const xs=(isSAV&&Array.isArray(c.x))?c.x:[];
+  popSAV=true; // plusieurs chantiers (max 3) possibles pour toutes les équipes
+  const xs=Array.isArray(c.x)?c.x:[];
   [2,3].forEach(n=>{const it=xs[n-2]||{};document.getElementById('ich'+n).value=it.chantier||'';document.getElementById('ita'+n).value=it.tache||'';});
-  document.getElementById('sv-box').style.display=isSAV?'':'none';
-  document.getElementById('cpop').classList.toggle('sav-mode',!!isSAV);
-  svShow(isSAV?xs.filter(it=>it&&(it.chantier||it.tache)).length:0);
+  document.getElementById('sv-box').style.display='';
+  document.getElementById('cpop').classList.add('sav-mode');
+  svShow(xs.filter(it=>it&&(it.chantier||it.tache)).length);
   document.getElementById('cpybtn').style.opacity=(c.chantier||c.tache)?'1':'0.4';
   document.getElementById('pastbtn').style.opacity=clipboard?'1':'0.4';
   document.getElementById('cpop').classList.add('open');
@@ -1588,7 +1626,7 @@ window.popOk=()=>{
   if(!popCell)return;
   const ch=document.getElementById('ich').value.trim(),ta=document.getElementById('ita').value.trim(),k=K(popCell.ti,popCell.d);
   const x=popSAV?svRead():[];
-  if(ch||ta||x.length){const o={chantier:ch,tache:ta};if(x.length)o.x=x;cells[k]=o;}else delete cells[k];
+  if(ch||ta||x.length){const o={chantier:ch,tache:ta};if(x.length)o.x=x;if(document.getElementById('iimp').checked)o.imp=true;cells[k]=o;}else delete cells[k];
   closeAll();render();svC();
 };
 window.popDel=()=>{if(!popCell)return;delete cells[K(popCell.ti,popCell.d)];closeAll();render();svC();};
@@ -1596,6 +1634,7 @@ window.popCopy=()=>{
   const ch=document.getElementById('ich').value.trim(),ta=document.getElementById('ita').value.trim();
   if(!ch&&!ta){toast('Rien à copier');return;}
   clipboard={chantier:ch,tache:ta};
+  if(document.getElementById('iimp').checked)clipboard.imp=true;
   if(popSAV){const x=svRead();if(x.length)clipboard.x=x;}
   const b=document.getElementById('cpybtn');b.style.background='#C0DD97';b.style.color='#27500A';b.innerHTML='<i class="ti ti-check"></i> Copié !';
   setTimeout(()=>{b.style.background='';b.style.color='';b.innerHTML='<i class="ti ti-copy" style="font-size:13px"></i> Copier';},1500);
@@ -1604,6 +1643,7 @@ window.popPaste=()=>{
   if(!clipboard){toast('Presse-papier vide');return;}
   document.getElementById('ich').value=clipboard.chantier||'';
   document.getElementById('ita').value=clipboard.tache||'';
+  document.getElementById('iimp').checked=!!clipboard.imp;document.getElementById('imp-box').classList.toggle('on',!!clipboard.imp);
   if(popSAV){const xs=Array.isArray(clipboard.x)?clipboard.x:[];[2,3].forEach(n=>{const it=xs[n-2]||{};document.getElementById('ich'+n).value=it.chantier||'';document.getElementById('ita'+n).value=it.tache||'';});svShow(xs.length);}
   const b=document.getElementById('pastbtn');b.style.background='#B5D4F4';b.style.color='#0C447C';b.innerHTML='<i class="ti ti-check"></i> Collé !';
   setTimeout(()=>{b.style.background='';b.style.color='';b.innerHTML='<i class="ti ti-clipboard" style="font-size:13px"></i> Coller';},1500);
@@ -2790,7 +2830,8 @@ pmbLoadCache();
 const t0=new Date();t0.setHours(0,0,0,0);let dw=t0.getDay();if(dw===0)dw=7;t0.setDate(t0.getDate()-(dw-1));
 startDate=t0;calViewDate=new Date(t0);
 const hasCache=loadCache();
-if(hasCache)calViewDate=new Date(startDate);
+// À chaque ouverture : on repart toujours de la semaine d'aujourd'hui (la durée 15j/30j choisie est gardée)
+startDate=new Date(t0);calViewDate=new Date(t0);
 ensureTeamIds();
 loadFilterPrefs();
 if(!navigator.onLine)ss('err');else ss('syncing');
@@ -2798,6 +2839,8 @@ updRB();buildChips();updLbl();renderCal();render();
 document.getElementById('bsort').classList.toggle('on',sortByPole);
 updMobileHdrPos();
 setTimeout(updMobileHdrPos,300);
+// Centre l'affichage sur la colonne d'aujourd'hui
+setTimeout(()=>{const el=document.querySelector('.tc');if(el)el.scrollIntoView({block:'nearest',inline:'center'});},350);
 // Onglet mémorisé (Pose MEN / Pose CH / Atelier / Prod Mex Bois / Prod BOIS / Prod ALU / Prod Agencement)
 poseStash();
 try{const t=localStorage.getItem(TAB_KEY);if(t==='atelier'||t==='prod'||t==='prodb'||t==='prodalu'||t==='proda'||t==='posech')setTab(t);}catch(e){}
