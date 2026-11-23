@@ -143,10 +143,11 @@ function render(){
       const cls='day'+(d.getTime()===today.getTime()?' today':d<today?' past':'');
       let body='';
       if(fe)body+='<div class="ferie">FÉRIÉ</div>';
-      if(c&&(c.chantier||c.tache)){
-        const k=col(c.chantier);
-        if(c.chantier)body+=`<div><span class="chip" style="background:${k.bg};color:${k.tx}">${esc(c.chantier)}</span></div>`;
-        if(c.tache)body+=`<div class="task">${esc(c.tache)}</div>`;
+      const its=c?[{chantier:c.chantier,tache:c.tache}].concat(Array.isArray(c.x)?c.x:[]).filter(it=>it&&(it.chantier||it.tache)).slice(0,3):[];
+      if(its.length){
+        its.forEach((it,i)=>{const k=col(it.chantier);
+          if(it.chantier)body+=`<div${i?' style="margin-top:6px"':''}><span class="chip" style="background:${k.bg};color:${k.tx}">${esc(it.chantier)}</span></div>`;
+          if(it.tache)body+=`<div class="task">${esc(it.tache)}</div>`;});
       }else if(!fe)body+='<div class="empty">Rien de prévu</div>';
       h+=`<div class="${cls}"><div class="d-date"><div class="d-dow">${d.toLocaleString('fr-FR',{weekday:'short'}).replace('.','')}</div><div class="d-num">${d.getDate()}</div></div><div class="d-body">${body}</div></div>`;
     }

@@ -229,6 +229,15 @@ tr.row-moving .team-cell{background:rgba(55,138,221,.1);}
 .popup .imp-box input{width:16px;height:16px;margin:0;accent-color:#D32F2F;cursor:pointer;flex:none;}
 .ci{display:flex;flex-direction:column;gap:2px;min-height:60px;}
 .ci[draggable="true"]{cursor:grab;}
+/* Poignée pour ÉTIRER un chantier sur plusieurs jours */
+.ci{position:relative;}
+.stretch{position:absolute;top:0;bottom:0;right:-3px;width:12px;cursor:ew-resize;z-index:3;touch-action:none;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .15s;}
+.stretch::after{content:"";width:4px;height:60%;max-height:34px;border-radius:3px;background:#378ADD;box-shadow:0 0 0 1.5px #fff;}
+.dc:hover .stretch,.dc.sel .stretch,body.stretching .stretch{opacity:1;}
+@media (hover:none){.stretch{width:22px;right:-6px;}.dc:hover .stretch{opacity:0;}.dc.sel .stretch{opacity:1;}}
+.dc.stretch-on .ci{outline:2px dashed #378ADD;outline-offset:-2px;border-radius:5px;background:rgba(55,138,221,.15);}
+body.stretching,body.stretching *{cursor:ew-resize!important;user-select:none!important;-webkit-user-select:none!important;}
+@media print{.stretch{display:none!important;}}
 .ci.dragging{opacity:0.35;}
 .dc.drag-over .ci{outline:2px dashed #378ADD;outline-offset:-2px;border-radius:5px;background:rgba(55,138,221,.08);}
 .cc{flex:0 0 30px;border-radius:4px;font-size:11px;font-weight:500;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden;padding:2px 4px;line-height:1.2;}
@@ -1581,7 +1590,7 @@ function teamRow(team,ti,pole){
       else{cH=`<div class="cc" style="${pb}">${esc(c.chantier)}</div>`;tH=`<div class="ct${isSAV?' ct-sav':''}" style="${tb}">${esc(c.tache||'')}</div>`;}
     }
     const isDraggable=!!c&&!sl;
-    row+=`<td class="${cls}" data-ti="${ti}" data-d="${d}" data-key="${k}" ondblclick="openCP(event,${ti},${d})"><div class="ci${isSAV?' ci-sav':''}" style="min-height:${rowH}"${isDraggable?` draggable="true" ondragstart="dragStart(event,'${k}')"`:''} ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="dropCell(event,${ti},${d})">${cH}${tH}</div></td>`;
+    row+=`<td class="${cls}" data-ti="${ti}" data-d="${d}" data-key="${k}" ondblclick="openCP(event,${ti},${d})"><div class="ci${isSAV?' ci-sav':''}" style="min-height:${rowH}"${isDraggable?` draggable="true" ondragstart="dragStart(event,'${k}')"`:''} ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="dropCell(event,${ti},${d})">${cH}${tH}${isDraggable?`<span class="stretch" draggable="false" title="Étirer ce chantier sur plusieurs jours" ondragstart="return false" onpointerdown="stretchStart(event,${ti},${d})"></span>`:''}</div></td>`;
   });
   return row+'</tr>';
 }
@@ -1923,6 +1932,69 @@ window.dropCell=(e,ti,d)=>{
   render();svC();
   toast('📦 Chantier déplacé');
 };
+
+// ── ÉTIRER un chantier sur plusieurs jours (poignée bleue à droite de la case) ──
+// Tirer la poignée vers la droite (ou la gauche) recopie la case sur les jours ouvrés traversés.
+// Les week-ends et jours fériés sont sautés. Ctrl+Z ne s'applique pas : une confirmation est demandée
+// avant d'écraser une case déjà remplie.
+let stretch=null;
+window.stretchStart=(e,ti,d)=>{
+  if(e.button!=null&&e.button>0)return;
+  e.preventDefault();e.stopPropagation();
+  if(!cells[K(ti,d)])return;
+  stretch={ti,d,to:d};
+  try{e.currentTarget.setPointerCapture(e.pointerId);}catch(_){}
+  selectCell(K(ti,d));
+  document.body.classList.add('stretching');
+  document.addEventListener('pointermove',stretchMove);
+  document.addEventListener('pointerup',stretchEnd);
+  document.addEventListener('pointercancel',stretchCancel);
+};
+function stretchDays(){
+  if(!stretch)return[];
+  const a=Math.min(stretch.d,stretch.to),b=Math.max(stretch.d,stretch.to),r=[];
+  for(let x=a;x<=b;x++)if(x!==stretch.d&&!isWk(x)&&!isFO(x))r.push(x);
+  return r;
+}
+function stretchPaint(){
+  document.querySelectorAll('.dc.stretch-on').forEach(t=>t.classList.remove('stretch-on'));
+  stretchDays().forEach(x=>{const td=document.querySelector(`td.dc[data-key="${K(stretch.ti,x)}"]`);if(td)td.classList.add('stretch-on');});
+}
+function stretchMove(e){
+  if(!stretch)return;
+  // défilement auto si on arrive au bord du planning
+  const box=document.getElementById('gantt-wrap');
+  if(box){const r=box.getBoundingClientRect();if(e.clientX>r.right-40)box.scrollLeft+=20;else if(e.clientX<r.left+180)box.scrollLeft-=20;}
+  const el=document.elementFromPoint(e.clientX,e.clientY);
+  const td=el&&el.closest('td.dc[data-key]');
+  if(!td||+td.dataset.ti!==stretch.ti)return;
+  const d=+td.dataset.d;
+  if(d!==stretch.to){stretch.to=d;stretchPaint();}
+}
+function stretchStop(){
+  document.removeEventListener('pointermove',stretchMove);
+  document.removeEventListener('pointerup',stretchEnd);
+  document.removeEventListener('pointercancel',stretchCancel);
+  document.body.classList.remove('stretching');
+  const s=stretch,days=stretchDays();stretch=null;stretchPaint();
+  return {s,days};
+}
+function stretchCancel(){stretchStop();}
+function stretchEnd(){
+  const {s,days}=stretchStop();
+  if(!s||!days.length)return;
+  justDragged=true;setTimeout(()=>{justDragged=false;},500);
+  const src=cells[K(s.ti,s.d)];if(!src)return;
+  const same=c=>JSON.stringify(c)===JSON.stringify(src);
+  const over=days.filter(x=>{const c=cells[K(s.ti,x)];return c&&!same(c);});
+  if(over.length){
+    const noms=[...new Set(over.map(x=>cellItems(cells[K(s.ti,x)]).map(it=>it.chantier).filter(Boolean).join(' + ')||'case'))].join(', ');
+    if(!confirm(`${over.length} case(s) déjà remplie(s) (${noms}) vont être remplacées par « ${src.chantier} ». Continuer ?`))return;
+  }
+  days.forEach(x=>{cells[K(s.ti,x)]=JSON.parse(JSON.stringify(src));});
+  render();svC();
+  toast(`↔ « ${src.chantier||'chantier'} » sur ${days.length+1} jours`);
+}
 
 // -- REORDONNER LES EQUIPES (appui long sur la poignee) --------
 function currentVisibleList(){
