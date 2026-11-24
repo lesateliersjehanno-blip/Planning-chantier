@@ -228,6 +228,9 @@ tr.row-moving .team-cell{background:rgba(55,138,221,.1);}
 .popup .imp-box{display:flex;align-items:center;gap:8px;margin:0 0 12px;padding:7px 10px;border-radius:var(--rs);border:1.5px solid #D32F2F;color:var(--text);font-size:13px;cursor:pointer;user-select:none;}
 .popup .imp-box input{width:16px;height:16px;margin:0;accent-color:#D32F2F;cursor:pointer;flex:none;}
 .ci{display:flex;flex-direction:column;gap:2px;min-height:60px;}
+/* la case remplit toute la hauteur de la ligne (plus de blanc sous le chantier quand l'équipe a beaucoup de compagnons) */
+.dc{height:1px;}
+.dc>.ci{height:100%;box-sizing:border-box;}
 .ci[draggable="true"]{cursor:grab;}
 /* Poignée pour ÉTIRER un chantier sur plusieurs jours */
 .ci{position:relative;}
