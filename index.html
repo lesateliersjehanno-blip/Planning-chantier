@@ -65,6 +65,8 @@ header{background:var(--bg);border-bottom:.5px solid var(--border);padding:8px 1
 .header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px;}
 .header-top h1{font-size:15px;font-weight:600;display:flex;align-items:center;gap:6px;}
 .sync-badge{display:flex;align-items:center;gap:4px;font-size:10px;color:var(--text3);}
+.sync-wrap{display:flex;flex-direction:column;align-items:flex-end;gap:1px;}
+.sync-maj{font-size:9.5px;color:var(--text3);white-space:nowrap;}
 .sync-dot{width:7px;height:7px;border-radius:50%;background:#ccc;transition:background .3s;}
 .sync-dot.ok{background:#4caf50;}.sync-dot.syncing{background:#ff9800;animation:pulse 1s infinite;}.sync-dot.err{background:#f44336;}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
@@ -236,7 +238,10 @@ tr.row-moving .team-cell{background:rgba(55,138,221,.1);}
 .ci{position:relative;}
 .stretch{position:absolute;top:0;bottom:0;right:-3px;width:12px;cursor:ew-resize;z-index:3;touch-action:none;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .15s;}
 .stretch::after{content:"";width:4px;height:60%;max-height:34px;border-radius:3px;background:#378ADD;box-shadow:0 0 0 1.5px #fff;}
-.dc:hover .stretch,.dc.sel .stretch,body.stretching .stretch{opacity:1;}
+.dc:hover .stretch,.dc.sel .stretch{opacity:1;}
+/* pendant l'étirement : seule la poignée de la case de départ reste visible */
+body.stretching .stretch{opacity:0!important;}
+body.stretching .dc.sel .stretch{opacity:1!important;}
 @media (hover:none){.stretch{width:22px;right:-6px;}.dc:hover .stretch{opacity:0;}.dc.sel .stretch{opacity:1;}}
 .dc.stretch-on .ci{outline:2px dashed #378ADD;outline-offset:-2px;border-radius:5px;background:rgba(55,138,221,.15);}
 body.stretching,body.stretching *{cursor:ew-resize!important;user-select:none!important;-webkit-user-select:none!important;}
@@ -676,7 +681,7 @@ html,body{touch-action:manipulation;}
       <button class="tab" id="tab-prodalu" role="tab" onclick="setTab('prodalu')"><i class="ti ti-frame"></i> Prod ALU</button>
       <button class="tab" id="tab-proda" role="tab" onclick="setTab('proda')"><i class="ti ti-armchair"></i> Prod Agencement</button>
     </div>
-    <div class="sync-badge"><div class="sync-dot" id="sd"></div><span id="sl">…</span></div>
+    <div class="sync-wrap"><div class="sync-badge"><div class="sync-dot" id="sd"></div><span id="sl">…</span></div><div class="sync-maj" id="smaj"></div></div>
   </div>
   <div class="toolbar">
     <button class="btn" onclick="goToday()"><i class="ti ti-calendar-event"></i> Aujourd'hui</button>
@@ -1150,14 +1155,20 @@ function updLbl(){document.getElementById('mlbl').textContent=startDate.toLocale
 
 // ── SYNC ─────────────────────────────────────────────────────
 function ss(s){document.getElementById('sd').className='sync-dot '+s;document.getElementById('sl').textContent=s==='ok'?'Synchronisé':s==='syncing'?'Sync…':'Hors ligne';}
-async function svT(){saveCache();ss('syncing');try{await set(ref(db,TR),JSON.parse(JSON.stringify(teams)));ss('ok');}catch(e){ss('err');toast('Hors ligne : sauvegardé sur l\'appareil, sync au retour du réseau');}}
-async function svC(){saveCache();ss('syncing');try{await set(ref(db,CR),Object.keys(cells).length?cells:null);ss('ok');}catch(e){ss('err');toast('Hors ligne : sauvegardé sur l\'appareil, sync au retour du réseau');}}
+// Dernière mise à jour du planning (par n'importe qui) : planning/v1/maj = heure de l'enregistrement
+function majNow(){ set(ref(db,B+'/maj'),Date.now()).catch(()=>{}); }
+function majShow(t){ const el=document.getElementById('smaj'); if(!el)return; if(!t){el.textContent='';return;}
+  const d=new Date(t),p=n=>String(n).padStart(2,'0');
+  el.textContent=`Mis à jour le ${p(d.getDate())}/${p(d.getMonth()+1)}/${d.getFullYear()} à ${p(d.getHours())}h${p(d.getMinutes())}`; }
+onValue(ref(db,B+'/maj'),s=>majShow(s.val()));
+async function svT(){saveCache();ss('syncing');try{await set(ref(db,TR),JSON.parse(JSON.stringify(teams)));ss('ok');majNow();}catch(e){ss('err');toast('Hors ligne : sauvegardé sur l\'appareil, sync au retour du réseau');}}
+async function svC(){saveCache();ss('syncing');try{await set(ref(db,CR),Object.keys(cells).length?cells:null);ss('ok');majNow();}catch(e){ss('err');toast('Hors ligne : sauvegardé sur l\'appareil, sync au retour du réseau');}}
 // Plage de dates affichée : mémorisée sur l'appareil seulement (avant : partagée via Firebase,
 // ce qui faisait bouger l'écran des autres utilisateurs dès que quelqu'un naviguait).
 async function svR(){saveCache();}
-async function svP(){saveCache();try{await set(ref(db,PR),JSON.parse(JSON.stringify(POLES)));}catch(e){}}
-async function svW(){saveCache();try{await set(ref(db,WR),Object.keys(weekendAssign).length?weekendAssign:null);}catch(e){}}
-async function svN(){saveCache();try{await set(ref(db,NR),Object.keys(weekendNames).length?weekendNames:null);}catch(e){}}
+async function svP(){saveCache();try{await set(ref(db,PR),JSON.parse(JSON.stringify(POLES)));majNow();}catch(e){}}
+async function svW(){saveCache();try{await set(ref(db,WR),Object.keys(weekendAssign).length?weekendAssign:null);majNow();}catch(e){}}
+async function svN(){saveCache();try{await set(ref(db,NR),Object.keys(weekendNames).length?weekendNames:null);majNow();}catch(e){}}
 
 // Conserve le défilement (page + tableaux) quand une modif arrive d'un autre utilisateur
 function keepScroll(fn){
@@ -2136,7 +2147,7 @@ function atlLoadPref(){try{const p=JSON.parse(localStorage.getItem(ATL_PREF)||'n
 // ── Sync Firebase ──
 async function atlSet(path,val){
   atlSaveCache();ss('syncing');
-  try{await set(ref(db,AR+path),val);ss('ok');}
+  try{await set(ref(db,AR+path),val);ss('ok');majNow();}
   catch(e){ss('err');toast('Hors ligne : sauvegardé sur l\'appareil, sync au retour du réseau');}
 }
 function atlSvCentres(){return atlSet('/centres',JSON.parse(JSON.stringify(atlCentres)));}
@@ -2146,7 +2157,7 @@ function atlSvCell(k){const l=atlWk[k];return atlSet('/semaines/'+k,l&&l.length?
 async function atlSvCells(keys){
   const o={};keys.forEach(k=>{const l=atlWk[k];o[k]=l&&l.length?JSON.parse(JSON.stringify(l)):null;});
   atlSaveCache();ss('syncing');
-  try{await update(ref(db,AR+'/semaines'),o);ss('ok');}
+  try{await update(ref(db,AR+'/semaines'),o);ss('ok');majNow();}
   catch(e){ss('err');toast('Hors ligne : sauvegardé sur l\'appareil, sync au retour du réseau');}
 }
 function atlSvCh(){return atlSet('/chantiers',atlChantiers.length?atlChantiers:null);}
@@ -2515,7 +2526,7 @@ function pmbSaveCache(){try{localStorage.setItem(PMB_CACHE,JSON.stringify({rows:
 function pmbLoadCache(){try{const d=JSON.parse(localStorage.getItem(PMB_CACHE)||'null');if(d&&d.rows&&typeof d.rows==='object'&&Object.keys(d.rows).length){pmbRows=d.rows;pmbMaj=d.maj||pmbMaj;}}catch(e){}}
 async function pmbUpd(o){
   pmbMaj=pmbToday();o['meta/maj']=pmbMaj;pmbSaveCache();ss('syncing');
-  try{await update(ref(db,PB),o);ss('ok');}
+  try{await update(ref(db,PB),o);ss('ok');majNow();}
   catch(e){ss('err');toast('Hors ligne : sauvegardé sur l\'appareil, sync au retour du réseau');}
 }
 function pmbSvRows(ids){const o={};ids.forEach(id=>{o['rows/'+id]=pmbRows[id]?JSON.parse(JSON.stringify(pmbNorm(pmbRows[id],id))):null;});return pmbUpd(o);}
